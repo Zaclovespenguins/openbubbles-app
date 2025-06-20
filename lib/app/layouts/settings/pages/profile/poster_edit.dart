@@ -494,6 +494,8 @@ class PosterEditState
                   ),
                 )
               ),
+              if (poster.type is api.PosterType_TranscriptDynamic)
+              ImagePoster(poster: poster, images: {}, loop: true,),
               if (poster.type is api.PosterType_Photo)
               buildViewer((poster.type as api.PosterType_Photo).assets[0], (layer) => (poster.type as api.PosterType_Photo).assets[0].contents.properties.portraitLayout.clockLayerOrder != "ClockAboveBackground" || !layer.identifier.startsWith("foreground")),
               if (callPoster != null)
@@ -538,6 +540,95 @@ class PosterEditState
                 bottom: 12 + MediaQuery.of(context).padding.bottom,
                 left: 27,
                 child: Column(children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      elevation: 0.0,
+                      minimumSize: Size.zero,
+                    ),
+                    onPressed: () async {
+                      void changePoster(String name) async {
+                        Navigator.of(context).pop();
+
+                        if (poster.type is api.PosterType_Photo) {
+                          stopEditing();
+                        }
+
+                        await makeNewPoster();
+
+                        var randomColor = Color((math.Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+                        var newPoster = api.SimplifiedPoster(
+                          titleConfiguration: api.PRPosterTitleStyleConfiguration(
+                            alternateDateEnabled: false, 
+                            contentsLuminence: 0, 
+                            groupName: "PREditingLook", 
+                            preferredTitleAlignment: 0, 
+                            preferredTitleLayout: 0, 
+                            timeFontConfiguration: poster.titleConfiguration.timeFontConfiguration, 
+                            titleColor: api.PRPosterColor(
+                              preferredStyle: 2, 
+                              identifier: "vibrantMaterialColor", 
+                              suggested: false, 
+                              color: api.UIColor.grayscaleAlphaColorSpace(colorComponents: 2, white: 1, alpha: 0.5, bin: base64Decode("MSAwLjU="), colorSpace: 4, class_: "PRPosterColor"),
+                            ), 
+                            titleContentStyle: Uint8List.fromList([]), 
+                            userConfigured: false,
+                            timeNumberingSystem: api.nsNull(),
+                            titleStyle: api.PRPosterContentMaterialStyle.prPosterContentDiscreteColorsStyle(
+                              variation: 0, 
+                              colors: [colorToUIColor(saturateColor(randomColor))], 
+                              vibrant: true, 
+                              supportsVariation: true, 
+                              needsToResolveVariation: false
+                              )
+                          ),
+                          type: api.PosterType.transcriptDynamic(
+                            data: api.TranscriptDynamicUserData(identifier: name)
+                          ),
+                          role: poster.role,
+                        );
+                        setState(() {
+                          updatePoster(newPoster);
+                        });
+                      };
+
+                      showDialog(
+                        context: Get.context!,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(
+                              "Change to Dynamic?",
+                              style: context.theme.textTheme.titleLarge,
+                            ),
+                            backgroundColor: context.theme.colorScheme.properSurface,
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text("Cancel",
+                                    style: context.theme.textTheme.bodyLarge!
+                                        .copyWith(color: context.theme.colorScheme.primary)),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              ...posterOptions.entries.map((e) {
+                                return TextButton(
+                                  child: Text(e.key,
+                                      style: context.theme.textTheme.bodyLarge!
+                                          .copyWith(color: context.theme.colorScheme.primary)),
+                                  onPressed: () async {
+                                    changePoster(e.value);
+                                  },
+                                );
+                              }),
+                            ],
+                          );
+                        });
+                    },
+                    child: const Icon(CupertinoIcons.sparkles, color: Colors.white, size: 32,),
+                  ),
+                  const SizedBox(height: 15,),
                   if (poster.type is! api.PosterType_Monogram)
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -843,7 +934,7 @@ class PosterEditState
                   ),
                 ],)
               ),
-              if (poster.type is api.PosterType_Photo || poster.type is api.PosterType_Monogram)
+              if (poster.type is api.PosterType_Photo || poster.type is api.PosterType_Monogram || poster.type is api.PosterType_TranscriptDynamic)
               Positioned(
                 right: 15,
                 bottom: 12 + MediaQuery.of(context).padding.bottom,

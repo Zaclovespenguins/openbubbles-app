@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -6,14 +7,20 @@ import 'dart:typed_data';
 import 'package:bluebubbles/app/layouts/settings/pages/profile/poster_edit.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
+import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as img;
 import 'dart:math' as math;
+
+import 'package:path_provider/path_provider.dart';
 
 Future<ui.Image> decodeImageFromBytes(Uint8List bytes) async {
   final codec = await ui.instantiateImageCodec(bytes);
@@ -26,8 +33,11 @@ class ImagePoster extends StatefulWidget {
   final Map<String, ui.Image> images;
   final String? name;
   final String? desc;
+  final bool loop;
 
-  const ImagePoster({super.key, required this.poster, required this.images, this.name, this.desc});
+  String? get currentDynamic => poster.type is api.PosterType_TranscriptDynamic ? (poster.type as api.PosterType_TranscriptDynamic).data.identifier : null;
+
+  const ImagePoster({super.key, required this.poster, required this.images, this.name, this.desc, this.loop = false});
 
   @override
   State<ImagePoster> createState() => _ImagePosterState();
@@ -207,10 +217,102 @@ Future<Map<String, ui.Image>> loadPosterImages(String path, api.SimplifiedPoster
   return {};
 }
 
+var posterMap = {
+  "ocean_1": "ocean_1.mp4",
+  "ocean_2": "ocean_2.mp4",
+  "clouds_1": "sky.mp4",
+  "clouds_2": "sky.mp4",
+  "clouds_3": "sky.mp4",
+  "clouds_4": "sky.mp4",
+  "clouds_5": "sky.mp4",
+  "clouds_6": "sky.mp4",
+  "aurora_1": "aurora.mp4",
+  "aurora_2": "aurora.mp4",
+  "aurora_3": "aurora.mp4",
+};
+
+var posterOptions = {
+  "Sea (Light)": "ocean_1",
+  "Sea (Dark)": "ocean_2",
+  "Sky": "clouds_4",
+  "Aurora": "aurora_1",
+};
+
 class _ImagePosterState extends State<ImagePoster> {
+
+  late final player = Player();
+  late final controller = VideoController(player);
+
+  @override
+  void initState() {
+    super.initState();
+    // Play a [Media] or [Playlist].=
+    player.setPlaylistMode(PlaylistMode.loop);
+    updateDynamicPoster();
+  }
+
+  Timer? timer;
+  double currentSpeed = 1.0;
+  void animateSpeedToZero({Duration duration = const Duration(seconds: 2)}) {
+    const int steps = 30; // number of steps in the animation
+    final double decrement = currentSpeed / steps;
+    final int stepDurationMs = (duration.inMilliseconds / steps).round();
+
+    timer?.cancel();
+
+    timer = Timer.periodic(Duration(milliseconds: stepDurationMs), (t) {
+      currentSpeed -= decrement;
+      if (currentSpeed <= 0) {
+        currentSpeed = 0;
+        player.pause();
+        t.cancel();
+      } else {
+        player.setRate(currentSpeed);
+      }
+    });
+  }
+
+  void updateDynamicPoster() async {
+    timer?.cancel();
+    if (!posterMap.containsKey(widget.currentDynamic)) {
+      Logger.error("Unknown poster ${widget.currentDynamic}");
+      return;
+    }
+    var tempfile = File('${(await getTemporaryDirectory()).path}/${posterMap[widget.currentDynamic]}');
+    if (true) {
+      final bytedata = await rootBundle.load('assets/posters/${posterMap[widget.currentDynamic]}');
+      await tempfile.writeAsBytes(bytedata.buffer.asUint8List());
+    }
+    await player.open(Media(tempfile.path));
+    player.setRate(1.0);
+    currentSpeed = 1.0;
+    if (!widget.loop) {
+      timer = Timer(const Duration(seconds: 9), () async {
+        animateSpeedToZero(duration: const Duration(seconds: 1));
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(ImagePoster oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.currentDynamic != widget.currentDynamic) {
+      updateDynamicPoster();
+    }
+  }
+
+  @override
+  void dispose() {
+    player.dispose();
+    timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.poster.type is api.PosterType_TranscriptDynamic) {
+      return Video(controller: controller, fit: BoxFit.cover, controls: null,);
+    }
     return CustomPaint(
               painter: PosterPainter(poster: widget.poster, images: widget.images, name: widget.name, desc: widget.desc),
               child: const SizedBox.expand(),

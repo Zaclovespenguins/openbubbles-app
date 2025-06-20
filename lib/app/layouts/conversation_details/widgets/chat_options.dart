@@ -147,15 +147,7 @@ class _ChatOptionsState extends OptimizedState<ChatOptions> {
                       Navigator.of(context).push(
                         ThemeSwitcher.buildPageRoute(
                           builder: (context) => PosterEdit(transcriptPoster: cvc(chat).backgroundPoster.value ?? api.SimplifiedTranscriptPoster(
-                              poster: createNewPoster(api.PosterType.monogram(
-                                data: api.MonogramData(
-                                  topBackgroundColorDescription: colorToPosterColor(randomColor), 
-                                  backgroundColorDescription: colorToPosterColor(randomColor), 
-                                  initials: "A", 
-                                  monogramSupportedForName: true
-                                ), 
-                                background: colorToPosterColor(randomColor),
-                              ), randomColor, api.PosterRole.prPosterRoleBackdrop), 
+                              poster: createNewPoster(api.PosterType.transcriptDynamic(data: api.TranscriptDynamicUserData(identifier: posterOptions.keys.first)), randomColor, api.PosterRole.prPosterRoleBackdrop), 
                               watch: api.WatchBackground(isHighKey: false, luminance: 0, backgroundImageData: Uint8List(0), extensionIdentifier: "com.apple.ContactsUI.MonogramPosterExtension")
                             ), 
                             activePath: chat.transcriptPosterPath, 
