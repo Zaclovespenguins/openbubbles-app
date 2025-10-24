@@ -10,8 +10,8 @@ import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
 // These functions are ignored because they are not marked as `pub`: `config`, `do_login`, `get_login_config`, `get_phase`, `handle_2fa`, `handle_circle`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `restore`, `setup_push`, `shared_items`, `subscribe_streams`, `wrap_sink`
-// These types are ignored because they are not used by any `pub` functions: `ActiveCircleSession`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `SavedHardwareState`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
+// These types are ignored because they are not used by any `pub` functions: `ActiveCircleSession`, `AnisetteState`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `InnerPushState`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `ProvisionedAnisette`, `SavedHardwareState`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
 ChatProto decodeChatproto({required GZipWrapperChatProto wrapped}) =>
     RustLib.instance.api.crateApiApiDecodeChatproto(wrapped: wrapped);
@@ -588,6 +588,9 @@ Future<void> deleteAttachments(
         {required ArcPushState state, required List<String> attachments}) =>
     RustLib.instance.api
         .crateApiApiDeleteAttachments(state: state, attachments: attachments);
+
+Future<CloudMessageSummary> countRecords({required ArcPushState state}) =>
+    RustLib.instance.api.crateApiApiCountRecords(state: state);
 
 Future<void> downloadCloudAttachments(
         {required ArcPushState state, required List<(String, String)> files}) =>
@@ -1410,6 +1413,33 @@ class CloudMessage {
           msgProto3 == other.msgProto3 &&
           service == other.service &&
           msgProto4 == other.msgProto4;
+}
+
+class CloudMessageSummary {
+  final Int64List messagesSummary;
+  final Int64List chatSummary;
+  final Int64List attachmentSummary;
+
+  const CloudMessageSummary({
+    required this.messagesSummary,
+    required this.chatSummary,
+    required this.attachmentSummary,
+  });
+
+  @override
+  int get hashCode =>
+      messagesSummary.hashCode ^
+      chatSummary.hashCode ^
+      attachmentSummary.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CloudMessageSummary &&
+          runtimeType == other.runtimeType &&
+          messagesSummary == other.messagesSummary &&
+          chatSummary == other.chatSummary &&
+          attachmentSummary == other.attachmentSummary;
 }
 
 class CloudParticipant {
@@ -4037,6 +4067,15 @@ class PrivateDeviceInfo {
           isHsaTrusted == other.isHsaTrusted &&
           identites == other.identites &&
           subServices == other.subServices;
+}
+
+enum ProvisionedFlavor {
+  mac,
+  ios,
+  ;
+
+  static Future<ProvisionedFlavor> default_() =>
+      RustLib.instance.api.crateApiApiProvisionedFlavorDefault();
 }
 
 @freezed

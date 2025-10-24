@@ -940,6 +940,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CloudMessage dco_decode_cloud_message(dynamic raw);
 
   @protected
+  CloudMessageSummary dco_decode_cloud_message_summary(dynamic raw);
+
+  @protected
   CloudParticipant dco_decode_cloud_participant(dynamic raw);
 
   @protected
@@ -1097,6 +1100,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Float64List dco_decode_list_prim_f_64_strict(dynamic raw);
+
+  @protected
+  Int64List dco_decode_list_prim_i_64_strict(dynamic raw);
 
   @protected
   Uint32List dco_decode_list_prim_u_32_strict(dynamic raw);
@@ -1575,6 +1581,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PrivateDeviceInfo dco_decode_private_device_info(dynamic raw);
+
+  @protected
+  ProvisionedFlavor dco_decode_provisioned_flavor(dynamic raw);
 
   @protected
   PushMessage dco_decode_push_message(dynamic raw);
@@ -2730,6 +2739,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CloudMessage sse_decode_cloud_message(SseDeserializer deserializer);
 
   @protected
+  CloudMessageSummary sse_decode_cloud_message_summary(
+      SseDeserializer deserializer);
+
+  @protected
   CloudParticipant sse_decode_cloud_participant(SseDeserializer deserializer);
 
   @protected
@@ -2899,6 +2912,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Float64List sse_decode_list_prim_f_64_strict(SseDeserializer deserializer);
+
+  @protected
+  Int64List sse_decode_list_prim_i_64_strict(SseDeserializer deserializer);
 
   @protected
   Uint32List sse_decode_list_prim_u_32_strict(SseDeserializer deserializer);
@@ -3429,6 +3445,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PrivateDeviceInfo sse_decode_private_device_info(
       SseDeserializer deserializer);
+
+  @protected
+  ProvisionedFlavor sse_decode_provisioned_flavor(SseDeserializer deserializer);
 
   @protected
   PushMessage sse_decode_push_message(SseDeserializer deserializer);
@@ -4625,6 +4644,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_cloud_message(CloudMessage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_cloud_message_summary(
+      CloudMessageSummary self, SseSerializer serializer);
+
+  @protected
   void sse_encode_cloud_participant(
       CloudParticipant self, SseSerializer serializer);
 
@@ -4805,6 +4828,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_prim_f_64_strict(
       Float64List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_prim_i_64_strict(
+      Int64List self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_32_strict(
@@ -5341,6 +5368,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_private_device_info(
       PrivateDeviceInfo self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_provisioned_flavor(
+      ProvisionedFlavor self, SseSerializer serializer);
 
   @protected
   void sse_encode_push_message(PushMessage self, SseSerializer serializer);

@@ -48,6 +48,7 @@ import com.bluebubbles.messaging.services.system.GetFullResolution
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.HeifDecoder
 import com.bluebubbles.messaging.services.system.HeifEncoder
+import com.bluebubbles.messaging.services.system.NativeSyncIsolateHandler
 import com.bluebubbles.messaging.services.system.OpenSMSAppHandler
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
@@ -129,6 +130,7 @@ class MethodCallHandler {
             HeifEncoder.tag -> HeifEncoder().handleMethodCall(call, result, context)
             CircleProximitySessionHandler.tag -> CircleProximitySessionHandler().handleMethodCall(call, result, context)
             EnableBTHandler.tag -> EnableBTHandler().handleMethodCall(call, result, context)
+            NativeSyncIsolateHandler.tag -> NativeSyncIsolateHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

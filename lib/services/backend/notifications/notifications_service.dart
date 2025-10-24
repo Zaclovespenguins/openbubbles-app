@@ -41,6 +41,7 @@ class NotificationsService extends GetxService {
   static const String FACETIME_CHANNEL = "com.bluebubbles.incoming_facetimes";
   static const String FOREGROUND_SERVICE_CHANNEL = "com.bluebubbles.foreground_service";
   static const String AUTH_CODES_CHANNEL = "com.bluebubbles.auth_codes";
+  static const String SYNC_STATUS_CHANNEL = "com.bluebubbles.sync_status";
 
   static const String NEW_MESSAGE_TAG = "com.bluebubbles.messaging.NEW_MESSAGE_NOTIFICATION";
   static const String NEW_FACETIME_TAG = "com.bluebubbles.messaging.NEW_FACETIME_NOTIFICATION";
@@ -113,6 +114,11 @@ class NotificationsService extends GetxService {
         AUTH_CODES_CHANNEL, 
         "Apple Account login requests", 
         "Shows Apple Account login requests"
+      );
+      createNotificationChannel(
+        SYNC_STATUS_CHANNEL, 
+        "Sync Status", 
+        "View the status of iCloud syncing."
       );
     }
 
@@ -797,6 +803,67 @@ class NotificationsService extends GetxService {
         "sbdy": message.aps.alert.sbdy,
       });
     }
+  }
+
+  Future<void> createSyncStatusNotification(String? status) async {
+    if (kIsDesktop) {
+      return;
+    }
+
+    if (status == null) {
+      await flnp.cancel(-3 - 50);
+      return;
+    }
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+        SYNC_STATUS_CHANNEL, // channel ID
+        'Sync Status', // channel name
+        channelDescription: 'View the status of iCloud syncing.',
+        channelShowBadge: false,
+        importance: Importance.low,
+        priority: Priority.low,
+        onlyAlertOnce: true,
+        showProgress: true,
+        indeterminate: true, // 👈 this makes it indeterminate
+      );
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flnp.show(
+      -3 - 50, // OB
+      'Syncing with iCloud',
+      status,
+      platformChannelSpecifics,
+      payload: "-53"
+    );
+  }
+
+  Future<void> createSyncFailed(String status) async {
+    if (kIsDesktop) {
+      return;
+    }
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+        SYNC_STATUS_CHANNEL, // channel ID
+        'Sync Status', // channel name
+        channelDescription: 'View the status of iCloud syncing.',
+        channelShowBadge: false,
+        importance: Importance.low,
+        priority: Priority.low,
+      );
+
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flnp.show(
+      -3 - 50, // OB
+      'Syncing with iCloud Failed',
+      status,
+      platformChannelSpecifics,
+    );
   }
 
   Future<void> createMissedCallNotification(String name, String callUuid) async {

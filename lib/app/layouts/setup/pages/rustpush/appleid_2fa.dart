@@ -284,7 +284,7 @@ class _AppleId2FAState extends OptimizedState<AppleId2FA> {
       }
     } catch (e) {
       if (e is AnyhowException) {
-        if (e.message.contains("This account needs to accept the ToS")) {
+        if (e.message.contains("MOBILEME_TERMS_OF_SERVICE_UPDATE")) {
           await controller.updateAccountUi((finished) => setState(() { loading = finished; }));
         }
         controller.updateConnectError(e.message);

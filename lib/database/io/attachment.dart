@@ -298,8 +298,9 @@ class Attachment {
       query.close();
       if (result?.id != null) {
         if (result?.ckRecordId != null && !pushService.syncStopDelete) {
-          ss.settings.attachmentDeletionIds.add(result!.ckRecordId!);
-          ss.saveSettings();
+          var list = ss.prefs.getStringList("attachmentDeletionIds-1") ?? [];
+          list.add(result!.ckRecordId!);
+          ss.prefs.setStringList("attachmentDeletionIds-1", list);
         }
         Database.attachments.remove(result!.id!);
       }

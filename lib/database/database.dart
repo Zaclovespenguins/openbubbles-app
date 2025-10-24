@@ -104,7 +104,7 @@ class Database {
         Logger.info("Successfully attached to an existing ObjectBox store");
       } else {
         Logger.info("Opening new ObjectBox store from path: ${objectBoxDirectory.path}");
-        store = await openStore(directory: objectBoxDirectory.path);
+        store = await openStore(directory: objectBoxDirectory.path, maxDBSizeInKB: 5 * 1024 * 1024);
       }
     } catch (e, s) {
       Logger.error("Failed to open ObjectBox store!", error: e, trace: s);

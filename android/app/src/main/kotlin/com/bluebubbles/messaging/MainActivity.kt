@@ -17,6 +17,7 @@ import com.bluebubbles.messaging.services.extension.MessageViewHandle
 import com.bluebubbles.messaging.services.rustpush.APNService
 import com.bluebubbles.messaging.services.system.CreateDocumentHandler
 import com.bluebubbles.messaging.services.system.EnableBTHandler
+import com.rmawatson.flutterisolate.FlutterIsolatePlugin
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel

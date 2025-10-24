@@ -405,7 +405,7 @@ async fn restore(curr_state: &PushState) {
     let (connection, _err) = setup_push(inner.os_config.as_ref().unwrap(), &state.identity, Some(&state.push), hw_config_path).await;
     inner.inq_queue = Some(Mutex::new(connection.messages_cont.subscribe()));
     inner.conn = Some(connection);
-    let provider = Some(default_provider(inner.os_config.as_ref().unwrap().get_gsa_config(&*inner.conn.as_ref().unwrap().state.read().await), inner.conf_dir.join("anisette_test")));
+    let provider = Some(default_provider(get_login_config(&inner).await, inner.conf_dir.join("anisette_test")));
     inner.anisette = provider;
 
     inner.idms_client = Some(IdmsAuthListener::new(inner.conn.as_ref().unwrap().clone()).await);
@@ -706,8 +706,40 @@ async fn setup_push(config: &JoinedOSConfig, identity: &IDSNGMIdentity, state: O
     (conn, error)
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct AnisetteState {
+    keychain_identifier: [u8; 16],
+    provisioned: Option<ProvisionedAnisette>,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+pub struct ProvisionedAnisette {
+    client_secret: Data,
+    mid: Data,
+    metadata: Data,
+    rinfo: String,
+    #[serde(default)]
+    flavor: ProvisionedFlavor,
+}
+
+#[derive(Serialize, Deserialize, Clone, Default)]
+pub enum ProvisionedFlavor {
+    #[default]
+    Mac,
+    IOS,
+}
+
 async fn get_login_config(inner: &InnerPushState) -> LoginClientInfo {
-    inner.os_config.as_ref().unwrap().get_gsa_config(&*inner.conn.as_ref().unwrap().state.read().await)
+    let anisette_dir = inner.conf_dir.join("anisette_test");
+    let config_path = anisette_dir.join("state.plist");
+
+    let require_mac = if let Ok(decoded) = plist::from_file::<_, AnisetteState>(config_path) {
+        matches!(decoded.provisioned, Some(ProvisionedAnisette { flavor: ProvisionedFlavor::Mac, .. }))
+    } else {
+        false
+    };
+
+    inner.os_config.as_ref().unwrap().get_gsa_config(&*inner.conn.as_ref().unwrap().state.read().await, require_mac)
 }
 
 pub async fn configure_app_review(state: &Arc<PushState>) -> anyhow::Result<()> {
@@ -1059,7 +1091,7 @@ pub async fn get_anisette_headers(state: &Arc<PushState>) -> anyhow::Result<Hash
     let state = state.0.read().await;
 
     let mut headers = state.anisette.as_ref().unwrap().lock().await.get_headers().await?.clone();
-    headers.insert("X-Mme-Client-Info".to_string(), state.os_config.as_ref().unwrap().get_adi_mme_info("com.apple.AuthKit/1 (com.apple.findmy/375.20)"));
+    headers.insert("X-Mme-Client-Info".to_string(), state.os_config.as_ref().unwrap().get_adi_mme_info("com.apple.AuthKit/1 (com.apple.findmy/375.20)", !headers["X-Mme-Client-Info"].contains("iPhone OS")));
     Ok(headers)
 }
 
@@ -2183,6 +2215,14 @@ pub async fn delete_attachments(
     let inner = state.0.read().await;
     let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
     Ok(cloud_messages_client.delete_attachments(attachments).await?)
+}
+
+pub async fn count_records(
+    state: &Arc<PushState>,
+) -> anyhow::Result<CloudMessageSummary> {
+    let inner = state.0.read().await;
+    let cloud_messages_client = inner.cloud_messages_client.as_ref().unwrap();
+    Ok(cloud_messages_client.count_records().await?)
 }
 
 pub async fn download_cloud_attachments(state: &Arc<PushState>, files: Vec<(String, String)>) -> anyhow::Result<()> {

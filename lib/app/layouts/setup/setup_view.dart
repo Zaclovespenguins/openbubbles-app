@@ -223,6 +223,11 @@ class SetupViewController extends StatefulController {
             updateSucceeded(finish);
             Get.back();
           });
+          // for ios, also hijacks macos because ios doesn't load prefpange-setupservice.js, loads ios-setupservice.js but that doesn't work
+          controller.addJavaScriptHandler(handlerName: 'confirmWithCallback', callback: (args) {
+            updateSucceeded(finish);
+            Get.back();
+          });
           controller.addJavaScriptHandler(handlerName: 'resizeToWindow', callback: (args) {
             setState(() {
               height = args[1];

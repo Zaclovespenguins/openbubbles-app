@@ -62,6 +62,8 @@ class NotificationChannelHandler: MethodCallHandlerImpl() {
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build()
             )
+        } else if (channelId == "com.bluebubbles.sync_status") {
+            channel.importance = NotificationManager.IMPORTANCE_LOW
         }
         // create the channel
         notificationManager.createNotificationChannel(channel)

@@ -52,6 +52,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
   RxList<api.PrivateDeviceInfo> forwardingTargets = RxList([]);
 
   Rxn<api.QuotaInfo> quotaInfo = Rxn(null);
+  // Rxn<api.CloudMessageSummary> cloudMessageSummary = Rxn(null);
 
   Future<void> handleSubscriptionToken(String subscription) async {
     var activated = await http.dio.post("https://hw.openbubbles.app/ticket/${ticket!}/activate", data: {"purchase_token": subscription});
@@ -132,6 +133,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
       handlePurchases(details);
     });
     api.getQuotaInfo(state: pushService.state).then((quota) => quotaInfo.value = quota);
+    // api.countRecords(state: pushService.state).then((summary) => cloudMessageSummary.value = summary);
   }
 
   @override
@@ -501,7 +503,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                             ),
                           ),
                       ),
-                      if(ss.settings.cloudSyncingEnabled.value && !pushService.isSyncing.value)
+                      if(ss.settings.cloudSyncingEnabled.value && pushService.isSyncing.value == null)
                       SettingsTile(
                         title: "Sync Now",
                         onTap: () async {
@@ -514,8 +516,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0, left: 15, top: 8.0, right: 15),
                             child: Text(
-                              pushService.isSyncing.value ? "Syncing Now..." :
-                              ss.settings.lastSynced.value == 0 ? "Not Synced" : "Synced ${buildChatListDateMaterial(DateTime.fromMillisecondsSinceEpoch(ss.settings.lastSynced.value))}"
+                              pushService.isSyncing.value ??
+                              ((ss.prefs.getInt("lastSynced") ?? 0) == 0 ? "Not Synced" : "Synced ${buildChatListDateMaterial(DateTime.fromMillisecondsSinceEpoch(ss.prefs.getInt("lastSynced")!))}")
                             )
                           ),
                       ),

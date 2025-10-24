@@ -1,10 +1,15 @@
 (function() {
+    Object.defineProperty(window, "prefpaneSetupserviceJSLoaded", {
+        value: true,
+        writable: false,
+        configurable: true,
+    });
     window.InternetAccount = {agreedToTerms: false, transferCookie: function() { }};
     methods = [
         "log",
         "cancel",
         "resizeToWindow",
-        // "confirmWithCallback", (provided in prefpange-setupservice.js)
+        "confirmWithCallback", //(provided in prefpange-setupservice.js)
         "updateSucceeded",
         "register",
     ];

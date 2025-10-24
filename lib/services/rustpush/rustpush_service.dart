@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -47,6 +48,8 @@ import 'package:convert/convert.dart';
 import 'package:bluebubbles/helpers/types/constants.dart' as constants;
 import 'dart:ui' as ui;
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+import 'package:bluebubbles/helpers/backend/startup_tasks.dart';
+import 'package:flutter_isolate/flutter_isolate.dart';
 
 var uuid = const Uuid();
 RustPushService pushService =
@@ -55,6 +58,57 @@ RustPushService pushService =
 
 const rpApiRoot = "https://hw.openbubbles.app/code";
 
+
+class SyncIsolate {
+  static void initialize() {
+    ui.CallbackHandle callbackHandle = ui.PluginUtilities.getCallbackHandle(backgroundSyncIsolate)!;
+    ss.prefs.setInt("backgroundSyncIsolate", callbackHandle.toRawHandle());
+  }
+}
+
+@pragma('vm:entry-point')
+Future<void> backgroundSyncIsolate() async {
+  final receive = ReceivePort();
+  ui.IsolateNameServer.registerPortWithName(receive.sendPort, "bg_sync");
+  List<SendPort> ports = [];
+
+  receive.listen((port) {
+    ports.add(port);
+  });
+
+  await StartupTasks.initIsolateServices();
+
+  pushService.isSyncing.listen((value) {
+    notif.createSyncStatusNotification(value);
+
+    ports.retainWhere((port) {
+      try {
+        port.send(value);
+        return true;
+      } catch (e) {
+        Logger.error("failed to send status", error: e);
+        return false;
+      }
+    });
+  });
+
+  chats.restoring = true;
+
+  await pushService.initFuture;
+
+  try {
+    await pushService.doCloudKitSyncPrivate();
+  } catch (e) {
+    notif.createSyncFailed(e.toString());
+    rethrow;
+  } finally {
+    pushService.isSyncing.value = null;
+    chats.restoring = false;
+    ui.IsolateNameServer.removePortNameMapping("bg_sync");
+    mcs.invokeMethod("exit");
+  }
+
+}
 
 // utils for communicating between dart and rustpush.
 class RustPushBBUtils {
@@ -2081,14 +2135,13 @@ class RustPushService extends GetxService {
   bool syncStopDelete = false;
 
   void eraseCloudKitSync() {
-    if (ss.settings.chatSyncToken.value == null) return;
-    ss.settings.chatSyncToken.value = null;
-    ss.settings.messageSyncToken.value = null;
-    ss.settings.attachmentSyncToken.value = null;
-    ss.settings.chatDeletionIds.clear();
-    ss.settings.messageDeletionIds.clear();
-    ss.settings.attachmentDeletionIds.clear();
-    ss.saveSettings();
+    if (ss.prefs.getString("chatSyncToken") == null) return;
+    ss.prefs.remove("chatSyncToken");
+    ss.prefs.remove("messageSyncToken");
+    ss.prefs.remove("attachmentSyncToken");
+    ss.prefs.remove("chatDeletionIds-1");
+    ss.prefs.remove("messageDeletionIds-1");
+    ss.prefs.remove("attachmentDeletionIds-1");
     var messages = Database.messages.getAll();
     for (var message in messages) {
       message.ckRecordId = null;
@@ -2110,19 +2163,32 @@ class RustPushService extends GetxService {
     Database.attachments.putMany(attachments);
   }
 
-  RxBool isSyncing = false.obs;
+  Rxn<String> isSyncing = Rxn(null);
   Future<void> doCloudKitSync() async {
-    isSyncing.value = true;
-    chats.restoring = true;
-    try {
-      await doCloudKitSyncPrivate();
-    } catch (e) {
-      showSnackbar("iCloud Sync failed", "$e");
-      rethrow;
-    } finally {
-      isSyncing.value = false;
-      chats.restoring = false;
+    if (kIsDesktop) {
+      chats.restoring = true;
+      try {
+        await pushService.doCloudKitSyncPrivate();
+      } finally {
+        pushService.isSyncing.value = null;
+        chats.restoring = false;
+      }
+      return;
     }
+    var syncing = ui.IsolateNameServer.lookupPortByName("bg_sync");
+    if (syncing != null) {
+      Logger.warn("Already syncing, not syncing again!");
+      return;
+    }
+    isSyncing.value = "Starting Sync...";
+    await mcs.invokeMethod("native-sync-isolate");
+    
+    var port = ReceivePort();
+    port.listen((data) {
+      isSyncing.value = data;
+    });
+    syncing = ui.IsolateNameServer.lookupPortByName("bg_sync");
+    syncing!.send(port.sendPort);
   }
 
   String formatBytes(int bytes, [int decimals = 2]) {
@@ -2130,7 +2196,7 @@ class RustPushService extends GetxService {
     const suffixes = ["B", "KB", "MB", "GB", "TB"];
     var i = (log(bytes) / log(1024)).floor();
     var size = bytes / pow(1024, i);
-    return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";
+    return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";  
   }
 
   Future<void> uploadMessages(
@@ -2242,6 +2308,7 @@ class RustPushService extends GetxService {
   }
 
   Future<void> doCloudKitSyncPrivate() async {
+    isSyncing.value = "Syncing Now...";
 
     var isInClique = await api.isInClique(state: pushService.state);
     if (!isInClique) {
@@ -2251,28 +2318,30 @@ class RustPushService extends GetxService {
       return;
     }
 
-    if (ss.settings.messageDeletionIds.isNotEmpty) {
-      await api.deleteMessages(state: pushService.state, messages: ss.settings.messageDeletionIds);
-      ss.settings.messageDeletionIds.clear();
+    if (ss.prefs.getStringList("messageDeletionIds-1")?.isNotEmpty ?? false) {
+      await api.deleteMessages(state: pushService.state, messages: ss.prefs.getStringList("messageDeletionIds-1")!);
+      ss.prefs.remove("messageDeletionIds-1");
     }
 
-    if (ss.settings.attachmentDeletionIds.isNotEmpty) {
-      await api.deleteAttachments(state: pushService.state, attachments: ss.settings.attachmentDeletionIds);
-      ss.settings.attachmentDeletionIds.clear();
+    if (ss.prefs.getStringList("attachmentDeletionIds-1")?.isNotEmpty ?? false) {
+      await api.deleteAttachments(state: pushService.state, attachments: ss.prefs.getStringList("attachmentDeletionIds-1")!);
+      ss.prefs.remove("attachmentDeletionIds-1");
     }
 
-    if (ss.settings.chatDeletionIds.isNotEmpty) {
-      await api.deleteChats(state: pushService.state, chats: ss.settings.chatDeletionIds);
-      ss.settings.chatDeletionIds.clear();
+    if (ss.prefs.getStringList("chatDeletionIds-1")?.isNotEmpty ?? false) {
+      await api.deleteChats(state: pushService.state, chats: ss.prefs.getStringList("chatDeletionIds-1")!);
+      ss.prefs.remove("chatDeletionIds-1");
     }
 
     ss.saveSettings();
+
+    isSyncing.value = "Syncing Chats...";
 
     List<(String, String)> downloadPfPics = [];
     var currentState = 0;
     while (currentState != 3) {
       var (token, items, state) = await api.syncChats(state: pushService.state, 
-        continuationToken: ss.settings.chatSyncToken.value != null ? base64Decode(ss.settings.chatSyncToken.value!) : null);
+        continuationToken: ss.prefs.getString("chatSyncToken") != null ? base64Decode(ss.prefs.getString("chatSyncToken")!) : null);
       currentState = state;
       List<String> dupDeleteChats = [];
       for (var item in items.entries) {
@@ -2329,18 +2398,20 @@ class RustPushService extends GetxService {
         }
       }
 
-      ss.settings.chatSyncToken.value = base64Encode(token);
-      ss.saveSettings();
+      ss.prefs.setString("chatSyncToken", base64Encode(token));
     }  
 
     if (downloadPfPics.isNotEmpty) {
       await api.downloadCloudGroupPhotos(state: pushService.state, files: downloadPfPics);
     }
 
+    isSyncing.value = "Downloading Attachments...";
+
+    var attCount = 0;
     currentState = 0;
     while (currentState != 3) {
       var (token3, items3, state3) = await api.syncAttachments(state: pushService.state, 
-          continuationToken: ss.settings.attachmentSyncToken.value != null ? base64Decode(ss.settings.attachmentSyncToken.value!) : null);
+          continuationToken: ss.prefs.getString("attachmentSyncToken") != null ? base64Decode(ss.prefs.getString("attachmentSyncToken")!) : null);
       currentState = state3;
       List<String> dupDeleteAttachments = [];
       for (var item in items3.entries) {
@@ -2388,8 +2459,10 @@ class RustPushService extends GetxService {
         }
       }
 
-      ss.settings.attachmentSyncToken.value = base64Encode(token3);
-      ss.saveSettings();
+      attCount += items3.length;
+      isSyncing.value = "Downloaded $attCount attachments";
+
+      ss.prefs.setString("attachmentSyncToken", base64Encode(token3));
     }
 
     int localUnchanged = 0;
@@ -2399,10 +2472,12 @@ class RustPushService extends GetxService {
     int totalMessages = 0;
     int remoteNew = 0;
 
+    isSyncing.value = "Downloading Messages...";
+
     currentState = 0;
     while (currentState != 3) {
       var (token2, items2, state2) = await api.syncMessages(state: pushService.state, 
-        continuationToken: ss.settings.messageSyncToken.value != null ? base64Decode(ss.settings.messageSyncToken.value!) : null);
+        continuationToken: ss.prefs.getString("messageSyncToken") != null ? base64Decode(ss.prefs.getString("messageSyncToken")!) : null);
       currentState = state2;
 
       List<String> dupDeleteMessages = [];
@@ -2458,10 +2533,13 @@ class RustPushService extends GetxService {
           } else { rethrow; }
         }
       }
+
+      isSyncing.value = "Downloaded $totalMessages messages";
       
-      ss.settings.messageSyncToken.value = base64Encode(token2);
-      ss.saveSettings();
+      ss.prefs.setString("messageSyncToken", base64Encode(token2));
     }
+
+    isSyncing.value = "Uploading chats...";
 
     Logger.info("Out");
 
@@ -2473,6 +2551,7 @@ class RustPushService extends GetxService {
     Logger.info("Out2");
     Map<String, api.CloudChat> saveChats = {};
     List<(String, String)> uploadPhotos = [];
+    var totalSavedChats = 0;
     for (var chat in useChats) {
       var item = await chat.toCloud();
 
@@ -2505,6 +2584,8 @@ class RustPushService extends GetxService {
         }
       }
 
+      totalSavedChats += saveChats.length;
+
       var result = await api.saveChats(state: pushService.state, chats: saveChats);
       for (var result in result.entries) {
         if (result.value) continue; // success
@@ -2515,6 +2596,8 @@ class RustPushService extends GetxService {
       for (var result in useChats) {
         result.save(updateCkRecordId: true); // save ckRecordId
       }
+
+      isSyncing.value = "Uploaded $totalSavedChats chats";
     }
 
     Logger.info("Syncing messages");
@@ -2536,9 +2619,10 @@ class RustPushService extends GetxService {
         ..limit = 3000;
       messages = unsyncedMessages.find();
       localUpload += messages.length;
+      isSyncing.value = "Uploaded $localUpload messages";
     }
 
-    ss.settings.lastSynced.value = DateTime.now().millisecondsSinceEpoch;
+    ss.prefs.setInt("lastSynced", DateTime.now().millisecondsSinceEpoch);
     Logger.info("Syncing completed");
     Logger.info("Sync stats: $localUnchanged $localChanged $localSet $remoteSaved $localUpload $totalMessages $remoteNew");
   }
@@ -4542,6 +4626,22 @@ class RustPushService extends GetxService {
     }
   }
 
+  void initSyncState() {
+    isSyncing.listen((syncing) {
+      chats.restoring = syncing != null;
+    });
+    if (!ls.isUiThread) return;
+
+    var syncing = ui.IsolateNameServer.lookupPortByName("bg_sync");
+    if (syncing != null) {
+      var port = ReceivePort();
+      port.listen((data) {
+        isSyncing.value = data;
+      });
+      syncing.send(port.sendPort);
+    }
+  }
+
   // uniquely identify the backend service that is running
   String serviceId = "";
 
@@ -4591,6 +4691,7 @@ class RustPushService extends GetxService {
         }
       }
     })();
+    initSyncState();
     initAppLinks();
     initMixPanel();
     await initFuture;

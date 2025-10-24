@@ -1203,8 +1203,9 @@ class Chat {
       Database.attachments.removeMany(attachments.map((e) => e.id!).toList());
     });
     if (chat.ckRecordId != null && !pushService.syncStopDelete) {
-      ss.settings.chatDeletionIds.add(chat.ckRecordId!);
-      ss.saveSettings();
+      var list = ss.prefs.getStringList("chatDeletionIds-1") ?? [];
+      list.add(chat.ckRecordId!);
+      ss.prefs.setStringList("chatDeletionIds-1", list);
     }
   }
 

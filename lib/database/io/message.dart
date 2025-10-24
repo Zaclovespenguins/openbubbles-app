@@ -1251,8 +1251,9 @@ class Message {
       query.close();
       if (result?.id != null) {
         if (result?.ckRecordId != null && !pushService.syncStopDelete) {
-          ss.settings.messageDeletionIds.add(result!.ckRecordId!);
-          ss.saveSettings();
+          var list = ss.prefs.getStringList("messageDeletionIds-1") ?? [];
+          list.add(result!.ckRecordId!);
+          ss.prefs.setStringList("messageDeletionIds-1", list);
         }
         Database.messages.remove(result!.id!);
       }

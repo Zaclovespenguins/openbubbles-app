@@ -212,7 +212,7 @@ class IntentsService extends GetxService {
           },
         ),
       );
-    } else if (guid == "-51") {
+    } else if (guid == "-51" || guid == '-53') {
       Logger.debug("Opening profile panel...", tag: "IntentsService");
       ns.pushLeft(Get.context!, ProfilePanel());
     } else if (guid == "-52") {
