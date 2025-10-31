@@ -192,4 +192,10 @@ dependencies {
 
     // heic decoding
     implementation 'com.github.awxkee:avif-coder:1.8.0'
+
+    def shizuku_version = "13.1.5"
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+
+    // Add this line if you want to support Shizuku
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
 }

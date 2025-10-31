@@ -1,12 +1,12 @@
-use std::{collections::{BTreeMap, HashMap}, fmt::Debug, sync::{Arc, LazyLock, OnceLock, RwLock}, time::Duration};
+use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, LazyLock, OnceLock, RwLock}, time::Duration};
 
 use flexi_logger::{FileSpec, Logger, WriteMode};
 use log::{error, info, warn};
-use rustpush::get_gateways_for_mccmnc;
+use rustpush::{EntitlementAuthState, PushError, get_gateways_for_mccmnc};
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
-use crate::{api::api::{approve_circle, decline_facetime, get_2fa_code, get_phase, new_push_state, recv_wait, set_status, teardown_2fa, PollResult, PushMessage, PushState, RegistrationPhase}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger, RUNTIME};
+use crate::{RUNTIME, api::api::{PollResult, PushMessage, PushState, RegistrationPhase, approve_circle, decline_facetime, get_2fa_code, get_entitlements, get_phase, new_push_state, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
 
 #[derive(uniffi::Record)] 
 pub struct FileInfo {
@@ -69,11 +69,30 @@ pub fn init_native(dir: String, handler: Arc<dyn MsgReceiver>, packager: Arc<dyn
 pub fn get_carrier(handler: Arc<dyn CarrierHandler>, mccmnc: String) {
     RUNTIME.spawn(async move {
         match get_gateways_for_mccmnc(&mccmnc).await {
-            Ok(gateway) => handler.got_gateway(Some(gateway), None),
+            Ok(gateway) => handler.got_gateway(Some(gateway.gateway), None),
             Err(err) => handler.got_gateway(None, Some(err.to_string())),
         }
     });
 }
+
+
+#[uniffi::export(with_foreign)]
+pub trait EntitlementHandler: Send + Sync + Debug {
+    fn got_user(&self, gateway: Option<String>, error: Option<String>);
+    fn perform_challenge(&self, challenge: String) -> Option<String>;
+}
+
+pub fn plist_to_buf<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, plist::Error> {
+    let mut buf: Vec<u8> = Vec::new();
+    let writer = Cursor::new(&mut buf);
+    plist::to_writer_xml(writer, &value)?;
+    Ok(buf)
+}
+
+pub fn plist_to_string<T: serde::Serialize>(value: &T) -> Result<String, plist::Error> {
+    plist_to_buf(value).map(|val| String::from_utf8(val).unwrap())
+}
+
 
 pub static QUEUED_MESSAGES: LazyLock<Mutex<(u64, HashMap<u64, PushMessage>)>> = LazyLock::new(|| Mutex::new((0, HashMap::new())));
 
@@ -133,6 +152,19 @@ impl NativePushState {
                 }
             }
             info!("finishing loop");
+        });
+    }
+
+    pub fn get_entitlements(&self, handler: Arc<dyn EntitlementHandler>, mccmnc: String, subscriber: String, imei: String) {
+        let state_ref = self.state.clone();
+        RUNTIME.spawn(async move {
+            let handler_copy = handler.clone();
+            match get_entitlements(&state_ref, mccmnc, subscriber, imei, |challenge| async move {
+                handler_copy.perform_challenge(challenge).ok_or(PushError::ICCAuthFailed)
+            }).await {
+                Ok(entitlements) => handler.got_user(Some(plist_to_string(&entitlements).unwrap()), None),
+                Err(err) => handler.got_user(None, Some(err.to_string())),
+            }
         });
     }
 

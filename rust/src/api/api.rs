@@ -14,7 +14,7 @@ use sha2::Digest;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, oneshot::{self, Sender}, watch, Mutex, RwLock}};
-use rustpush::{authenticate_apple, authenticate_phone, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FTClient, FTState, FACETIME_SERVICE, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}, APSMessage, CircleClientSession, CircleServerSession, IDSNGMIdentity, LoginDelegate, TokenProvider, MADRID_SERVICE};
+use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
 use rustpush::AnisetteProvider;
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
@@ -1093,6 +1093,18 @@ pub async fn get_anisette_headers(state: &Arc<PushState>) -> anyhow::Result<Hash
     let mut headers = state.anisette.as_ref().unwrap().lock().await.get_headers().await?.clone();
     headers.insert("X-Mme-Client-Info".to_string(), state.os_config.as_ref().unwrap().get_adi_mme_info("com.apple.AuthKit/1 (com.apple.findmy/375.20)", !headers["X-Mme-Client-Info"].contains("iPhone OS")));
     Ok(headers)
+}
+
+#[frb(ignore)]
+pub async fn get_entitlements<Fut: Future<Output = Result<String, PushError>>>(state: &Arc<PushState>, mccmnc: String, subscriber: String, imei: String, process_challenge: impl FnOnce(String) -> Fut) -> anyhow::Result<IDSUser> {
+    let inner = state.0.read().await;
+    let mut entitlementstate = EntitlementAuthState::new(subscriber, mccmnc, imei);
+
+    let entitlements = entitlementstate.get_entitlements(inner.os_config.as_deref().unwrap(), inner.conn.as_ref().unwrap(), process_challenge).await?;
+
+    let user = authenticate_smsless(&entitlements.phone, &entitlements.host, inner.os_config.as_deref().unwrap(), inner.conn.as_ref().unwrap()).await?;
+
+    Ok(user)
 }
 
 pub async fn retry_login(state: &Arc<PushState>) -> anyhow::Result<IDSUser> {
@@ -2434,6 +2446,7 @@ pub async fn verify_2fa_sms(state: &Arc<PushState>, body: &VerifyBody, code: Str
 pub async fn validate_cert(state: &Arc<PushState>, user: &IDSUser) -> anyhow::Result<Vec<String>> {
     let inner = state.0.read().await;
     let x = Ok(user.get_possible_handles(&*inner.conn.as_ref().unwrap().state.read().await).await?);
+    info!("Validated cert");
     x
 }
 

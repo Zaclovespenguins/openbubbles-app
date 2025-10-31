@@ -42,7 +42,7 @@ class SMSAuthGateway: MethodCallHandlerImpl() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             telephonyManager = telephonyManager.createForSubscriptionId(subscription)
         }
-        val carrierMccMnc = telephonyManager.networkOperator
+        val carrierMccMnc = telephonyManager.simOperator
 
         getCarrier(object : CarrierHandler {
             override fun gotGateway(gateway: String?, error: String?) {

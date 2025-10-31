@@ -1019,10 +1019,22 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                   style: context
                                                       .theme.textTheme.titleLarge,
                                                 ),
-                                                content: Text(
-                                                  "Re-login will be required. No messages will be deleted.",
-                                                  style: context
-                                                      .theme.textTheme.bodyLarge,
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Re-login will be required. No messages will be deleted.",
+                                                      style: context
+                                                          .theme.textTheme.bodyLarge,
+                                                    ),
+                                                    const SizedBox(height: 10,),
+                                                    if (ss.settings.keychainDefaultPassword.value != null)
+                                                    Text(
+                                                      "This device's iCloud Keychain code is ${ss.settings.keychainDefaultPassword.value}. This code will not be available after confirming, and you may need it to access your encrypted data in iCloud. It can be changed in Settings -> Device.",
+                                                      style: context
+                                                          .theme.textTheme.bodyLarge?.apply(fontWeightDelta: 2),
+                                                    ),
+                                                  ],
                                                 ),
                                                 backgroundColor: context.theme
                                                     .colorScheme.properSurface,
@@ -1080,10 +1092,22 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                   style: context
                                                       .theme.textTheme.titleLarge,
                                                 ),
-                                                content: Text(
-                                                  "Re-login will be required. No messages will be deleted.",
-                                                  style: context
-                                                      .theme.textTheme.bodyLarge,
+                                                content: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Re-login will be required. No messages will be deleted.",
+                                                      style: context
+                                                          .theme.textTheme.bodyLarge,
+                                                    ),
+                                                    const SizedBox(height: 10,),
+                                                    if (ss.settings.keychainDefaultPassword.value != null)
+                                                    Text(
+                                                      "This device's iCloud Keychain code is ${ss.settings.keychainDefaultPassword.value}. This code will not be available after confirming, and you may need it to access your encrypted data in iCloud. It can be changed in Settings -> Device.",
+                                                      style: context
+                                                          .theme.textTheme.bodyLarge?.apply(fontWeightDelta: 2),
+                                                    ),
+                                                  ],
                                                 ),
                                                 backgroundColor: context.theme
                                                     .colorScheme.properSurface,
@@ -1155,10 +1179,22 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                 style: context
                                                     .theme.textTheme.titleLarge,
                                               ),
-                                              content: Text(
-                                                "This will delete all app data, including your settings, messages, attachments, and more. This action cannot be undone. It is recommended that you take a backup of your settings before proceeding. This will also close the app once the process is complete.",
-                                                style: context
-                                                    .theme.textTheme.bodyLarge,
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                    "This will delete all app data, including your settings, messages, attachments, and more. This action cannot be undone. It is recommended that you take a backup of your settings before proceeding. This will also close the app once the process is complete.",
+                                                    style: context
+                                                        .theme.textTheme.bodyLarge,
+                                                  ),
+                                                  const SizedBox(height: 10,),
+                                                  if (ss.settings.keychainDefaultPassword.value != null)
+                                                  Text(
+                                                    "This device's iCloud Keychain code is ${ss.settings.keychainDefaultPassword.value}. This code will not be available after confirming, and you may need it to access your encrypted data in iCloud. It can be changed in Settings -> Device.",
+                                                    style: context
+                                                        .theme.textTheme.bodyLarge?.apply(fontWeightDelta: 2),
+                                                  ),
+                                                ],
                                               ),
                                               backgroundColor: context.theme
                                                   .colorScheme.properSurface,

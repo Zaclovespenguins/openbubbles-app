@@ -576,6 +576,23 @@ class SetupViewController extends StatefulController {
 
   void updateConnectError(String newError) {
     handleOfflineError(newError, null);
+    if (newError.contains("6005") && currentPhoneUsers.isNotEmpty) {
+      for (var user in currentPhoneUsers.keys) {
+        ss.settings.cachedCodes.remove("sms-auth-$user");
+        ss.saveSettings();
+      }
+
+      currentPhoneUsers.clear();
+
+      newError = "Phone Number validation failed, please re-authenticate!";
+      updateWidgets<ErrorText>(newError);
+      pageController.jumpToPage(5);
+      return;
+    }
+    if (newError.contains("Wrong phase!")) {
+      pushService.correctState();
+      return;
+    }
     if (newError.contains("6001")) {
       newError += " Make sure Contact Key Verification and Advanced Data Protection are off.";
     }
@@ -616,15 +633,16 @@ class _SetupViewState extends OptimizedState<SetupView> {
         var user = await api.restoreUser(user: items.value);
         controller.phoneValidating.value = true;
         try {
-          Logger.debug("restore validating!");
+          Logger.info("restore validating!");
           await api.validateCert(state: pushService.state, user: user);
+          Logger.info("restore validated");
         } catch (e) {
-          Logger.debug("restore resetting! $e");
+          Logger.info("restore resetting! $e");
           ss.settings.cachedCodes.remove(items.key);
           ss.saveSettings();
           continue;
         } finally {
-          Logger.debug("restore done!");
+          Logger.info("restore done!");
           controller.phoneValidating.value = false;
         }
 

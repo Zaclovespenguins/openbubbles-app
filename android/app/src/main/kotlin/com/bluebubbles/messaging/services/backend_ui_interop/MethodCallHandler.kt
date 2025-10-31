@@ -40,6 +40,7 @@ import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandle
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.AppleAccountLoginHandler
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
+import com.bluebubbles.messaging.services.rustpush.SMSLessAuthGateway
 import com.bluebubbles.messaging.services.system.EnableBTHandler
 import com.bluebubbles.messaging.services.system.CircleProximitySessionHandler
 import com.bluebubbles.messaging.services.system.ConversationExemptHandler
@@ -51,6 +52,7 @@ import com.bluebubbles.messaging.services.system.HeifEncoder
 import com.bluebubbles.messaging.services.system.NativeSyncIsolateHandler
 import com.bluebubbles.messaging.services.system.OpenSMSAppHandler
 import com.bluebubbles.messaging.services.system.RecentContactsRequestHandler
+import com.bluebubbles.messaging.services.system.ShizukuGrantPermissionHandler
 import com.bluebubbles.messaging.services.system.ZenModeSetupHandler
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
 import io.flutter.plugin.common.MethodCall
@@ -131,6 +133,8 @@ class MethodCallHandler {
             CircleProximitySessionHandler.tag -> CircleProximitySessionHandler().handleMethodCall(call, result, context)
             EnableBTHandler.tag -> EnableBTHandler().handleMethodCall(call, result, context)
             NativeSyncIsolateHandler.tag -> NativeSyncIsolateHandler().handleMethodCall(call, result, context)
+            SMSLessAuthGateway.tag -> SMSLessAuthGateway().handleMethodCall(call, result, context)
+            ShizukuGrantPermissionHandler.tag -> ShizukuGrantPermissionHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

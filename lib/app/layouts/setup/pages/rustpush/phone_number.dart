@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:async_task/async_task_extension.dart';
 import 'package:bluebubbles/app/layouts/settings/dialogs/custom_headers_dialog.dart';
@@ -64,14 +65,44 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
     }
   }
 
-  Future<void> subscribeSubscription(int subscription) async {
+  RxBool failedSms = false.obs;
+
+  Future<void> subscribeSubscription(int subscription, {bool trySmsLess = true}) async {
     if (ss.settings.cachedCodes.containsKey("sms-auth-$subscription")) {
       controller.currentPhoneUsers[subscription] = await api.restoreUser(user: ss.settings.cachedCodes["sms-auth-$subscription"]!);
       controller.updateConnectError("");
       setState(() { });
       return;
     }
+    failedSms.value = false;
     controller.phoneValidating.value = true;
+
+    if (trySmsLess) {
+      try {
+        String resp = await mcs.invokeMethod("sms-less-auth-gateway", {'subscription': subscription});
+
+        controller.currentPhoneUsers[subscription] = await api.restoreUser(user: resp);
+        ss.settings.cachedCodes["sms-auth-$subscription"] = resp;
+        ss.saveSettings();
+        controller.updateConnectError("");
+        setState(() { });
+        controller.phoneValidating.value = false;
+        return;
+      } catch (e) {
+        if (e is PlatformException) {
+          var msg = e.code;
+          if (!msg.contains("No ICC auth permission!")) {
+            controller.updateConnectError(msg);
+            controller.phoneValidating.value = false;
+            rethrow;
+          }
+        } else {
+          controller.phoneValidating.value = false;
+          rethrow;
+        }
+      }
+    }
+
     try {
       var granted = await TelephonyPlus().requestPermissions();
       if (!granted) {
@@ -99,6 +130,7 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
       if (e is PanicException) {
         controller.updateConnectError(e.message);
       }
+      failedSms.value = true;
       rethrow;
     } finally {
       controller.phoneValidating.value = false;
@@ -142,6 +174,100 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
                             backgroundColor: tileColor,
                             isThreeLine: true,
                           ),
+                        if (failedSms.value)
+                          TextButton(
+                              onPressed: () async {
+                                await showDialog(
+                                  context: Get.context!,
+                                  builder: (context) => AlertDialog(
+                                    title: const Text('Alternate Activation'),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "If SMS-based activation is not working, you can try SMS-less activation. This requires granting OpenBubbles special permissions so it can authenticate directly with your SIM.",
+                                          style: Get.textTheme.bodyMedium,
+                                        ),
+                                        Padding(padding: const EdgeInsets.only(top:10), child: Text(
+                                          "Method 1 (Easiest)",
+                                          style: Get.textTheme.labelLarge,
+                                        ),),
+                                        RichText(
+                                          text: TextSpan(
+                                            style: Get.textTheme.bodyMedium,
+                                            children: [
+                                              TextSpan(
+                                                text: "Download Shizuku from the Play Store",
+                                                style: const TextStyle(
+                                                  color: Colors.blue,
+                                                ),
+                                                recognizer: TapGestureRecognizer()
+                                                  ..onTap = () {
+                                                    launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=moe.shizuku.privileged.api&hl=en_US"), mode: LaunchMode.externalApplication);
+                                                  },
+                                              ),
+                                              const TextSpan(
+                                                text: ". Look for 'Start via Wireless Debugging', and follow the step-by-step guide. Then, click the 'Use Shizuku' button."
+                                              ),
+                                            ]
+                                          ),
+                                        ),
+                                        Padding(padding: const EdgeInsets.only(top:10), child: Text(
+                                          "Method 2 (ADB; requires computer)",
+                                          style: Get.textTheme.labelLarge,
+                                        ),),
+                                        Text(
+                                          "Connect your Phone to your computer. Run this command in the ADB shell:",
+                                          style: Get.textTheme.bodyMedium,
+                                        ),
+                                        GestureDetector(
+                                          child: RichText(
+                                            text: TextSpan(
+                                              style: context.theme.textTheme.bodySmall,
+                                              children: [
+                                                const TextSpan(
+                                                  text: "appops set --uid com.openbubbles.messaging USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER allow (click to copy)"
+                                                ),
+                                              ]
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            Clipboard.setData(const ClipboardData(text: "appops set --uid com.openbubbles.messaging USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER allow"));
+                                            if (!Platform.isAndroid || (fs.androidInfo?.version.sdkInt ?? 0) < 33) {
+                                              showSnackbar("Copied", "Command copied to clipboard!");
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    actions: <Widget>[
+                                      TextButton(
+                                              onPressed: () => Get.back(),
+                                              child: Text("Done", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary))),
+                                      TextButton(
+                                              onPressed: () async {
+                                                try {
+                                                  await mcs.invokeMethod("shizuku-grant-permission");
+                                                } catch (e) {
+                                                  if (e is PlatformException) {
+                                                    showSnackbar("Error", e.code);
+                                                  }
+                                                  rethrow;
+                                                }
+                                                Get.back();
+                                                failedSms.value = false;
+                                              },
+                                              child: Text("Use Shizuku", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary))),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Try Alternate Activation Method",
+                                style: context.theme.textTheme.bodyMedium!.apply(color: HexColor('2772C3'))
+                              )
+                            ),
                         if (!failed.value)
                         ...mcs.simInfo.map((sim) => SettingsSwitch(
                             padding: false,
