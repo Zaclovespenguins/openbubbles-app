@@ -64,7 +64,7 @@ class AuthCodeActivity : Activity() {
                 val client = APNClient(applicationContext)
                 client.bind { service: APNService ->
                     try {
-                        service.pushState.teardown2fa("albtn", AppleAccountLoginHandler.txnid!!)
+                        service.pushState?.teardown2fa("albtn", AppleAccountLoginHandler.txnid!!)
                         AppleAccountLoginHandler.txnid = null
                     } finally {
                         client.destroy()
@@ -79,8 +79,8 @@ class AuthCodeActivity : Activity() {
                         try {
                             done = true
                             // will block, get before tearing down because that can cause GSA to lock
-                            val code = service.pushState.getAuthCode(AppleAccountLoginHandler.txnid!!)
-                            service.pushState.teardown2fa("defbtn", AppleAccountLoginHandler.txnid!!)
+                            val code = service.pushState!!.getAuthCode(AppleAccountLoginHandler.txnid!!)
+                            service.pushState?.teardown2fa("defbtn", AppleAccountLoginHandler.txnid!!)
                             AppleAccountLoginHandler.txnid = null
                             runOnUiThread {
                                 allow(code)

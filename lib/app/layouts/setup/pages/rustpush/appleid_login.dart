@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:bluebubbles/app/components/avatars/contact_avatar_widget.dart';
 import 'package:bluebubbles/app/layouts/settings/dialogs/custom_headers_dialog.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/layout/settings_section.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/page_template.dart';
 import 'package:bluebubbles/app/layouts/setup/setup_view.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
@@ -29,9 +31,13 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
 
   bool obscureText = true;
 
+  String? availableUser;
+
   @override
   void initState() {
     super.initState();
+
+    availableUser = api.getAvailableUser(path: pushService.statePath);
 
     // Start listening to changes.
     appleIdController.addListener(() {
@@ -61,7 +67,9 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                     ),
                     child: Column(
                       children: [
+                        if (availableUser == null)
                         const SizedBox(height: 20),
+                        if (availableUser == null)
                         Container(
                           width: context.width * 2 / 3,
                           child: Focus(
@@ -96,7 +104,9 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                             ),
                           ),
                         ),
+                        if (availableUser == null)
                         const SizedBox(height: 20),
+                        if (availableUser == null)
                         Container(
                           width: context.width * 2 / 3,
                           child: Focus(
@@ -141,13 +151,15 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                             ),
                           ),
                         ),
+                        if (availableUser == null)
                         const SizedBox(height: 10),
+                        if (availableUser == null)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextButton(
                               onPressed: () async {
-                                var devInfo = await api.getDeviceInfoState(state: pushService.state);
+                                var devInfo = await api.getDeviceInfo(config: controller.config!);
                                 await showDialog(
                                   context: Get.context!,
                                   builder: (context) => AlertDialog(
@@ -204,6 +216,45 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                             ),
                           ],
                         ),
+                        if (availableUser != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Material(
+                            color: tileColor,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: ListTile(
+                              mouseCursor: MouseCursor.defer,
+                              leading: ContactAvatarWidget(
+                                handle: null,
+                                borderThickness: 0.1,
+                                editable: false,
+                                fontSize: 22,
+                                size: 50,
+                              ),
+                              onTap: () async {
+                                if (loading) return;
+                                connect(availableUser!, null);
+                              },
+                              title: RichText(
+                                text: TextSpan(
+                                  style: context.theme.textTheme.bodyLarge,
+                                  children: MessageHelper.buildEmojiText(
+                                    ss.settings.redactedMode.value && ss.settings.hideContactInfo.value
+                                        ? "User Name" : ss.settings.userName.value,
+                                    context.theme.textTheme.bodyLarge!,
+                                  ),
+                                ),
+                              ),
+                              subtitle: Text(ss.settings.redactedMode.value && ss.settings.hideContactInfo.value
+                                  ? "User iCloud"
+                                  : availableUser!, style: context.theme.textTheme.bodyMedium!.apply(color: context.theme.colorScheme.outline)),
+                              trailing: loading ? buildProgressIndicator(context, brightness: Brightness.dark) : Icon(Icons.arrow_forward, color: context.theme.colorScheme.onBackground, size: 20),
+                            ),
+                          ),
+                        ),
+
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,7 +299,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                 ),
                               ),
                             ),
-                            if ((appleIdController.text != "" && passwordController.text != "") || controller.currentPhoneUsers.isEmpty)
+                            if (((appleIdController.text != "" && passwordController.text != "") || controller.currentPhoneUsers.isEmpty) && availableUser == null)
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
@@ -298,7 +349,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                 )
                               ),
                             ),
-                            if (!((appleIdController.text != "" && passwordController.text != "") || controller.currentPhoneUsers.isEmpty))
+                            if ((!((appleIdController.text != "" && passwordController.text != "") || controller.currentPhoneUsers.isEmpty) || availableUser != null) && !(availableUser != null && loading))
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(25),
@@ -322,6 +373,12 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                   minimumSize: MaterialStateProperty.all(const Size(30, 30)),
                                 ),
                                 onPressed: loading ? null : () async {
+                                  if (availableUser != null) {
+                                    setState(() {
+                                      availableUser = null;
+                                    });
+                                    return;
+                                  }
                                   controller.updateConnectError("");
                                   setState(() {
                                     loading = true;
@@ -362,7 +419,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                     Opacity(opacity: loading ? 0 : 1, child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text("Skip",
+                                        Text(availableUser != null ? "Change" : "Skip",
                                             style: context.theme.textTheme.bodyLarge!
                                                 .apply(fontSizeFactor: 1.1, color: context.theme.colorScheme.onBackground)),
                                         const SizedBox(width: 10),
@@ -386,7 +443,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
     );
   }
 
-  Future<void> connect(String appleId, String password) async {
+  Future<void> connect(String appleId, String? password) async {
     // apple only takes lowercase
     appleId = appleId.toLowerCase();
     controller.updateConnectError("");
@@ -394,8 +451,15 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
       loading = true;
     });
     try {
-      var (result, user) = await api.tryAuth(state: pushService.state, username: appleId, password: password);
+      var (account, result, user) = await api.tryAuth(
+        path: pushService.statePath,
+        conf: controller.config!,
+        conn: controller.connection!,
+        anisette: controller.anisette!, 
+        creds: password == null ? null : (appleId, password),
+      );
       controller.currentAppleUser = user;
+      controller.currentAppleAccount = account;
       result = await controller.updateLoginState(result);
 
 
@@ -412,8 +476,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
       if (result is api.LoginState_Needs2FAVerification || result is api.LoginState_NeedsSMS2FAVerification) {
         // we need 2fa
         controller.goingTo2fa = true;
-        controller.twoFaUser = appleId;
-        controller.twoFaPass = password;
+        controller.twoFaCreds = password == null ? null : (appleId, password);
         controller.pageController.nextPage(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,

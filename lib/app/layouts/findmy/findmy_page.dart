@@ -157,11 +157,17 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
     }
 
     var isNew = fmfClient == null;
-    fmfClient ??= await api.makeFindMyFriends(state: pushService.state);
+    fmfClient ??= await api.makeFindMyFriends(
+      path: pushService.statePath,
+      config: pushService.state!.osConfig,
+      aps: pushService.state!.conn,
+      anisette: pushService.state!.anisette,
+      provider: pushService.state!.icloudServices!.tokenProvider,
+    );
 
     try {
       if (refreshFriends && !isNew) {
-        await api.refreshFollowing(state: pushService.state, client: fmfClient!);
+        await api.refreshFollowing(config: pushService.state!.osConfig, client: fmfClient!);
       }
 
       var following = await api.getFollowing(client: fmfClient!);
@@ -204,7 +210,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
           }
           await completer.future;
 
-          await api.selectFriend(state: pushService.state, client: fmfClient!, friend: friend.id);
+          await api.selectFriend(config: pushService.state!.osConfig, client: fmfClient!, friend: friend.id);
 
 
           if (friend.latitude != null) {
@@ -227,12 +233,18 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
     }
 
     var isNewi = fmipClient == null;
-    fmipClient ??= await api.makeFindMyPhone(state: pushService.state);
+    fmipClient ??= await api.makeFindMyPhone(
+      config: pushService.state!.osConfig,
+      path: pushService.statePath,
+      aps: pushService.state!.conn,
+      anisette: pushService.state!.anisette,
+      provider: pushService.state!.icloudServices!.tokenProvider,
+    );
 
 
     try {
       if (refreshDevices && !isNewi) {
-        await api.refreshDevices(state: pushService.state, client: fmipClient!);
+        await api.refreshDevices(config: pushService.state!.osConfig, client: fmipClient!);
       }
 
       var following = await api.getDevices(client: fmipClient!);
@@ -306,9 +318,9 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
       
 
       if (beaconCacheDate == null || DateTime.now().difference(beaconCacheDate!).inMinutes > 3) {
-        isInClique = await api.isInClique(state: pushService.state);
+        isInClique = await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!);
         try {
-          cachedBeacons = isInClique ? await api.getBeaconItems(state: pushService.state) : [];
+          cachedBeacons = isInClique ? await api.getBeaconItems(items: pushService.state!.icloudServices!.fmfd!) : [];
         } catch (e, s) {
           // used for PCS key missing catching after we reset the clique.
           Logger.error("Failed to fetch beacon data", error: e, trace: s);
@@ -711,8 +723,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
               SettingsTile(
                 title: "Show Airtags",
                 onTap: () async {
-                  var supportsKeychain = await api.supportsKeychain(state: pushService.state);
-                  if (!supportsKeychain) {
+                  if (pushService.state?.icloudServices?.keychain == null) {
                     showSnackbar("Relog required!", "Relog required to use Backup! Relog in Settings -> Reconfigure");
                     return;
                   }
@@ -1034,7 +1045,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                                 title: Text(item.handle?.displayName ?? item.title ?? "Unknown Friend"),
                                 subtitle: Text(ss.settings.redactedMode.value ? "Location" : (item.longAddress ?? "No location found")),
                                 onTap: () async {
-                                  await api.selectFriend(state: pushService.state, client: fmfClient!, friend: item.id);
+                                  await api.selectFriend(config: pushService.state!.osConfig, client: fmfClient!, friend: item.id);
                                 },
                                 onLongPress: () async {
                                   const encoder = JsonEncoder.withIndent("     ");
@@ -1655,7 +1666,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
             onPopupEvent: (ev, m) async {
               final item = m.isEmpty ? null : friends
                       .firstWhere((e) => e.latitude == m[0].point.latitude && e.longitude == m[0].point.longitude).id;
-              await api.selectFriend(state: pushService.state, client: fmfClient!, friend: item);
+              await api.selectFriend(config: pushService.state!.osConfig, client: fmfClient!, friend: item);
             },
             popupController: popupController,
             markers: markers.values.toList(),

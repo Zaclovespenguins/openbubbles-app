@@ -468,13 +468,14 @@ class _TroubleshootPanelState extends OptimizedState<TroubleshootPanel> {
                       title: "Clear identity cache",
                       subtitle: "Run this troubleshooter if you're having trouble sending messages.",
                       onTap: () async {
-                        await api.invalidateIdCache(state: pushService.state);
+                        await api.invalidateIdCache(client: pushService.state!.client);
                         showSnackbar("Success", "Identity cache cleared! Try re-sending any messages.");
                       }),
                     SettingsTile(
                       title: "Clear peer caches",
                       subtitle: "Run this troubleshooter if you are told to do so.",
                       onTap: () async {
+                        if (reregisteringIds.value ?? false) return;
                         try {
                           reregisteringIds.value = true;
                           await pushService.invalidatePeerCaches();
@@ -502,10 +503,39 @@ class _TroubleshootPanelState extends OptimizedState<TroubleshootPanel> {
                       title: "Reregister",
                       subtitle: "Run this troubleshooter if you are told to do so.",
                       onTap: () async {
+                        if (reregisteringIds.value ?? false) return;
                         try {
                           reregisteringIds.value = true;
-                          await api.doReregister(state: pushService.state);
+                          await api.doReregister(state: pushService.state!.client);
                           showSnackbar("Success", "Registered");
+                        } catch (e) {
+                          showSnackbar("Failure", e.toString());
+                          rethrow;
+                        } finally {
+                          reregisteringIds.value = false;
+                        }
+                      },
+                      trailing: Obx(() => reregisteringIds.value == null
+                          ? const SizedBox.shrink()
+                          : reregisteringIds.value == true ? Container(
+                          constraints: const BoxConstraints(
+                            maxHeight: 20,
+                            maxWidth: 20,
+                          ),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            valueColor: AlwaysStoppedAnimation<Color>(context.theme.colorScheme.primary),
+                          )) : Icon(Icons.check, color: context.theme.colorScheme.outline))
+                      ),
+                    SettingsTile(
+                      title: "Clear FaceTime Handles",
+                      subtitle: "Run this troubleshooter if you cannot use FaceTime. This will delete all links asscoiated with your account.",
+                      onTap: () async {
+                        if (reregisteringIds.value ?? false) return;
+                        try {
+                          reregisteringIds.value = true;
+                          await api.clearLinks(facetime: pushService.state!.ftClient);
+                          showSnackbar("Success", "Cleared Links!");
                         } catch (e) {
                           showSnackbar("Failure", e.toString());
                           rethrow;

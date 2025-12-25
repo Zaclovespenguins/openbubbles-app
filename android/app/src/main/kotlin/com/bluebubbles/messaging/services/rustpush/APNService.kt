@@ -34,9 +34,10 @@ import kotlinx.coroutines.SupervisorJob
 import uniffi.rust_lib_bluebubbles.NativePushState
 import uniffi.rust_lib_bluebubbles.initNative
 import uniffi.rust_lib_bluebubbles.MsgReceiver
+import uniffi.rust_lib_bluebubbles.start
 
 class APNService : Service(), MsgReceiver {
-    lateinit var pushState: NativePushState
+    var pushState: NativePushState? = null
     private var started = false
     private val binder = APNBinder()
     private var ready = false;
@@ -51,7 +52,7 @@ class APNService : Service(), MsgReceiver {
         synchronized(waitingHandleCb) {
             ready = true;
             for (cb in waitingHandleCb) {
-                cb(pushState.getState())
+                cb(pushState?.getState() ?: 0UL)
             }
         }
     }
@@ -75,14 +76,14 @@ class APNService : Service(), MsgReceiver {
     }
 
     fun configured() {
-        pushState.startLoop(this)
+        pushState?.startLoop(this)
     }
 
     fun getHandle(cb: (handle: ULong) -> Unit) {
         Log.i("launching agent", "getting handle")
         synchronized(waitingHandleCb) {
             if (ready) {
-                cb(pushState.getState())
+                cb(pushState?.getState() ?: 0UL)
             } else {
                 Log.i("launching agent", "stalled")
                 waitingHandleCb.add(cb)
@@ -90,12 +91,18 @@ class APNService : Service(), MsgReceiver {
         }
     }
 
-    override fun nativeReady(isReady: Boolean, state: NativePushState) {
+    override fun nativeReady(state: NativePushState?) {
+        pushState?.destroy()
         pushState = state
-        if (isReady) {
-            state.startLoop(this)
-        }
+        state?.startLoop(this)
         ready()
+    }
+
+    // called on state destroy
+    override fun finish() {
+        pushState?.destroy()
+        pushState = null
+        Log.i("nativestate", "destroyed")
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -104,7 +111,7 @@ class APNService : Service(), MsgReceiver {
 
         Log.i("OpenBubbles", "ZenModeChanged $zenMode")
         val uuid = zenMode?.let { ZenModeUUIDHandler.getZenKey(this, it) }
-        pushState.publishStatus(uuid)
+        pushState?.publishStatus(uuid)
     }
 
 
@@ -144,7 +151,13 @@ class APNService : Service(), MsgReceiver {
             )
         }
 
-        initNative(applicationContext.filesDir.path, this, AndroidFilePackager(this))
+        start(applicationContext.filesDir.path, AndroidFilePackager(this))
+
+        initNative(applicationContext.filesDir.path, null, this)
+    }
+
+    fun kickstartNative(handle: String) {
+        initNative(applicationContext.filesDir.path, handle, this)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -190,7 +203,7 @@ class APNService : Service(), MsgReceiver {
 
     override fun onDestroy() {
         super.onDestroy()
-        pushState.destroy()
+        pushState?.destroy()
         job.cancel()
     }
 

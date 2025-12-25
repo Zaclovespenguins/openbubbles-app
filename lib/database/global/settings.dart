@@ -195,7 +195,7 @@ class Settings {
   final RxString defaultHandle = "".obs;
   final RxBool macIsMine = true.obs;
   final RxBool deviceIsHosted = false.obs;
-  final RxnString hostedPendingTransaction = RxnString();
+  final RxnString hostedToken = RxnString();
   final RxBool isSmsRouter = false.obs; // true if we can send/recieve from the app, and via sms forwarding over APNs
   final RxBool vpnWarned = false.obs;
   final RxMap<String, String> cachedCodes = <String, String>{}.obs;
@@ -414,7 +414,7 @@ class Settings {
       'defaultHandle': defaultHandle.value,
       'macIsMine': macIsMine.value,
       'deviceIsHosted': deviceIsHosted.value,
-      'hostedPendingTransaction': hostedPendingTransaction.value,
+      'hostedToken': hostedToken.value,
       'keychainDefaultPassword': keychainDefaultPassword.value,
       'isSmsRouter': isSmsRouter.value,
       'developerEnabled': developerEnabled.value,
@@ -584,7 +584,7 @@ class Settings {
     ss.settings.defaultHandle.value = map['defaultHandle'] ?? "";
     // ss.settings.macIsMine.value = map['macIsMine'] ?? true;
     // ss.settings.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
-    ss.settings.hostedPendingTransaction.value = map['hostedPendingTransaction'];
+    ss.settings.hostedToken.value = map['hostedToken'];
     ss.settings.keychainDefaultPassword.value = map['keychainDefaultPassword'];
     ss.settings.isSmsRouter.value = map['isSmsRouter'] ?? false;
     ss.settings.developerEnabled.value = map['developerEnabled'] ?? false;
@@ -752,7 +752,7 @@ class Settings {
     s.defaultHandle.value = map['defaultHandle'] ?? "";
     s.macIsMine.value = map['macIsMine'] ?? true;
     s.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
-    s.hostedPendingTransaction.value = map['hostedPendingTransaction'];
+    s.hostedToken.value = map['hostedToken'];
     s.keychainDefaultPassword.value = map['keychainDefaultPassword'];
     s.isSmsRouter.value = map['isSmsRouter'] ?? false;
     s.developerEnabled.value = map['developerEnabled'] ?? false;

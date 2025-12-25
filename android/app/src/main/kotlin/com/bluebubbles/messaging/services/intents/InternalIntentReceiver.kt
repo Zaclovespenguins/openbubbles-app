@@ -54,7 +54,7 @@ class InternalIntentReceiver: BroadcastReceiver() {
                 }
                 callUuid?.let { callUuid ->
                     val service = (peekService(context, Intent(context, APNService::class.java)) as APNService.APNBinder).getService()
-                    service.pushState.declineFacetime(callUuid)
+                    service.pushState?.declineFacetime(callUuid)
                 }
             }
             "ReplyChat" -> {

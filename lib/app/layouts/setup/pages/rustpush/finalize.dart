@@ -32,7 +32,7 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
   @override
   void initState() {
     super.initState();
-    api.getHandles(state: pushService.state).then((result) {
+    api.getHandles(state: pushService.state!.client).then((result) {
       setState(() {
         handles = result;
       });

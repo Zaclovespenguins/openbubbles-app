@@ -61,8 +61,8 @@ class CupertinoConversationListState
     }
     (() async {
       await pushService.initFuture;
-      handles = await api.getHandles(state: pushService.state);
-      var deviceState = await api.getDeviceInfoState(state: pushService.state);
+      handles = await api.getHandles(state: pushService.state!.client);
+      var deviceState = await api.getDeviceInfo(config: pushService.state!.osConfig);
       canPnr = deviceState.name.contains("iPhone") || deviceState.name.contains("iPod") || deviceState.name.contains("iPad");
       setState(() {});
     })();

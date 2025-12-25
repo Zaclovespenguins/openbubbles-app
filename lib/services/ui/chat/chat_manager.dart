@@ -14,6 +14,7 @@ ChatManager cm = Get.isRegistered<ChatManager>() ? Get.find<ChatManager>() : Get
 
 class ChatManager extends GetxService {
   ChatLifecycleManager? activeChat;
+  api.ChannelInterestToken? provider;
   final Map<String, ChatLifecycleManager> _chatControllers = {};
 
   /// Same as setAllInactive but but removes lastOpenedChat from prefs on next frame
@@ -24,6 +25,8 @@ class ChatManager extends GetxService {
     if (clearActive) {
       activeChat?.controller = null;
       activeChat = null;
+      provider?.dispose();
+      provider = null;
     } else {
       skip = activeChat?.chat.guid;
     }
@@ -58,6 +61,8 @@ class ChatManager extends GetxService {
 
     (() async {
       if (!chat.isIMessage) return;
+      var statuskit = pushService.state?.icloudServices?.statuskitClient;
+      if (statuskit == null) return;
       Logger.info("ensuring keys");
       var participants = (await chat.getConversationData()).participants;
       var targets = await pushService.doValidateTargets(participants, await chat.ensureHandle());
@@ -65,7 +70,8 @@ class ChatManager extends GetxService {
       if (chat.participants.length == 1) {
         participants.remove(await chat.ensureHandle());
         Logger.info("showing interest in handle ${participants[0]}");
-        await api.requestHandles(state: pushService.state, to: [participants[0]]);
+        provider?.dispose();
+        provider = await api.requestHandles(status: statuskit, to: [participants[0]]);
         Logger.info("showed interest in handles");
         chat.fixZenModeShared();
       }

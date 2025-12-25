@@ -67,7 +67,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.3.0';
 
   @override
-  int get rustContentHash => -1286072758;
+  int get rustContentHash => 860314712;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -125,6 +125,24 @@ abstract class RustLibApi extends BaseApi {
   MessageFlags crateApiApiMessageFlagsFromBitsTruncate(
       {required PlatformInt64 val});
 
+  IdsngmIdentity crateApiApiSavedHardwareStateAutoAccessorGetIdentity(
+      {required SavedHardwareState that});
+
+  JoinedOsConfig crateApiApiSavedHardwareStateAutoAccessorGetOsConfig(
+      {required SavedHardwareState that});
+
+  ApsState crateApiApiSavedHardwareStateAutoAccessorGetPush(
+      {required SavedHardwareState that});
+
+  void crateApiApiSavedHardwareStateAutoAccessorSetIdentity(
+      {required SavedHardwareState that, required IdsngmIdentity identity});
+
+  void crateApiApiSavedHardwareStateAutoAccessorSetOsConfig(
+      {required SavedHardwareState that, required JoinedOsConfig osConfig});
+
+  void crateApiApiSavedHardwareStateAutoAccessorSetPush(
+      {required SavedHardwareState that, required ApsState push});
+
   String crateApiApiViableBottleAutoAccessorGetDeviceName(
       {required ViableBottle that});
 
@@ -150,52 +168,66 @@ abstract class RustLibApi extends BaseApi {
       {required ViableBottle that, required int numericLength});
 
   Future<List<SharedAlbum>> crateApiApiAddAlbum(
-      {required ArcPushState state,
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
       required String guid,
       required String folder});
 
   Future<void> crateApiApiAnswerFtRequest(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required LetMeInRequest request,
       String? approvedGroup});
 
   Future<int> crateApiApiApproveCircle(
-      {required ArcPushState state, required String txnid});
+      {required ArcMutexVecActiveCircleSession state,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required String txnid});
 
   Future<int> crateApiApiAttachmentGetSize({required Attachment that});
 
   MMCSAttachmentMeta? crateApiApiAttachmentToCloud({required Attachment att});
 
   Future<IdsUser> crateApiApiAuthPhone(
-      {required ArcPushState state,
+      {required ApsConnection conn,
+      required JoinedOsConfig config,
       required String number,
       required List<int> sig});
 
-  Future<bool> crateApiApiCanFindMy({required ArcPushState state});
-
-  Future<bool> crateApiApiCanProfileShare({required ArcPushState state});
-
-  Future<bool> crateApiApiCanStatuskit({required ArcPushState state});
+  (Sender, ArcSenderPushMessage, ApsWatcher) crateApiApiBuildWatcher(
+      {required ApsConnection conn, required ArcImClient client});
 
   Future<void> crateApiApiCancelFacetime(
-      {required ArcPushState state, required String guid});
+      {required ArcFtClient facetime, required String guid});
+
+  void crateApiApiCancelPoll({required Sender cancel});
 
   Future<void> crateApiApiCertifyDelivery(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required CertifiedContext context,
       required bool notify});
 
   Future<void> crateApiApiChangeEscrowPassword(
-      {required ArcPushState state, required String devicePassword});
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required String devicePassword});
 
-  Future<void> crateApiApiCircleSetupClique(
-      {required ArcPushState state, required String devicePassword});
+  Future<bool> crateApiApiCircleSetupClique(
+      {required ArcMutexOptionCircleClientSessionDefaultAnisetteProvider client,
+      required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required String devicePassword});
+
+  Future<void> crateApiApiClearLinks({required ArcFtClient facetime});
 
   SimplifiedIncomingCallPoster crateApiApiClonePoster(
       {required SimplifiedIncomingCallPoster poster});
 
   SimplifiedTranscriptPoster crateApiApiCloneTranscriptPoster(
       {required SimplifiedTranscriptPoster poster});
+
+  void crateApiApiCloseAps({required ApsConnection aps});
+
+  void crateApiApiCloseClient({required ArcImClient client});
+
+  void crateApiApiCloseSyncmanager(
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager shared});
 
   Future<void> crateApiApiCompleteMsg({required String ptr});
 
@@ -208,21 +240,19 @@ abstract class RustLibApi extends BaseApi {
   Future<JoinedOsConfig> crateApiApiConfigFromValidationData(
       {required List<int> data, required HwExtra extra});
 
-  Future<void> crateApiApiConfigureAppReview({required ArcPushState state});
-
-  Future<void> crateApiApiConfigureMacos(
-      {required ArcPushState state, required JoinedOsConfig config});
+  Future<void> crateApiApiConfigureAppReview({required String path});
 
   Future<String> crateApiApiConvertTokenToUuid(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required List<int> token});
 
   Future<CloudMessageSummary> crateApiApiCountRecords(
-      {required ArcPushState state});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient});
 
   Future<void> crateApiApiCreateFacetime(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required String uuid,
       required String handle,
       required List<String> participants});
@@ -236,7 +266,7 @@ abstract class RustLibApi extends BaseApi {
   Date crateApiApiDateNow();
 
   Future<void> crateApiApiDeclineFacetime(
-      {required ArcPushState state, required String guid});
+      {required ArcFtClient facetime, required String guid});
 
   AttachmentMeta crateApiApiDecodeAttachmentmeta(
       {required GZipWrapperAttachmentMeta wrapped});
@@ -267,31 +297,55 @@ abstract class RustLibApi extends BaseApi {
       {required List<int> info});
 
   Future<void> crateApiApiDeleteAttachments(
-      {required ArcPushState state, required List<String> attachments});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> attachments});
 
   Future<void> crateApiApiDeleteChats(
-      {required ArcPushState state, required List<String> chats});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> chats});
 
   Future<void> crateApiApiDeleteMessages(
-      {required ArcPushState state, required List<String> messages});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> messages});
 
-  Future<void> crateApiApiDoReregister({required ArcPushState state});
+  Future<void> crateApiApiDoFirstTimeInit({required String path});
+
+  Future<IdsUser> crateApiApiDoLogin(
+      {required String path,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      String? cookie,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig osConfig});
+
+  Future<void> crateApiApiDoReregister({required ArcImClient state});
 
   Stream<TransferProgress> crateApiApiDownloadAttachment(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required Attachment attachment,
       required String path});
 
   Future<void> crateApiApiDownloadCloudAttachments(
-      {required ArcPushState state, required List<(String, String)> files});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files});
 
   Future<void> crateApiApiDownloadCloudGroupPhotos(
-      {required ArcPushState state, required List<(String, String)> files});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files});
 
   Stream<TransferProgress> crateApiApiDownloadMmcs(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required MMCSFile attachment,
       required String path});
+
+  (ArcSharedPushState, SharedPushState) crateApiApiDupDaemonDesk(
+      {required SharedPushState state});
+
+  IdsUser crateApiApiDuplicateUser({required IdsUser user});
 
   GZipWrapperAttachmentMeta crateApiApiEncodeAttachmentmeta(
       {required AttachmentMeta attachmentmeta});
@@ -324,7 +378,8 @@ abstract class RustLibApi extends BaseApi {
       {required MessageSummaryInfo info});
 
   Future<IMessageNicknameRecord> crateApiApiFetchProfile(
-      {required ArcPushState state, required ShareProfileMessage message});
+      {required ArcProfilesClientDefaultAnisetteProvider profiles,
+      required ShareProfileMessage message});
 
   Future<FFIFilePackager> crateApiApiFfiFilePackagerDefault();
 
@@ -337,102 +392,199 @@ abstract class RustLibApi extends BaseApi {
   Future<SimplifiedTranscriptPoster> crateApiApiFromTranscriptPosterSave(
       {required List<int> poster});
 
-  Future<List<FTSession>> crateApiApiFtSessions({required ArcPushState state});
+  Future<List<FTSession>> crateApiApiFtSessions(
+      {required ArcFtClient facetime});
 
   Future<String> crateApiApiGenerateUdid();
 
-  Future<int> crateApiApiGet2FaCode({required ArcPushState state});
+  Future<int> crateApiApiGet2FaCode(
+      {required ArcAnisetteClientDefaultAnisetteProvider anisette});
 
   Future<(List<TrustedPhoneNumber>, LoginState?)> crateApiApiGet2FaSmsOpts(
-      {required ArcPushState state});
+      {required ArcMutexAppleAccountDefaultAnisetteProvider state});
 
   Future<(List<SharedAlbum>, List<String>)> crateApiApiGetAlbums(
-      {required ArcPushState state, required bool refresh});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required bool refresh});
 
   Future<Map<String, String>> crateApiApiGetAnisetteHeaders(
-      {required ArcPushState state});
+      {required ArcAnisetteClientDefaultAnisetteProvider state,
+      required JoinedOsConfig config});
+
+  String? crateApiApiGetAvailableUser({required String path});
 
   Future<List<Follow>> crateApiApiGetBackgroundFollowing(
-      {required ArcPushState state});
+      {required ArcFindMyClientDefaultAnisetteProvider fmfd});
 
   Future<List<DartBeacon>> crateApiApiGetBeaconItems(
-      {required ArcPushState state});
+      {required ArcFindMyClientDefaultAnisetteProvider items});
 
   Future<List<ViableBottle>> crateApiApiGetBottles(
-      {required ArcPushState state});
-
-  Future<JoinedOsConfig?> crateApiApiGetConfigState(
-      {required ArcPushState state});
+      {required ArcKeychainClientDefaultAnisetteProvider keychain});
 
   Future<DeviceInfo> crateApiApiGetDeviceInfo({required JoinedOsConfig config});
 
-  Future<DeviceInfo> crateApiApiGetDeviceInfoState(
-      {required ArcPushState state});
-
   Future<List<FoundDevice>> crateApiApiGetDevices(
       {required FindMyPhoneClientDefaultAnisetteProvider client});
+
+  Future<IdsUser> crateApiApiGetEntitlements(
+      {required JoinedOsConfig config,
+      required ApsConnection conn,
+      required String mccmnc,
+      required String subscriber,
+      required String imei,
+      required FutureOr<String> Function(String) processChallenge});
 
   Future<List<Follow>> crateApiApiGetFollowing(
       {required FindMyFriendsClientDefaultAnisetteProvider client});
 
   Future<String> crateApiApiGetFtLink(
-      {required ArcPushState state, required String usage});
+      {required ArcFtClient facetime, required String usage});
 
-  Future<List<String>> crateApiApiGetHandles({required ArcPushState state});
+  Future<List<String>> crateApiApiGetHandles({required ArcImClient state});
 
   Future<List<String>> crateApiApiGetMyPhoneHandles(
-      {required ArcPushState state});
+      {required ArcImClient state});
 
-  Future<RegistrationPhase> crateApiApiGetPhase({required ArcPushState state});
+  Future<QuotaInfo> crateApiApiGetQuotaInfo(
+      {required ArcTokenProviderDefaultAnisetteProvider info});
 
-  Future<QuotaInfo> crateApiApiGetQuotaInfo({required ArcPushState state});
-
-  Future<RegisterState> crateApiApiGetRegstate({required ArcPushState state});
+  Future<RegisterState> crateApiApiGetRegstate({required ArcImClient state});
 
   Future<List<PrivateDeviceInfo>> crateApiApiGetSmsTargets(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required bool refresh});
 
   Future<(Map<String, SyncStatus>, (String, BigInt)?)> crateApiApiGetSyncstatus(
-      {required ArcPushState state});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock});
 
-  Future<Uint8List> crateApiApiGetToken({required ArcPushState state});
+  Future<Uint8List> crateApiApiGetToken({required ApsConnection state});
 
-  Future<String> crateApiApiGetUserName({required ArcPushState state});
+  Future<String> crateApiApiGetUserName(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider state});
 
-  Future<void> crateApiApiInvalidateIdCache({required ArcPushState state});
+  (Sender, ArcSenderPushMessage, ApsWatcher) crateApiApiImportWatcher(
+      {required ReceiverApsMessage queue, required ArcImClient client});
+
+  Future<void> crateApiApiInvalidateIdCache({required ArcImClient client});
 
   Future<void> crateApiApiInviteToChannel(
-      {required ArcPushState state,
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
       required String handle,
       required Map<String, StatusKitPersonalConfig> to});
 
-  Future<bool> crateApiApiIsInClique({required ArcPushState state});
+  Future<bool> crateApiApiIsInClique(
+      {required ArcKeychainClientDefaultAnisetteProvider keychain});
 
   Future<void> crateApiApiJoinCliqueWithBottle(
-      {required ArcPushState state,
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
       required EscrowData bottle,
       required String password,
       required String devicePassword});
 
+  Future<ArcAnisetteClientDefaultAnisetteProvider> crateApiApiMakeAnisette(
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection conn});
+
+  ArcMutexVecActiveCircleSession crateApiApiMakeCircleSessions();
+
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      crateApiApiMakeClientSession(
+          {CircleClientSessionDefaultAnisetteProvider? circle});
+
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      crateApiApiMakeCloudMessagesClient(
+          {required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+          required ArcKeychainClientDefaultAnisetteProvider keychain});
+
+  Future<ArcCloudKitClientDefaultAnisetteProvider?> crateApiApiMakeCloudkit(
+      {required String path,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider});
+
+  Future<ArcFtClient> crateApiApiMakeFacetime(
+      {required String path,
+      required ApsConnection conn,
+      required ArcImClient client});
+
   Future<FindMyFriendsClientDefaultAnisetteProvider>
-      crateApiApiMakeFindMyFriends({required ArcPushState state});
+      crateApiApiMakeFindMyFriends(
+          {required String path,
+          required JoinedOsConfig config,
+          required ApsConnection aps,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required ArcTokenProviderDefaultAnisetteProvider provider});
 
   Future<FindMyPhoneClientDefaultAnisetteProvider> crateApiApiMakeFindMyPhone(
-      {required ArcPushState state});
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required ArcTokenProviderDefaultAnisetteProvider provider});
+
+  Future<ArcFindMyClientDefaultAnisetteProvider?> crateApiApiMakeFindmy(
+      {required String path,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider,
+      required ApsConnection conn,
+      required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+      required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcImClient client});
+
+  Future<ArcIdmsAuthListener> crateApiApiMakeIdms(
+      {required ApsConnection conn});
+
+  Future<ArcImClient> crateApiApiMakeImclient(
+      {required String path,
+      required ApsConnection conn,
+      required List<IdsUser> users,
+      required IdsngmIdentity identity});
+
+  ArcKeychainClientDefaultAnisetteProvider? crateApiApiMakeKeychain(
+      {required String path,
+      required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider});
+
+  Future<ArcProfilesClientDefaultAnisetteProvider> crateApiApiMakeProfiles(
+      {required ArcCloudKitClientDefaultAnisetteProvider cloudkit});
+
+  Future<SyncManagerDefaultAnisetteProviderMyFilePackager?>
+      crateApiApiMakeSharedStreams(
+          {required String path,
+          required ApsConnection conn,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required JoinedOsConfig config,
+          required ArcTokenProviderDefaultAnisetteProvider token});
+
+  Future<ArcStatusKitClientDefaultAnisetteProvider> crateApiApiMakeStatuskit(
+      {required String path,
+      required ArcTokenProviderDefaultAnisetteProvider provider,
+      required ApsConnection conn,
+      required JoinedOsConfig config,
+      required ArcImClient client});
+
+  ArcTokenProviderDefaultAnisetteProvider crateApiApiMakeTokenProvider(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required JoinedOsConfig config});
 
   Future<String> crateApiApiMessagePartsRawText({required MessageParts that});
+
+  Future<bool> crateApiApiMigrate({required String path});
 
   Future<MyAsyncRuntime> crateApiApiMyAsyncRuntimeDefault();
 
   Future<MessageInst> crateApiApiNewMsg(
-      {required ArcPushState state,
-      required ConversationData conversation,
+      {required ConversationData conversation,
       required String sender,
       required Message message});
 
-  Future<ArcPushState> crateApiApiNewPushState({required String dir});
+  IdsngmIdentity crateApiApiNewNgmIdentity();
 
   NSAttributedString crateApiApiNsAttributedStringDecode(
       {required StCollapsedValue val});
@@ -470,44 +622,68 @@ abstract class RustLibApi extends BaseApi {
 
   Future<PushMessage?> crateApiApiPtrToDart({required String ptr});
 
-  Future<PollResult> crateApiApiRecvWait({required ArcPushState state});
+  SavedHardwareState? crateApiApiReadHardware({required String path});
+
+  Future<PollResult> crateApiApiRecvWait(
+      {required ApsWatcher watcher, required ArcSharedPushState state});
 
   Future<List<Follow>> crateApiApiRefreshBackgroundFollowing(
-      {required ArcPushState state});
+      {required ArcFindMyClientDefaultAnisetteProvider state,
+      required JoinedOsConfig config});
 
   Future<List<FoundDevice>> crateApiApiRefreshDevices(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyPhoneClientDefaultAnisetteProvider client});
 
   Future<List<Follow>> crateApiApiRefreshFollowing(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyFriendsClientDefaultAnisetteProvider client});
 
-  Future<void> crateApiApiRefreshToken({required ArcPushState state});
-
-  Future<SupportAlert?> crateApiApiRegisterIds(
-      {required ArcPushState state, required List<IdsUser> users});
+  Future<(List<IdsUser>?, SupportAlert?)> crateApiApiRegisterIds(
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      required IdsngmIdentity identity,
+      required List<IdsUser> users});
 
   Future<List<SharedAlbum>> crateApiApiRemoveAlbum(
-      {required ArcPushState state, required String guid});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid});
 
   Future<void> crateApiApiReportMessages(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required List<ReportMessage> messages});
 
-  Future<void> crateApiApiRequestHandles(
-      {required ArcPushState state, required List<String> to});
+  Future<ChannelInterestToken?> crateApiApiRequestHandles(
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
+      required List<String> to});
 
-  Future<void> crateApiApiResetChannelKeys({required ArcPushState state});
+  void crateApiApiResetAnisette({required String path});
+
+  Future<void> crateApiApiResetChannelKeys(
+      {required ArcStatusKitClientDefaultAnisetteProvider status});
 
   Future<void> crateApiApiResetClique(
-      {required ArcPushState state, required String devicePassword});
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required ArcCloudMessagesClientDefaultAnisetteProvider cloudMessages,
+      required String devicePassword});
 
   Future<void> crateApiApiResetState(
-      {required ArcPushState state,
+      {required Sender cancel,
+      required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      ArcMutexAppleAccountDefaultAnisetteProvider? account,
       required bool resetHw,
       required bool logout});
+
+  Future<ArcMutexAppleAccountDefaultAnisetteProvider?>
+      crateApiApiRestoreAccount(
+          {required String path,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required JoinedOsConfig config,
+          required ApsConnection conn});
 
   Attachment crateApiApiRestoreAttachment({required String data});
 
@@ -515,156 +691,391 @@ abstract class RustLibApi extends BaseApi {
 
   Future<IdsUser> crateApiApiRestoreUser({required String user});
 
-  Future<IdsUser> crateApiApiRetryLogin({required ArcPushState state});
+  List<IdsUser>? crateApiApiRestoreUsers({required String path});
 
   Future<String> crateApiApiSaveAttachment({required Attachment att});
 
   Future<Map<String, bool>> crateApiApiSaveAttachments(
-      {required ArcPushState state,
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
       required Map<String, CloudAttachment> attachments});
 
   Future<Map<String, bool>> crateApiApiSaveChats(
-      {required ArcPushState state, required Map<String, CloudChat> chats});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required Map<String, CloudChat> chats});
 
   Uint8List crateApiApiSaveCloudChat({required CloudChat value});
 
   Future<Map<String, bool>> crateApiApiSaveMessages(
-      {required ArcPushState state,
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
       required Map<String, CloudMessage> messages});
 
   Future<String> crateApiApiSaveUser({required IdsUser user});
 
+  void crateApiApiSaveUsers(
+      {required List<IdsUser> users, required String path});
+
   Future<List<Follow>> crateApiApiSelectBackgroundFriend(
-      {required ArcPushState state, String? friend});
+      {required ArcFindMyClientDefaultAnisetteProvider fmfd, String? friend});
 
   Future<List<Follow>> crateApiApiSelectFriend(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyFriendsClientDefaultAnisetteProvider client,
       String? friend});
 
   Future<bool> crateApiApiSend(
-      {required ArcPushState state, required MessageInst msg});
+      {required ArcImClient state,
+      required ArcSenderPushMessage local,
+      required MessageInst msg});
 
   Future<LoginState> crateApiApiSend2FaSms(
-      {required ArcPushState state, required int phoneId});
+      {CircleClientSessionDefaultAnisetteProvider? locked,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required int phoneId});
 
-  Future<(LoginState, String?)> crateApiApiSend2FaToDevices(
-      {required ArcPushState state});
+  Future<(CircleClientSessionDefaultAnisetteProvider, LoginState, String?)>
+      crateApiApiSend2FaToDevices(
+          {required ArcMutexAppleAccountDefaultAnisetteProvider state,
+          required ApsConnection conn});
 
-  Future<ArcPushState> crateApiApiServiceFromPtr({required String ptr});
+  (int, SharedPushState) crateApiApiSendDaemon(
+      {required SharedPushState state, required ApsWatcher watcher});
+
+  Future<SharedPushState?> crateApiApiServiceFromPtr({required String ptr});
+
+  Future<void> crateApiApiSetIdentity(
+      {required String statePath,
+      required JoinedOsConfig config,
+      required IdsngmIdentity identity});
 
   Future<ShareProfileMessage> crateApiApiSetProfile(
-      {required ArcPushState state,
+      {required ArcProfilesClientDefaultAnisetteProvider profiles,
       required IMessageNicknameRecord record,
       ShareProfileMessage? existing});
 
   Future<void> crateApiApiSetStatus(
-      {required ArcPushState state, String? newStatus});
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
+      String? newStatus});
+
+  Future<(ApsConnection, PushError?)> crateApiApiSetupPush(
+      {required JoinedOsConfig config,
+      required IdsngmIdentity identity,
+      ApsState? state,
+      required String statePath});
+
+  Future<(SharedPushState, ApsWatcher)?> crateApiApiSharedPushStateRestore(
+      {required String path});
 
   Future<List<SharedAlbum>> crateApiApiSubscribe(
-      {required ArcPushState state, required String guid});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid});
+
+  ReceiverApsMessage crateApiApiSubscribeConn({required ApsConnection conn});
 
   Future<List<SharedAlbum>> crateApiApiSubscribeToken(
-      {required ArcPushState state, required String token});
-
-  Future<bool> crateApiApiSupportsKeychain({required ArcPushState state});
-
-  Future<bool> crateApiApiSupportsSharedStreams({required ArcPushState state});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String token});
 
   Future<(Uint8List, Map<String, CloudAttachment?>, int)>
       crateApiApiSyncAttachments(
-          {required ArcPushState state, Uint8List? continuationToken});
+          {required ArcCloudMessagesClientDefaultAnisetteProvider
+              cloudMessagesClient,
+          Uint8List? continuationToken});
 
   Future<(Uint8List, Map<String, CloudChat?>, int)> crateApiApiSyncChats(
-      {required ArcPushState state, Uint8List? continuationToken});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      Uint8List? continuationToken});
 
   Future<(Uint8List, Map<String, CloudMessage?>, int)> crateApiApiSyncMessages(
-      {required ArcPushState state, Uint8List? continuationToken});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      Uint8List? continuationToken});
 
-  Future<void> crateApiApiSyncNow({required ArcPushState state});
+  Future<void> crateApiApiSyncNow(
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock});
 
   int crateApiApiSystemtimeToMillis({required SystemTime time});
 
   Future<void> crateApiApiTeardown2Fa(
-      {required ArcPushState state,
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
       required String action,
       required String txnid});
 
   Future<Uint8List> crateApiApiTranscriptPosterSave(
       {required SimplifiedTranscriptPoster poster});
 
-  Future<(LoginState, IdsUser?)> crateApiApiTryAuth(
-      {required ArcPushState state,
-      required String username,
-      required String password});
+  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState, IdsUser?)>
+      crateApiApiTryAuth(
+          {required String path,
+          required JoinedOsConfig conf,
+          required ApsConnection conn,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          (String, String)? creds});
 
   Future<List<SharedAlbum>> crateApiApiUnsubscribe(
-      {required ArcPushState state, required String guid});
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid});
 
-  Future<String> crateApiApiUpdateAccountHeaders({required ArcPushState state});
+  Future<String> crateApiApiUpdateAccountHeaders(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account});
 
   Future<void> crateApiApiUpdateBeaconName(
-      {required ArcPushState state, required BeaconNamingRecord namingRecord});
+      {required ArcFindMyClientDefaultAnisetteProvider items,
+      required BeaconNamingRecord namingRecord});
 
   Stream<TransferProgress> crateApiApiUploadAttachment(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required String path,
       required String mime,
       required String uti,
       required String name});
 
   Future<Map<String, Asset>> crateApiApiUploadCloudAttachments(
-      {required ArcPushState state, required List<(String, String)> files});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files});
 
   Future<Map<String, Asset>> crateApiApiUploadGroupPhoto(
-      {required ArcPushState state, required List<(String, String)> files});
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files});
 
   Stream<MMCSTransferProgress> crateApiApiUploadMmcs(
-      {required ArcPushState state, required String path});
+      {required ApsConnection aps, required String path});
 
   Future<void> crateApiApiUseLinkFor(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required String oldUsage,
       required String usage});
 
   SystemTime crateApiApiUtmNow();
 
   Future<List<String>> crateApiApiValidateCert(
-      {required ArcPushState state, required IdsUser user});
+      {required ApsConnection conn, required IdsUser user});
 
-  Future<String?> crateApiApiValidateRelay({required ArcPushState state});
+  Future<String?> crateApiApiValidateRelay({required JoinedOsConfig configRef});
 
   Future<List<String>> crateApiApiValidateTargets(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required List<String> targets,
       required String sender});
 
   Future<List<String>> crateApiApiValidateTargetsFacetime(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required List<String> targets,
       required String sender});
 
   Future<(LoginState, IdsUser?)> crateApiApiVerify2Fa(
-      {required ArcPushState state, required String code});
+      {required String path,
+      required CircleClientSessionDefaultAnisetteProvider client,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig osConfig,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required ReceiverApsMessage watcher,
+      required ArcIdmsAuthListener idms,
+      required String code});
 
   Future<(LoginState, IdsUser?)> crateApiApiVerify2FaSms(
-      {required ArcPushState state,
+      {required String path,
+      required ArcMutexAppleAccountDefaultAnisetteProvider accountMut,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
       required VerifyBody body,
       required String code});
 
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_ArcPushState;
+      get rust_arc_increment_strong_count_ApsConnection;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_ArcPushState;
+      get rust_arc_decrement_strong_count_ApsConnection;
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ArcPushStatePtr;
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ApsConnectionPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ApsState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ApsState;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ApsStatePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ApsWatcher;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ApsWatcher;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ApsWatcherPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcAnisetteClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcCloudKitClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcFtClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcFtClient;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ArcFtClientPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcFindMyClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcImClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcImClient;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ArcImClientPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcIdmsAuthListener;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcIdmsAuthListener;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcIdmsAuthListenerPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcKeychainClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexVecActiveCircleSession;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSession;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSessionPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcProfilesClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcSenderPushMessage;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcSenderPushMessage;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcSenderPushMessagePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcSharedPushState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcSharedPushState;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcSharedPushStatePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcStatusKitClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProviderPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcTokenProviderDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProviderPtr;
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Asset;
 
   RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Asset;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_AssetPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ChannelInterestToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ChannelInterestToken;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ChannelInterestTokenPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_CircleClientSessionDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProvider;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProviderPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_ConversationLink;
@@ -770,6 +1181,15 @@ abstract class RustLibApi extends BaseApi {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_GZipWrapperMessageProto4Ptr;
 
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_IdsngmIdentity;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_IdsngmIdentity;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_IdsngmIdentityPtr;
+
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_IdsUser;
 
   RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_IdsUser;
@@ -821,6 +1241,38 @@ abstract class RustLibApi extends BaseApi {
       get rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PushError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PushError;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_PushErrorPtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ReceiverApsMessage;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ReceiverApsMessage;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ReceiverApsMessagePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SavedHardwareState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SavedHardwareState;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SavedHardwareStatePtr;
+
+  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Sender;
+
+  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Sender;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_SenderPtr;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StCollapsedValue;
 
   RustArcDecrementStrongCountFnType
@@ -828,6 +1280,15 @@ abstract class RustLibApi extends BaseApi {
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_StCollapsedValuePtr;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackagerPtr;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_SystemTime;
@@ -1297,6 +1758,177 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  IdsngmIdentity crateApiApiSavedHardwareStateAutoAccessorGetIdentity(
+      {required SavedHardwareState that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorGetIdentityConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorGetIdentityConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_get_identity",
+            argNames: ["that"],
+          );
+
+  @override
+  JoinedOsConfig crateApiApiSavedHardwareStateAutoAccessorGetOsConfig(
+      {required SavedHardwareState that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorGetOsConfigConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorGetOsConfigConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_get_os_config",
+            argNames: ["that"],
+          );
+
+  @override
+  ApsState crateApiApiSavedHardwareStateAutoAccessorGetPush(
+      {required SavedHardwareState that}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorGetPushConstMeta,
+      argValues: [that],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorGetPushConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_get_push",
+            argNames: ["that"],
+          );
+
+  @override
+  void crateApiApiSavedHardwareStateAutoAccessorSetIdentity(
+      {required SavedHardwareState that, required IdsngmIdentity identity}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+            identity, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorSetIdentityConstMeta,
+      argValues: [that, identity],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorSetIdentityConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_set_identity",
+            argNames: ["that", "identity"],
+          );
+
+  @override
+  void crateApiApiSavedHardwareStateAutoAccessorSetOsConfig(
+      {required SavedHardwareState that, required JoinedOsConfig osConfig}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            osConfig, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorSetOsConfigConstMeta,
+      argValues: [that, osConfig],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorSetOsConfigConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_set_os_config",
+            argNames: ["that", "osConfig"],
+          );
+
+  @override
+  void crateApiApiSavedHardwareStateAutoAccessorSetPush(
+      {required SavedHardwareState that, required ApsState push}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            that, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+            push, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSavedHardwareStateAutoAccessorSetPushConstMeta,
+      argValues: [that, push],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta
+      get kCrateApiApiSavedHardwareStateAutoAccessorSetPushConstMeta =>
+          const TaskConstMeta(
+            debugName: "SavedHardwareState_auto_accessor_set_push",
+            argNames: ["that", "push"],
+          );
+
+  @override
   String crateApiApiViableBottleAutoAccessorGetDeviceName(
       {required ViableBottle that}) {
     return handler.executeSync(SyncTask(
@@ -1304,7 +1936,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -1331,7 +1963,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1358,7 +1990,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -1385,7 +2017,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_CastedPrimitive_u_64,
@@ -1413,7 +2045,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
         sse_encode_String(deviceName, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1442,7 +2074,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             that, serializer);
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerEscrowData(
             escrow, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 28)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1469,7 +2101,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
         sse_encode_String(modelClass, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 29)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1497,7 +2129,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
             that, serializer);
         sse_encode_CastedPrimitive_u_64(numericLength, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 30)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1518,89 +2150,93 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<SharedAlbum>> crateApiApiAddAlbum(
-      {required ArcPushState state,
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
       required String guid,
       required String folder}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_String(guid, serializer);
         sse_encode_String(folder, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 25, port: port_);
+            funcId: 31, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiAddAlbumConstMeta,
-      argValues: [state, guid, folder],
+      argValues: [lock, guid, folder],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiAddAlbumConstMeta => const TaskConstMeta(
         debugName: "add_album",
-        argNames: ["state", "guid", "folder"],
+        argNames: ["lock", "guid", "folder"],
       );
 
   @override
   Future<void> crateApiApiAnswerFtRequest(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required LetMeInRequest request,
       String? approvedGroup}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_box_autoadd_let_me_in_request(request, serializer);
         sse_encode_opt_String(approvedGroup, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 26, port: port_);
+            funcId: 32, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiAnswerFtRequestConstMeta,
-      argValues: [state, request, approvedGroup],
+      argValues: [facetime, request, approvedGroup],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiAnswerFtRequestConstMeta => const TaskConstMeta(
         debugName: "answer_ft_request",
-        argNames: ["state", "request", "approvedGroup"],
+        argNames: ["facetime", "request", "approvedGroup"],
       );
 
   @override
   Future<int> crateApiApiApproveCircle(
-      {required ArcPushState state, required String txnid}) {
+      {required ArcMutexVecActiveCircleSession state,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required String txnid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
             state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
         sse_encode_String(txnid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 27, port: port_);
+            funcId: 33, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_u_32,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiApproveCircleConstMeta,
-      argValues: [state, txnid],
+      argValues: [state, account, txnid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiApproveCircleConstMeta => const TaskConstMeta(
         debugName: "approve_circle",
-        argNames: ["state", "txnid"],
+        argNames: ["state", "account", "txnid"],
       );
 
   @override
@@ -1610,7 +2246,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_attachment(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 28, port: port_);
+            funcId: 34, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_CastedPrimitive_usize,
@@ -1634,7 +2270,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_attachment(att, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 29)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_box_autoadd_mmcs_attachment_meta,
@@ -1654,18 +2290,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<IdsUser> crateApiApiAuthPhone(
-      {required ArcPushState state,
+      {required ApsConnection conn,
+      required JoinedOsConfig config,
       required String number,
       required List<int> sig}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         sse_encode_String(number, serializer);
         sse_encode_list_prim_u_8_loose(sig, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 30, port: port_);
+            funcId: 36, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1673,132 +2312,109 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiAuthPhoneConstMeta,
-      argValues: [state, number, sig],
+      argValues: [conn, config, number, sig],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiAuthPhoneConstMeta => const TaskConstMeta(
         debugName: "auth_phone",
-        argNames: ["state", "number", "sig"],
+        argNames: ["conn", "config", "number", "sig"],
       );
 
   @override
-  Future<bool> crateApiApiCanFindMy({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
+  (Sender, ArcSenderPushMessage, ApsWatcher) crateApiApiBuildWatcher(
+      {required ApsConnection conn, required ArcImClient client}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 31, port: port_);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 37)!;
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiApiCanFindMyConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiCanFindMyConstMeta => const TaskConstMeta(
-        debugName: "can_find_my",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<bool> crateApiApiCanProfileShare({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 32, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher,
         decodeErrorData: null,
       ),
-      constMeta: kCrateApiApiCanProfileShareConstMeta,
-      argValues: [state],
+      constMeta: kCrateApiApiBuildWatcherConstMeta,
+      argValues: [conn, client],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiApiCanProfileShareConstMeta => const TaskConstMeta(
-        debugName: "can_profile_share",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<bool> crateApiApiCanStatuskit({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 33, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiApiCanStatuskitConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiCanStatuskitConstMeta => const TaskConstMeta(
-        debugName: "can_statuskit",
-        argNames: ["state"],
+  TaskConstMeta get kCrateApiApiBuildWatcherConstMeta => const TaskConstMeta(
+        debugName: "build_watcher",
+        argNames: ["conn", "client"],
       );
 
   @override
   Future<void> crateApiApiCancelFacetime(
-      {required ArcPushState state, required String guid}) {
+      {required ArcFtClient facetime, required String guid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 34, port: port_);
+            funcId: 38, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiCancelFacetimeConstMeta,
-      argValues: [state, guid],
+      argValues: [facetime, guid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiCancelFacetimeConstMeta => const TaskConstMeta(
         debugName: "cancel_facetime",
-        argNames: ["state", "guid"],
+        argNames: ["facetime", "guid"],
+      );
+
+  @override
+  void crateApiApiCancelPoll({required Sender cancel}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+            cancel, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 39)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiCancelPollConstMeta,
+      argValues: [cancel],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiCancelPollConstMeta => const TaskConstMeta(
+        debugName: "cancel_poll",
+        argNames: ["cancel"],
       );
 
   @override
   Future<void> crateApiApiCertifyDelivery(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required CertifiedContext context,
       required bool notify}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_box_autoadd_certified_context(context, serializer);
         sse_encode_bool(notify, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 35, port: port_);
+            funcId: 40, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1817,22 +2433,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiApiChangeEscrowPassword(
-      {required ArcPushState state, required String devicePassword}) {
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required String devicePassword}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
         sse_encode_String(devicePassword, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 36, port: port_);
+            funcId: 41, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiChangeEscrowPasswordConstMeta,
-      argValues: [state, devicePassword],
+      argValues: [keychain, devicePassword],
       apiImpl: this,
     ));
   }
@@ -1840,27 +2457,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiChangeEscrowPasswordConstMeta =>
       const TaskConstMeta(
         debugName: "change_escrow_password",
-        argNames: ["state", "devicePassword"],
+        argNames: ["keychain", "devicePassword"],
       );
 
   @override
-  Future<void> crateApiApiCircleSetupClique(
-      {required ArcPushState state, required String devicePassword}) {
+  Future<bool> crateApiApiCircleSetupClique(
+      {required ArcMutexOptionCircleClientSessionDefaultAnisetteProvider client,
+      required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required String devicePassword}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+            client, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
         sse_encode_String(devicePassword, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 37, port: port_);
+            funcId: 42, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData: sse_decode_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiCircleSetupCliqueConstMeta,
-      argValues: [state, devicePassword],
+      argValues: [client, keychain, devicePassword],
       apiImpl: this,
     ));
   }
@@ -1868,7 +2489,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiCircleSetupCliqueConstMeta =>
       const TaskConstMeta(
         debugName: "circle_setup_clique",
-        argNames: ["state", "devicePassword"],
+        argNames: ["client", "keychain", "devicePassword"],
+      );
+
+  @override
+  Future<void> crateApiApiClearLinks({required ArcFtClient facetime}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 43, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiClearLinksConstMeta,
+      argValues: [facetime],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiClearLinksConstMeta => const TaskConstMeta(
+        debugName: "clear_links",
+        argNames: ["facetime"],
       );
 
   @override
@@ -1879,7 +2525,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_simplified_incoming_call_poster(
             poster, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 38)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 44)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_incoming_call_poster,
@@ -1903,7 +2549,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_simplified_transcript_poster(poster, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 39)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 45)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_transcript_poster,
@@ -1922,13 +2568,87 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  void crateApiApiCloseAps({required ApsConnection aps}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 46)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiCloseApsConstMeta,
+      argValues: [aps],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiCloseApsConstMeta => const TaskConstMeta(
+        debugName: "close_aps",
+        argNames: ["aps"],
+      );
+
+  @override
+  void crateApiApiCloseClient({required ArcImClient client}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 47)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiCloseClientConstMeta,
+      argValues: [client],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiCloseClientConstMeta => const TaskConstMeta(
+        debugName: "close_client",
+        argNames: ["client"],
+      );
+
+  @override
+  void crateApiApiCloseSyncmanager(
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager shared}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            shared, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 48)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiCloseSyncmanagerConstMeta,
+      argValues: [shared],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiCloseSyncmanagerConstMeta =>
+      const TaskConstMeta(
+        debugName: "close_syncmanager",
+        argNames: ["shared"],
+      );
+
+  @override
   Future<void> crateApiApiCompleteMsg({required String ptr}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(ptr, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 40, port: port_);
+            funcId: 49, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -1953,7 +2673,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(encoded, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 41, port: port_);
+            funcId: 50, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -1982,7 +2702,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(host, serializer);
         sse_encode_opt_String(token, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 42, port: port_);
+            funcId: 51, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2009,7 +2729,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_prim_u_8_loose(data, serializer);
         sse_encode_box_autoadd_hw_extra(extra, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 43, port: port_);
+            funcId: 52, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2029,21 +2749,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiConfigureAppReview({required ArcPushState state}) {
+  Future<void> crateApiApiConfigureAppReview({required String path}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 44, port: port_);
+            funcId: 53, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiConfigureAppReviewConstMeta,
-      argValues: [state],
+      argValues: [path],
       apiImpl: this,
     ));
   }
@@ -2051,51 +2770,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiConfigureAppReviewConstMeta =>
       const TaskConstMeta(
         debugName: "configure_app_review",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<void> crateApiApiConfigureMacos(
-      {required ArcPushState state, required JoinedOsConfig config}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-            config, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 45, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiApiConfigureMacosConstMeta,
-      argValues: [state, config],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiConfigureMacosConstMeta => const TaskConstMeta(
-        debugName: "configure_macos",
-        argNames: ["state", "config"],
+        argNames: ["path"],
       );
 
   @override
   Future<String> crateApiApiConvertTokenToUuid(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required List<int> token}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_String(handle, serializer);
         sse_encode_list_prim_u_8_loose(token, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 46, port: port_);
+            funcId: 54, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2115,60 +2806,61 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<CloudMessageSummary> crateApiApiCountRecords(
-      {required ArcPushState state}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 47, port: port_);
+            funcId: 55, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_cloud_message_summary,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiCountRecordsConstMeta,
-      argValues: [state],
+      argValues: [cloudMessagesClient],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiCountRecordsConstMeta => const TaskConstMeta(
         debugName: "count_records",
-        argNames: ["state"],
+        argNames: ["cloudMessagesClient"],
       );
 
   @override
   Future<void> crateApiApiCreateFacetime(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required String uuid,
       required String handle,
       required List<String> participants}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_String(uuid, serializer);
         sse_encode_String(handle, serializer);
         sse_encode_list_String(participants, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 48, port: port_);
+            funcId: 56, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiCreateFacetimeConstMeta,
-      argValues: [state, uuid, handle, participants],
+      argValues: [facetime, uuid, handle, participants],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiCreateFacetimeConstMeta => const TaskConstMeta(
         debugName: "create_facetime",
-        argNames: ["state", "uuid", "handle", "participants"],
+        argNames: ["facetime", "uuid", "handle", "participants"],
       );
 
   @override
@@ -2179,7 +2871,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_lp_icon_metadata(img, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 49, port: port_);
+            funcId: 57, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2205,7 +2897,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_lp_image_metadata(img, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 50, port: port_);
+            funcId: 58, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2229,7 +2921,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 51)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 59)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2249,29 +2941,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiApiDeclineFacetime(
-      {required ArcPushState state, required String guid}) {
+      {required ArcFtClient facetime, required String guid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 52, port: port_);
+            funcId: 60, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDeclineFacetimeConstMeta,
-      argValues: [state, guid],
+      argValues: [facetime, guid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiDeclineFacetimeConstMeta => const TaskConstMeta(
         debugName: "decline_facetime",
-        argNames: ["state", "guid"],
+        argNames: ["facetime", "guid"],
       );
 
   @override
@@ -2282,7 +2974,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperAttachmentMeta(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 53)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 61)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_attachment_meta,
@@ -2308,7 +3000,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperChatProto(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 54)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 62)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_chat_proto,
@@ -2333,7 +3025,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bp, serializer);
         sse_encode_String(bid, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 55)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 63)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_extension_app,
@@ -2357,7 +3049,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 56)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 64)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_summary_info,
@@ -2383,7 +3075,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 57)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 65)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto,
@@ -2409,7 +3101,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto2(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 58)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 66)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_2,
@@ -2435,7 +3127,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto3(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 59)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 67)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_3,
@@ -2461,7 +3153,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto4(
             wrapped, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 60)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 68)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_proto_4,
@@ -2487,7 +3179,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(s, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 61, port: port_);
+            funcId: 69, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_share_profile_message,
@@ -2513,7 +3205,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(info, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 62, port: port_);
+            funcId: 70, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_summary_info,
@@ -2533,22 +3225,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiApiDeleteAttachments(
-      {required ArcPushState state, required List<String> attachments}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> attachments}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_String(attachments, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 63, port: port_);
+            funcId: 71, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDeleteAttachmentsConstMeta,
-      argValues: [state, attachments],
+      argValues: [cloudMessagesClient, attachments],
       apiImpl: this,
     ));
   }
@@ -2556,72 +3250,137 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiDeleteAttachmentsConstMeta =>
       const TaskConstMeta(
         debugName: "delete_attachments",
-        argNames: ["state", "attachments"],
+        argNames: ["cloudMessagesClient", "attachments"],
       );
 
   @override
   Future<void> crateApiApiDeleteChats(
-      {required ArcPushState state, required List<String> chats}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> chats}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_String(chats, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 64, port: port_);
+            funcId: 72, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDeleteChatsConstMeta,
-      argValues: [state, chats],
+      argValues: [cloudMessagesClient, chats],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiDeleteChatsConstMeta => const TaskConstMeta(
         debugName: "delete_chats",
-        argNames: ["state", "chats"],
+        argNames: ["cloudMessagesClient", "chats"],
       );
 
   @override
   Future<void> crateApiApiDeleteMessages(
-      {required ArcPushState state, required List<String> messages}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<String> messages}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_String(messages, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 65, port: port_);
+            funcId: 73, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDeleteMessagesConstMeta,
-      argValues: [state, messages],
+      argValues: [cloudMessagesClient, messages],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiDeleteMessagesConstMeta => const TaskConstMeta(
         debugName: "delete_messages",
-        argNames: ["state", "messages"],
+        argNames: ["cloudMessagesClient", "messages"],
       );
 
   @override
-  Future<void> crateApiApiDoReregister({required ArcPushState state}) {
+  Future<void> crateApiApiDoFirstTimeInit({required String path}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_String(path, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 74, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiDoFirstTimeInitConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiDoFirstTimeInitConstMeta => const TaskConstMeta(
+        debugName: "do_first_time_init",
+        argNames: ["path"],
+      );
+
+  @override
+  Future<IdsUser> crateApiApiDoLogin(
+      {required String path,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      String? cookie,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig osConfig}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
+        sse_encode_opt_String(cookie, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            osConfig, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 75, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiDoLoginConstMeta,
+      argValues: [path, account, cookie, anisette, osConfig],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiDoLoginConstMeta => const TaskConstMeta(
+        debugName: "do_login",
+        argNames: ["path", "account", "cookie", "anisette", "osConfig"],
+      );
+
+  @override
+  Future<void> crateApiApiDoReregister({required ArcImClient state}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 66, port: port_);
+            funcId: 76, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -2640,7 +3399,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Stream<TransferProgress> crateApiApiDownloadAttachment(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required Attachment attachment,
       required String path}) {
     final sink = RustStreamSink<TransferProgress>();
@@ -2648,19 +3407,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_transfer_progress_Sse(sink, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
         sse_encode_box_autoadd_attachment(attachment, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 67, port: port_);
+            funcId: 77, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiDownloadAttachmentConstMeta,
-      argValues: [sink, state, attachment, path],
+      argValues: [sink, aps, attachment, path],
       apiImpl: this,
     )));
     return sink.stream;
@@ -2669,27 +3428,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiDownloadAttachmentConstMeta =>
       const TaskConstMeta(
         debugName: "download_attachment",
-        argNames: ["sink", "state", "attachment", "path"],
+        argNames: ["sink", "aps", "attachment", "path"],
       );
 
   @override
   Future<void> crateApiApiDownloadCloudAttachments(
-      {required ArcPushState state, required List<(String, String)> files}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 68, port: port_);
+            funcId: 78, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDownloadCloudAttachmentsConstMeta,
-      argValues: [state, files],
+      argValues: [cloudMessagesClient, files],
       apiImpl: this,
     ));
   }
@@ -2697,27 +3458,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiDownloadCloudAttachmentsConstMeta =>
       const TaskConstMeta(
         debugName: "download_cloud_attachments",
-        argNames: ["state", "files"],
+        argNames: ["cloudMessagesClient", "files"],
       );
 
   @override
   Future<void> crateApiApiDownloadCloudGroupPhotos(
-      {required ArcPushState state, required List<(String, String)> files}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 69, port: port_);
+            funcId: 79, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDownloadCloudGroupPhotosConstMeta,
-      argValues: [state, files],
+      argValues: [cloudMessagesClient, files],
       apiImpl: this,
     ));
   }
@@ -2725,12 +3488,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiDownloadCloudGroupPhotosConstMeta =>
       const TaskConstMeta(
         debugName: "download_cloud_group_photos",
-        argNames: ["state", "files"],
+        argNames: ["cloudMessagesClient", "files"],
       );
 
   @override
   Stream<TransferProgress> crateApiApiDownloadMmcs(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required MMCSFile attachment,
       required String path}) {
     final sink = RustStreamSink<TransferProgress>();
@@ -2738,19 +3501,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_transfer_progress_Sse(sink, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
         sse_encode_box_autoadd_mmcs_file(attachment, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 70, port: port_);
+            funcId: 80, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiDownloadMmcsConstMeta,
-      argValues: [sink, state, attachment, path],
+      argValues: [sink, aps, attachment, path],
       apiImpl: this,
     )));
     return sink.stream;
@@ -2758,7 +3521,57 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiApiDownloadMmcsConstMeta => const TaskConstMeta(
         debugName: "download_mmcs",
-        argNames: ["sink", "state", "attachment", "path"],
+        argNames: ["sink", "aps", "attachment", "path"],
+      );
+
+  @override
+  (ArcSharedPushState, SharedPushState) crateApiApiDupDaemonDesk(
+      {required SharedPushState state}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_shared_push_state(state, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 81)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiDupDaemonDeskConstMeta,
+      argValues: [state],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiDupDaemonDeskConstMeta => const TaskConstMeta(
+        debugName: "dup_daemon_desk",
+        argNames: ["state"],
+      );
+
+  @override
+  IdsUser crateApiApiDuplicateUser({required IdsUser user}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            user, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 82)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiDuplicateUserConstMeta,
+      argValues: [user],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiDuplicateUserConstMeta => const TaskConstMeta(
+        debugName: "duplicate_user",
+        argNames: ["user"],
       );
 
   @override
@@ -2768,7 +3581,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_attachment_meta(attachmentmeta, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 71)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 83)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2793,7 +3606,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_chat_proto(chat, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 72)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 84)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2818,7 +3631,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_extension_app(app, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 73)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 85)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2844,7 +3657,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(bytes, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 74, port: port_);
+            funcId: 86, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -2867,7 +3680,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_summary_info(info, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 75)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 87)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -2892,7 +3705,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto(messageproto, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 76)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 88)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2918,7 +3731,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_2(messageproto2, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 77)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 89)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2944,7 +3757,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_3(messageproto3, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 78)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 90)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2970,7 +3783,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_proto_4(messageproto4, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 79)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 91)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -2997,7 +3810,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_share_profile_message(p, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 80, port: port_);
+            funcId: 92, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3023,7 +3836,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_summary_info(info, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 81, port: port_);
+            funcId: 93, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -3043,29 +3856,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<IMessageNicknameRecord> crateApiApiFetchProfile(
-      {required ArcPushState state, required ShareProfileMessage message}) {
+      {required ArcProfilesClientDefaultAnisetteProvider profiles,
+      required ShareProfileMessage message}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+            profiles, serializer);
         sse_encode_box_autoadd_share_profile_message(message, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 82, port: port_);
+            funcId: 94, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_i_message_nickname_record,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiFetchProfileConstMeta,
-      argValues: [state, message],
+      argValues: [profiles, message],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiFetchProfileConstMeta => const TaskConstMeta(
         debugName: "fetch_profile",
-        argNames: ["state", "message"],
+        argNames: ["profiles", "message"],
       );
 
   @override
@@ -3074,7 +3888,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 83, port: port_);
+            funcId: 95, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_ffi_file_packager,
@@ -3101,7 +3915,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_box_autoadd_simplified_incoming_call_poster(
             poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 84, port: port_);
+            funcId: 96, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_i_message_poster_record,
@@ -3126,7 +3940,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 85, port: port_);
+            funcId: 97, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_incoming_call_poster,
@@ -3151,7 +3965,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 86, port: port_);
+            funcId: 98, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_transcript_poster,
@@ -3170,28 +3984,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<List<FTSession>> crateApiApiFtSessions({required ArcPushState state}) {
+  Future<List<FTSession>> crateApiApiFtSessions(
+      {required ArcFtClient facetime}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 87, port: port_);
+            funcId: 99, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_ft_session,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiFtSessionsConstMeta,
-      argValues: [state],
+      argValues: [facetime],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiFtSessionsConstMeta => const TaskConstMeta(
         debugName: "ft_sessions",
-        argNames: ["state"],
+        argNames: ["facetime"],
       );
 
   @override
@@ -3200,7 +4015,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 88, port: port_);
+            funcId: 100, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3218,40 +4033,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<int> crateApiApiGet2FaCode({required ArcPushState state}) {
+  Future<int> crateApiApiGet2FaCode(
+      {required ArcAnisetteClientDefaultAnisetteProvider anisette}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 89, port: port_);
+            funcId: 101, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_u_32,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGet2FaCodeConstMeta,
-      argValues: [state],
+      argValues: [anisette],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGet2FaCodeConstMeta => const TaskConstMeta(
         debugName: "get_2fa_code",
-        argNames: ["state"],
+        argNames: ["anisette"],
       );
 
   @override
   Future<(List<TrustedPhoneNumber>, LoginState?)> crateApiApiGet2FaSmsOpts(
-      {required ArcPushState state}) {
+      {required ArcMutexAppleAccountDefaultAnisetteProvider state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 90, port: port_);
+            funcId: 102, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3271,48 +4087,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<(List<SharedAlbum>, List<String>)> crateApiApiGetAlbums(
-      {required ArcPushState state, required bool refresh}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required bool refresh}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_bool(refresh, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 91, port: port_);
+            funcId: 103, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_record_list_shared_album_list_string,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetAlbumsConstMeta,
-      argValues: [state, refresh],
+      argValues: [lock, refresh],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetAlbumsConstMeta => const TaskConstMeta(
         debugName: "get_albums",
-        argNames: ["state", "refresh"],
+        argNames: ["lock", "refresh"],
       );
 
   @override
   Future<Map<String, String>> crateApiApiGetAnisetteHeaders(
-      {required ArcPushState state}) {
+      {required ArcAnisetteClientDefaultAnisetteProvider state,
+      required JoinedOsConfig config}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
             state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 92, port: port_);
+            funcId: 104, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_Map_String_String,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetAnisetteHeadersConstMeta,
-      argValues: [state],
+      argValues: [state, config],
       apiImpl: this,
     ));
   }
@@ -3320,26 +4140,50 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiGetAnisetteHeadersConstMeta =>
       const TaskConstMeta(
         debugName: "get_anisette_headers",
-        argNames: ["state"],
+        argNames: ["state", "config"],
+      );
+
+  @override
+  String? crateApiApiGetAvailableUser({required String path}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 105)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_opt_String,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiGetAvailableUserConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiGetAvailableUserConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_available_user",
+        argNames: ["path"],
       );
 
   @override
   Future<List<Follow>> crateApiApiGetBackgroundFollowing(
-      {required ArcPushState state}) {
+      {required ArcFindMyClientDefaultAnisetteProvider fmfd}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            fmfd, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 93, port: port_);
+            funcId: 106, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiGetBackgroundFollowingConstMeta,
-      argValues: [state],
+      argValues: [fmfd],
       apiImpl: this,
     ));
   }
@@ -3347,45 +4191,45 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiGetBackgroundFollowingConstMeta =>
       const TaskConstMeta(
         debugName: "get_background_following",
-        argNames: ["state"],
+        argNames: ["fmfd"],
       );
 
   @override
   Future<List<DartBeacon>> crateApiApiGetBeaconItems(
-      {required ArcPushState state}) {
+      {required ArcFindMyClientDefaultAnisetteProvider items}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            items, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 94, port: port_);
+            funcId: 107, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_dart_beacon,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetBeaconItemsConstMeta,
-      argValues: [state],
+      argValues: [items],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetBeaconItemsConstMeta => const TaskConstMeta(
         debugName: "get_beacon_items",
-        argNames: ["state"],
+        argNames: ["items"],
       );
 
   @override
   Future<List<ViableBottle>> crateApiApiGetBottles(
-      {required ArcPushState state}) {
+      {required ArcKeychainClientDefaultAnisetteProvider keychain}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 95, port: port_);
+            funcId: 108, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3393,41 +4237,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetBottlesConstMeta,
-      argValues: [state],
+      argValues: [keychain],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetBottlesConstMeta => const TaskConstMeta(
         debugName: "get_bottles",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<JoinedOsConfig?> crateApiApiGetConfigState(
-      {required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 96, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiApiGetConfigStateConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiGetConfigStateConstMeta => const TaskConstMeta(
-        debugName: "get_config_state",
-        argNames: ["state"],
+        argNames: ["keychain"],
       );
 
   @override
@@ -3439,7 +4256,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
             config, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 97, port: port_);
+            funcId: 109, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_device_info,
@@ -3457,33 +4274,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<DeviceInfo> crateApiApiGetDeviceInfoState(
-      {required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 98, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_device_info,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiApiGetDeviceInfoStateConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiGetDeviceInfoStateConstMeta =>
-      const TaskConstMeta(
-        debugName: "get_device_info_state",
-        argNames: ["state"],
-      );
-
-  @override
   Future<List<FoundDevice>> crateApiApiGetDevices(
       {required FindMyPhoneClientDefaultAnisetteProvider client}) {
     return handler.executeNormal(NormalTask(
@@ -3492,7 +4282,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyPhoneClientDefaultAnisetteProvider(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 99, port: port_);
+            funcId: 110, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_found_device,
@@ -3510,6 +4300,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<IdsUser> crateApiApiGetEntitlements(
+      {required JoinedOsConfig config,
+      required ApsConnection conn,
+      required String mccmnc,
+      required String subscriber,
+      required String imei,
+      required FutureOr<String> Function(String) processChallenge}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_String(mccmnc, serializer);
+        sse_encode_String(subscriber, serializer);
+        sse_encode_String(imei, serializer);
+        sse_encode_DartFn_Inputs_String_Output_String_AnyhowException(
+            processChallenge, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 111, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiGetEntitlementsConstMeta,
+      argValues: [config, conn, mccmnc, subscriber, imei, processChallenge],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiGetEntitlementsConstMeta => const TaskConstMeta(
+        debugName: "get_entitlements",
+        argNames: [
+          "config",
+          "conn",
+          "mccmnc",
+          "subscriber",
+          "imei",
+          "processChallenge"
+        ],
+      );
+
+  @override
   Future<List<Follow>> crateApiApiGetFollowing(
       {required FindMyFriendsClientDefaultAnisetteProvider client}) {
     return handler.executeNormal(NormalTask(
@@ -3518,7 +4354,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyFriendsClientDefaultAnisetteProvider(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 100, port: port_);
+            funcId: 112, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
@@ -3537,40 +4373,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<String> crateApiApiGetFtLink(
-      {required ArcPushState state, required String usage}) {
+      {required ArcFtClient facetime, required String usage}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_String(usage, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 101, port: port_);
+            funcId: 113, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetFtLinkConstMeta,
-      argValues: [state, usage],
+      argValues: [facetime, usage],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetFtLinkConstMeta => const TaskConstMeta(
         debugName: "get_ft_link",
-        argNames: ["state", "usage"],
+        argNames: ["facetime", "usage"],
       );
 
   @override
-  Future<List<String>> crateApiApiGetHandles({required ArcPushState state}) {
+  Future<List<String>> crateApiApiGetHandles({required ArcImClient state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 102, port: port_);
+            funcId: 114, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -3589,14 +4425,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<String>> crateApiApiGetMyPhoneHandles(
-      {required ArcPushState state}) {
+      {required ArcImClient state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 103, port: port_);
+            funcId: 115, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -3615,64 +4451,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<RegistrationPhase> crateApiApiGetPhase({required ArcPushState state}) {
+  Future<QuotaInfo> crateApiApiGetQuotaInfo(
+      {required ArcTokenProviderDefaultAnisetteProvider info}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            info, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 104, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_registration_phase,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiApiGetPhaseConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiGetPhaseConstMeta => const TaskConstMeta(
-        debugName: "get_phase",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<QuotaInfo> crateApiApiGetQuotaInfo({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 105, port: port_);
+            funcId: 116, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_quota_info,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetQuotaInfoConstMeta,
-      argValues: [state],
+      argValues: [info],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetQuotaInfoConstMeta => const TaskConstMeta(
         debugName: "get_quota_info",
-        argNames: ["state"],
+        argNames: ["info"],
       );
 
   @override
-  Future<RegisterState> crateApiApiGetRegstate({required ArcPushState state}) {
+  Future<RegisterState> crateApiApiGetRegstate({required ArcImClient state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 106, port: port_);
+            funcId: 117, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_register_state,
@@ -3691,18 +4503,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<PrivateDeviceInfo>> crateApiApiGetSmsTargets(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required bool refresh}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_String(handle, serializer);
         sse_encode_bool(refresh, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 107, port: port_);
+            funcId: 118, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_private_device_info,
@@ -3721,14 +4533,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<(Map<String, SyncStatus>, (String, BigInt)?)> crateApiApiGetSyncstatus(
-      {required ArcPushState state}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 108, port: port_);
+            funcId: 119, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3736,25 +4548,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiGetSyncstatusConstMeta,
-      argValues: [state],
+      argValues: [lock],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiGetSyncstatusConstMeta => const TaskConstMeta(
         debugName: "get_syncstatus",
-        argNames: ["state"],
+        argNames: ["lock"],
       );
 
   @override
-  Future<Uint8List> crateApiApiGetToken({required ArcPushState state}) {
+  Future<Uint8List> crateApiApiGetToken({required ApsConnection state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 109, port: port_);
+            funcId: 120, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -3772,14 +4584,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiApiGetUserName({required ArcPushState state}) {
+  Future<String> crateApiApiGetUserName(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 110, port: port_);
+            funcId: 121, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3797,21 +4610,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiInvalidateIdCache({required ArcPushState state}) {
+  (Sender, ArcSenderPushMessage, ApsWatcher) crateApiApiImportWatcher(
+      {required ReceiverApsMessage queue, required ArcImClient client}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+            queue, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 122)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiImportWatcherConstMeta,
+      argValues: [queue, client],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiImportWatcherConstMeta => const TaskConstMeta(
+        debugName: "import_watcher",
+        argNames: ["queue", "client"],
+      );
+
+  @override
+  Future<void> crateApiApiInvalidateIdCache({required ArcImClient client}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 111, port: port_);
+            funcId: 123, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiInvalidateIdCacheConstMeta,
-      argValues: [state],
+      argValues: [client],
       apiImpl: this,
     ));
   }
@@ -3819,88 +4660,89 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiInvalidateIdCacheConstMeta =>
       const TaskConstMeta(
         debugName: "invalidate_id_cache",
-        argNames: ["state"],
+        argNames: ["client"],
       );
 
   @override
   Future<void> crateApiApiInviteToChannel(
-      {required ArcPushState state,
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
       required String handle,
       required Map<String, StatusKitPersonalConfig> to}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+            status, serializer);
         sse_encode_String(handle, serializer);
         sse_encode_Map_String_status_kit_personal_config(to, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 112, port: port_);
+            funcId: 124, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiInviteToChannelConstMeta,
-      argValues: [state, handle, to],
+      argValues: [status, handle, to],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiInviteToChannelConstMeta => const TaskConstMeta(
         debugName: "invite_to_channel",
-        argNames: ["state", "handle", "to"],
+        argNames: ["status", "handle", "to"],
       );
 
   @override
-  Future<bool> crateApiApiIsInClique({required ArcPushState state}) {
+  Future<bool> crateApiApiIsInClique(
+      {required ArcKeychainClientDefaultAnisetteProvider keychain}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 113, port: port_);
+            funcId: 125, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_bool,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiIsInCliqueConstMeta,
-      argValues: [state],
+      argValues: [keychain],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiIsInCliqueConstMeta => const TaskConstMeta(
         debugName: "is_in_clique",
-        argNames: ["state"],
+        argNames: ["keychain"],
       );
 
   @override
   Future<void> crateApiApiJoinCliqueWithBottle(
-      {required ArcPushState state,
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
       required EscrowData bottle,
       required String password,
       required String devicePassword}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerEscrowData(
             bottle, serializer);
         sse_encode_String(password, serializer);
         sse_encode_String(devicePassword, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 114, port: port_);
+            funcId: 126, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiJoinCliqueWithBottleConstMeta,
-      argValues: [state, bottle, password, devicePassword],
+      argValues: [keychain, bottle, password, devicePassword],
       apiImpl: this,
     ));
   }
@@ -3908,19 +4750,213 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiJoinCliqueWithBottleConstMeta =>
       const TaskConstMeta(
         debugName: "join_clique_with_bottle",
-        argNames: ["state", "bottle", "password", "devicePassword"],
+        argNames: ["keychain", "bottle", "password", "devicePassword"],
+      );
+
+  @override
+  Future<ArcAnisetteClientDefaultAnisetteProvider> crateApiApiMakeAnisette(
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection conn}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 127, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeAnisetteConstMeta,
+      argValues: [path, config, conn],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeAnisetteConstMeta => const TaskConstMeta(
+        debugName: "make_anisette",
+        argNames: ["path", "config", "conn"],
+      );
+
+  @override
+  ArcMutexVecActiveCircleSession crateApiApiMakeCircleSessions() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 128)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeCircleSessionsConstMeta,
+      argValues: [],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeCircleSessionsConstMeta =>
+      const TaskConstMeta(
+        debugName: "make_circle_sessions",
+        argNames: [],
+      );
+
+  @override
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      crateApiApiMakeClientSession(
+          {CircleClientSessionDefaultAnisetteProvider? circle}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+            circle, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 129)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeClientSessionConstMeta,
+      argValues: [circle],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeClientSessionConstMeta =>
+      const TaskConstMeta(
+        debugName: "make_client_session",
+        argNames: ["circle"],
+      );
+
+  @override
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      crateApiApiMakeCloudMessagesClient(
+          {required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+          required ArcKeychainClientDefaultAnisetteProvider keychain}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            cloudkit, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 130)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeCloudMessagesClientConstMeta,
+      argValues: [cloudkit, keychain],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeCloudMessagesClientConstMeta =>
+      const TaskConstMeta(
+        debugName: "make_cloud_messages_client",
+        argNames: ["cloudkit", "keychain"],
+      );
+
+  @override
+  Future<ArcCloudKitClientDefaultAnisetteProvider?> crateApiApiMakeCloudkit(
+      {required String path,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            tokenProvider, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 131, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeCloudkitConstMeta,
+      argValues: [path, anisette, config, tokenProvider],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeCloudkitConstMeta => const TaskConstMeta(
+        debugName: "make_cloudkit",
+        argNames: ["path", "anisette", "config", "tokenProvider"],
+      );
+
+  @override
+  Future<ArcFtClient> crateApiApiMakeFacetime(
+      {required String path,
+      required ApsConnection conn,
+      required ArcImClient client}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 132, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeFacetimeConstMeta,
+      argValues: [path, conn, client],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeFacetimeConstMeta => const TaskConstMeta(
+        debugName: "make_facetime",
+        argNames: ["path", "conn", "client"],
       );
 
   @override
   Future<FindMyFriendsClientDefaultAnisetteProvider>
-      crateApiApiMakeFindMyFriends({required ArcPushState state}) {
+      crateApiApiMakeFindMyFriends(
+          {required String path,
+          required JoinedOsConfig config,
+          required ApsConnection aps,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required ArcTokenProviderDefaultAnisetteProvider provider}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            provider, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 115, port: port_);
+            funcId: 133, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3928,7 +4964,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiMakeFindMyFriendsConstMeta,
-      argValues: [state],
+      argValues: [path, config, aps, anisette, provider],
       apiImpl: this,
     ));
   }
@@ -3936,19 +4972,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiMakeFindMyFriendsConstMeta =>
       const TaskConstMeta(
         debugName: "make_find_my_friends",
-        argNames: ["state"],
+        argNames: ["path", "config", "aps", "anisette", "provider"],
       );
 
   @override
   Future<FindMyPhoneClientDefaultAnisetteProvider> crateApiApiMakeFindMyPhone(
-      {required ArcPushState state}) {
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required ArcTokenProviderDefaultAnisetteProvider provider}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            provider, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 116, port: port_);
+            funcId: 134, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -3956,14 +5003,313 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiMakeFindMyPhoneConstMeta,
-      argValues: [state],
+      argValues: [path, config, aps, anisette, provider],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiMakeFindMyPhoneConstMeta => const TaskConstMeta(
         debugName: "make_find_my_phone",
-        argNames: ["state"],
+        argNames: ["path", "config", "aps", "anisette", "provider"],
+      );
+
+  @override
+  Future<ArcFindMyClientDefaultAnisetteProvider?> crateApiApiMakeFindmy(
+      {required String path,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider,
+      required ApsConnection conn,
+      required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+      required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcImClient client}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            tokenProvider, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            cloudkit, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 135, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeFindmyConstMeta,
+      argValues: [
+        path,
+        tokenProvider,
+        conn,
+        cloudkit,
+        keychain,
+        anisette,
+        config,
+        client
+      ],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeFindmyConstMeta => const TaskConstMeta(
+        debugName: "make_findmy",
+        argNames: [
+          "path",
+          "tokenProvider",
+          "conn",
+          "cloudkit",
+          "keychain",
+          "anisette",
+          "config",
+          "client"
+        ],
+      );
+
+  @override
+  Future<ArcIdmsAuthListener> crateApiApiMakeIdms(
+      {required ApsConnection conn}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 136, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeIdmsConstMeta,
+      argValues: [conn],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeIdmsConstMeta => const TaskConstMeta(
+        debugName: "make_idms",
+        argNames: ["conn"],
+      );
+
+  @override
+  Future<ArcImClient> crateApiApiMakeImclient(
+      {required String path,
+      required ApsConnection conn,
+      required List<IdsUser> users,
+      required IdsngmIdentity identity}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            users, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+            identity, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 137, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeImclientConstMeta,
+      argValues: [path, conn, users, identity],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeImclientConstMeta => const TaskConstMeta(
+        debugName: "make_imclient",
+        argNames: ["path", "conn", "users", "identity"],
+      );
+
+  @override
+  ArcKeychainClientDefaultAnisetteProvider? crateApiApiMakeKeychain(
+      {required String path,
+      required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
+      required ArcTokenProviderDefaultAnisetteProvider tokenProvider}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            cloudkit, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            tokenProvider, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 138)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeKeychainConstMeta,
+      argValues: [path, cloudkit, anisette, config, tokenProvider],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeKeychainConstMeta => const TaskConstMeta(
+        debugName: "make_keychain",
+        argNames: ["path", "cloudkit", "anisette", "config", "tokenProvider"],
+      );
+
+  @override
+  Future<ArcProfilesClientDefaultAnisetteProvider> crateApiApiMakeProfiles(
+      {required ArcCloudKitClientDefaultAnisetteProvider cloudkit}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            cloudkit, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 139, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeProfilesConstMeta,
+      argValues: [cloudkit],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeProfilesConstMeta => const TaskConstMeta(
+        debugName: "make_profiles",
+        argNames: ["cloudkit"],
+      );
+
+  @override
+  Future<SyncManagerDefaultAnisetteProviderMyFilePackager?>
+      crateApiApiMakeSharedStreams(
+          {required String path,
+          required ApsConnection conn,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required JoinedOsConfig config,
+          required ArcTokenProviderDefaultAnisetteProvider token}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            token, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 140, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeSharedStreamsConstMeta,
+      argValues: [path, conn, anisette, config, token],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeSharedStreamsConstMeta =>
+      const TaskConstMeta(
+        debugName: "make_shared_streams",
+        argNames: ["path", "conn", "anisette", "config", "token"],
+      );
+
+  @override
+  Future<ArcStatusKitClientDefaultAnisetteProvider> crateApiApiMakeStatuskit(
+      {required String path,
+      required ArcTokenProviderDefaultAnisetteProvider provider,
+      required ApsConnection conn,
+      required JoinedOsConfig config,
+      required ArcImClient client}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            provider, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            client, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 141, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeStatuskitConstMeta,
+      argValues: [path, provider, conn, config, client],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeStatuskitConstMeta => const TaskConstMeta(
+        debugName: "make_statuskit",
+        argNames: ["path", "provider", "conn", "config", "client"],
+      );
+
+  @override
+  ArcTokenProviderDefaultAnisetteProvider crateApiApiMakeTokenProvider(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required JoinedOsConfig config}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 142)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMakeTokenProviderConstMeta,
+      argValues: [account, config],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMakeTokenProviderConstMeta =>
+      const TaskConstMeta(
+        debugName: "make_token_provider",
+        argNames: ["account", "config"],
       );
 
   @override
@@ -3973,7 +5319,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_message_parts(that, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 117, port: port_);
+            funcId: 143, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -3992,12 +5338,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<bool> crateApiApiMigrate({required String path}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 144, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_bool,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiMigrateConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiMigrateConstMeta => const TaskConstMeta(
+        debugName: "migrate",
+        argNames: ["path"],
+      );
+
+  @override
   Future<MyAsyncRuntime> crateApiApiMyAsyncRuntimeDefault() {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 118, port: port_);
+            funcId: 145, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_my_async_runtime,
@@ -4017,59 +5387,54 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<MessageInst> crateApiApiNewMsg(
-      {required ArcPushState state,
-      required ConversationData conversation,
+      {required ConversationData conversation,
       required String sender,
       required Message message}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
         sse_encode_box_autoadd_conversation_data(conversation, serializer);
         sse_encode_String(sender, serializer);
         sse_encode_box_autoadd_message(message, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 119, port: port_);
+            funcId: 146, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_message_inst,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiNewMsgConstMeta,
-      argValues: [state, conversation, sender, message],
+      argValues: [conversation, sender, message],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiNewMsgConstMeta => const TaskConstMeta(
         debugName: "new_msg",
-        argNames: ["state", "conversation", "sender", "message"],
+        argNames: ["conversation", "sender", "message"],
       );
 
   @override
-  Future<ArcPushState> crateApiApiNewPushState({required String dir}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
+  IdsngmIdentity crateApiApiNewNgmIdentity() {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_String(dir, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 120, port: port_);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 147)!;
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState,
-        decodeErrorData: null,
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity,
+        decodeErrorData: sse_decode_AnyhowException,
       ),
-      constMeta: kCrateApiApiNewPushStateConstMeta,
-      argValues: [dir],
+      constMeta: kCrateApiApiNewNgmIdentityConstMeta,
+      argValues: [],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiApiNewPushStateConstMeta => const TaskConstMeta(
-        debugName: "new_push_state",
-        argNames: ["dir"],
+  TaskConstMeta get kCrateApiApiNewNgmIdentityConstMeta => const TaskConstMeta(
+        debugName: "new_ngm_identity",
+        argNames: [],
       );
 
   @override
@@ -4080,7 +5445,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
             val, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 121)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 148)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_ns_attributed_string,
@@ -4105,7 +5470,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_ns_attributed_string(that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 122)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 149)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -4129,7 +5494,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 123)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 150)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -4153,7 +5518,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
             val, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 124)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 151)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_ns_number,
@@ -4176,7 +5541,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_ns_number(that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 125)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 152)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -4201,7 +5566,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
             val, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 126)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 153)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_ns_string,
@@ -4224,7 +5589,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_ns_string(that, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 127)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 154)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -4248,7 +5613,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 128)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 155)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -4273,7 +5638,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
             value, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 129)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 156)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -4299,7 +5664,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_box_autoadd_simplified_transcript_poster(
             payload, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 130, port: port_);
+            funcId: 157, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -4325,7 +5690,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_i_message_poster_record(poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 131, port: port_);
+            funcId: 158, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_incoming_call_poster,
@@ -4351,7 +5716,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_box_autoadd_simplified_incoming_call_poster(
             poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 132, port: port_);
+            funcId: 159, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -4376,7 +5741,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(payload, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 133, port: port_);
+            funcId: 160, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_simplified_transcript_poster,
@@ -4400,7 +5765,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 134, port: port_);
+            funcId: 161, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_provisioned_flavor,
@@ -4425,7 +5790,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(ptr, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 135, port: port_);
+            funcId: 162, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_box_autoadd_push_message,
@@ -4443,47 +5808,77 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<PollResult> crateApiApiRecvWait({required ArcPushState state}) {
+  SavedHardwareState? crateApiApiReadHardware({required String path}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 163)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiReadHardwareConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiReadHardwareConstMeta => const TaskConstMeta(
+        debugName: "read_hardware",
+        argNames: ["path"],
+      );
+
+  @override
+  Future<PollResult> crateApiApiRecvWait(
+      {required ApsWatcher watcher, required ArcSharedPushState state}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+            watcher, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
             state, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 136, port: port_);
+            funcId: 164, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_poll_result,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiRecvWaitConstMeta,
-      argValues: [state],
+      argValues: [watcher, state],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiRecvWaitConstMeta => const TaskConstMeta(
         debugName: "recv_wait",
-        argNames: ["state"],
+        argNames: ["watcher", "state"],
       );
 
   @override
   Future<List<Follow>> crateApiApiRefreshBackgroundFollowing(
-      {required ArcPushState state}) {
+      {required ArcFindMyClientDefaultAnisetteProvider state,
+      required JoinedOsConfig config}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
             state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 137, port: port_);
+            funcId: 165, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRefreshBackgroundFollowingConstMeta,
-      argValues: [state],
+      argValues: [state, config],
       apiImpl: this,
     ));
   }
@@ -4491,58 +5886,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiRefreshBackgroundFollowingConstMeta =>
       const TaskConstMeta(
         debugName: "refresh_background_following",
-        argNames: ["state"],
+        argNames: ["state", "config"],
       );
 
   @override
   Future<List<FoundDevice>> crateApiApiRefreshDevices(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyPhoneClientDefaultAnisetteProvider client}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyPhoneClientDefaultAnisetteProvider(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 138, port: port_);
+            funcId: 166, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_found_device,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRefreshDevicesConstMeta,
-      argValues: [state, client],
+      argValues: [config, client],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiRefreshDevicesConstMeta => const TaskConstMeta(
         debugName: "refresh_devices",
-        argNames: ["state", "client"],
+        argNames: ["config", "client"],
       );
 
   @override
   Future<List<Follow>> crateApiApiRefreshFollowing(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyFriendsClientDefaultAnisetteProvider client}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyFriendsClientDefaultAnisetteProvider(
             client, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 139, port: port_);
+            funcId: 167, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRefreshFollowingConstMeta,
-      argValues: [state, client],
+      argValues: [config, client],
       apiImpl: this,
     ));
   }
@@ -4550,103 +5945,89 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiRefreshFollowingConstMeta =>
       const TaskConstMeta(
         debugName: "refresh_following",
-        argNames: ["state", "client"],
+        argNames: ["config", "client"],
       );
 
   @override
-  Future<void> crateApiApiRefreshToken({required ArcPushState state}) {
+  Future<(List<IdsUser>?, SupportAlert?)> crateApiApiRegisterIds(
+      {required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      required IdsngmIdentity identity,
+      required List<IdsUser> users}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 140, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiApiRefreshTokenConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiRefreshTokenConstMeta => const TaskConstMeta(
-        debugName: "refresh_token",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<SupportAlert?> crateApiApiRegisterIds(
-      {required ArcPushState state, required List<IdsUser> users}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+            identity, serializer);
         sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
             users, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 141, port: port_);
+            funcId: 168, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_opt_box_autoadd_support_alert,
+        decodeSuccessData:
+            sse_decode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRegisterIdsConstMeta,
-      argValues: [state, users],
+      argValues: [path, config, aps, identity, users],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiRegisterIdsConstMeta => const TaskConstMeta(
         debugName: "register_ids",
-        argNames: ["state", "users"],
+        argNames: ["path", "config", "aps", "identity", "users"],
       );
 
   @override
   Future<List<SharedAlbum>> crateApiApiRemoveAlbum(
-      {required ArcPushState state, required String guid}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 142, port: port_);
+            funcId: 169, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRemoveAlbumConstMeta,
-      argValues: [state, guid],
+      argValues: [lock, guid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiRemoveAlbumConstMeta => const TaskConstMeta(
         debugName: "remove_album",
-        argNames: ["state", "guid"],
+        argNames: ["lock", "guid"],
       );
 
   @override
   Future<void> crateApiApiReportMessages(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required String handle,
       required List<ReportMessage> messages}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_String(handle, serializer);
         sse_encode_list_report_message(messages, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 143, port: port_);
+            funcId: 170, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -4664,48 +6045,74 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiApiRequestHandles(
-      {required ArcPushState state, required List<String> to}) {
+  Future<ChannelInterestToken?> crateApiApiRequestHandles(
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
+      required List<String> to}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+            status, serializer);
         sse_encode_list_String(to, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 144, port: port_);
+            funcId: 171, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_unit,
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiRequestHandlesConstMeta,
-      argValues: [state, to],
+      argValues: [status, to],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiRequestHandlesConstMeta => const TaskConstMeta(
         debugName: "request_handles",
-        argNames: ["state", "to"],
+        argNames: ["status", "to"],
       );
 
   @override
-  Future<void> crateApiApiResetChannelKeys({required ArcPushState state}) {
+  void crateApiApiResetAnisette({required String path}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 172)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiResetAnisetteConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiResetAnisetteConstMeta => const TaskConstMeta(
+        debugName: "reset_anisette",
+        argNames: ["path"],
+      );
+
+  @override
+  Future<void> crateApiApiResetChannelKeys(
+      {required ArcStatusKitClientDefaultAnisetteProvider status}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+            status, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 145, port: port_);
+            funcId: 173, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiResetChannelKeysConstMeta,
-      argValues: [state],
+      argValues: [status],
       apiImpl: this,
     ));
   }
@@ -4713,64 +6120,123 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiResetChannelKeysConstMeta =>
       const TaskConstMeta(
         debugName: "reset_channel_keys",
-        argNames: ["state"],
+        argNames: ["status"],
       );
 
   @override
   Future<void> crateApiApiResetClique(
-      {required ArcPushState state, required String devicePassword}) {
+      {required ArcKeychainClientDefaultAnisetteProvider keychain,
+      required ArcCloudMessagesClientDefaultAnisetteProvider cloudMessages,
+      required String devicePassword}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            keychain, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessages, serializer);
         sse_encode_String(devicePassword, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 146, port: port_);
+            funcId: 174, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiResetCliqueConstMeta,
-      argValues: [state, devicePassword],
+      argValues: [keychain, cloudMessages, devicePassword],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiResetCliqueConstMeta => const TaskConstMeta(
         debugName: "reset_clique",
-        argNames: ["state", "devicePassword"],
+        argNames: ["keychain", "cloudMessages", "devicePassword"],
       );
 
   @override
   Future<void> crateApiApiResetState(
-      {required ArcPushState state,
+      {required Sender cancel,
+      required String path,
+      required JoinedOsConfig config,
+      required ApsConnection aps,
+      ArcMutexAppleAccountDefaultAnisetteProvider? account,
       required bool resetHw,
       required bool logout}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+            cancel, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
+        sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
         sse_encode_bool(resetHw, serializer);
         sse_encode_bool(logout, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 147, port: port_);
+            funcId: 175, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiResetStateConstMeta,
-      argValues: [state, resetHw, logout],
+      argValues: [cancel, path, config, aps, account, resetHw, logout],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiResetStateConstMeta => const TaskConstMeta(
         debugName: "reset_state",
-        argNames: ["state", "resetHw", "logout"],
+        argNames: [
+          "cancel",
+          "path",
+          "config",
+          "aps",
+          "account",
+          "resetHw",
+          "logout"
+        ],
+      );
+
+  @override
+  Future<ArcMutexAppleAccountDefaultAnisetteProvider?>
+      crateApiApiRestoreAccount(
+          {required String path,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          required JoinedOsConfig config,
+          required ApsConnection conn}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 176, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiRestoreAccountConstMeta,
+      argValues: [path, anisette, config, conn],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiRestoreAccountConstMeta => const TaskConstMeta(
+        debugName: "restore_account",
+        argNames: ["path", "anisette", "config", "conn"],
       );
 
   @override
@@ -4779,7 +6245,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 148)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 177)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_attachment,
@@ -4803,7 +6269,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_list_prim_u_8_loose(data, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 149)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 178)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_cloud_chat,
@@ -4828,7 +6294,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(user, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 150, port: port_);
+            funcId: 179, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -4847,29 +6313,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<IdsUser> crateApiApiRetryLogin({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
+  List<IdsUser>? crateApiApiRestoreUsers({required String path}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 151, port: port_);
+        sse_encode_String(path, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 180)!;
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
-        decodeErrorData: sse_decode_AnyhowException,
+            sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
+        decodeErrorData: null,
       ),
-      constMeta: kCrateApiApiRetryLoginConstMeta,
-      argValues: [state],
+      constMeta: kCrateApiApiRestoreUsersConstMeta,
+      argValues: [path],
       apiImpl: this,
     ));
   }
 
-  TaskConstMeta get kCrateApiApiRetryLoginConstMeta => const TaskConstMeta(
-        debugName: "retry_login",
-        argNames: ["state"],
+  TaskConstMeta get kCrateApiApiRestoreUsersConstMeta => const TaskConstMeta(
+        debugName: "restore_users",
+        argNames: ["path"],
       );
 
   @override
@@ -4879,7 +6343,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_attachment(att, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 152, port: port_);
+            funcId: 181, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -4898,57 +6362,60 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<Map<String, bool>> crateApiApiSaveAttachments(
-      {required ArcPushState state,
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
       required Map<String, CloudAttachment> attachments}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_Map_String_cloud_attachment(attachments, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 153, port: port_);
+            funcId: 182, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveAttachmentsConstMeta,
-      argValues: [state, attachments],
+      argValues: [cloudMessagesClient, attachments],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSaveAttachmentsConstMeta => const TaskConstMeta(
         debugName: "save_attachments",
-        argNames: ["state", "attachments"],
+        argNames: ["cloudMessagesClient", "attachments"],
       );
 
   @override
   Future<Map<String, bool>> crateApiApiSaveChats(
-      {required ArcPushState state, required Map<String, CloudChat> chats}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required Map<String, CloudChat> chats}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_Map_String_cloud_chat(chats, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 154, port: port_);
+            funcId: 183, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveChatsConstMeta,
-      argValues: [state, chats],
+      argValues: [cloudMessagesClient, chats],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSaveChatsConstMeta => const TaskConstMeta(
         debugName: "save_chats",
-        argNames: ["state", "chats"],
+        argNames: ["cloudMessagesClient", "chats"],
       );
 
   @override
@@ -4957,7 +6424,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_cloud_chat(value, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 155)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 184)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -4976,30 +6443,31 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<Map<String, bool>> crateApiApiSaveMessages(
-      {required ArcPushState state,
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
       required Map<String, CloudMessage> messages}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_Map_String_cloud_message(messages, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 156, port: port_);
+            funcId: 185, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_Map_String_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSaveMessagesConstMeta,
-      argValues: [state, messages],
+      argValues: [cloudMessagesClient, messages],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSaveMessagesConstMeta => const TaskConstMeta(
         debugName: "save_messages",
-        argNames: ["state", "messages"],
+        argNames: ["cloudMessagesClient", "messages"],
       );
 
   @override
@@ -5010,7 +6478,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
             user, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 157, port: port_);
+            funcId: 186, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
@@ -5028,23 +6496,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  void crateApiApiSaveUsers(
+      {required List<IdsUser> users, required String path}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            users, serializer);
+        sse_encode_String(path, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 187)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSaveUsersConstMeta,
+      argValues: [users, path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSaveUsersConstMeta => const TaskConstMeta(
+        debugName: "save_users",
+        argNames: ["users", "path"],
+      );
+
+  @override
   Future<List<Follow>> crateApiApiSelectBackgroundFriend(
-      {required ArcPushState state, String? friend}) {
+      {required ArcFindMyClientDefaultAnisetteProvider fmfd, String? friend}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            fmfd, serializer);
         sse_encode_opt_String(friend, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 158, port: port_);
+            funcId: 188, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSelectBackgroundFriendConstMeta,
-      argValues: [state, friend],
+      argValues: [fmfd, friend],
       apiImpl: this,
     ));
   }
@@ -5052,111 +6546,124 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiSelectBackgroundFriendConstMeta =>
       const TaskConstMeta(
         debugName: "select_background_friend",
-        argNames: ["state", "friend"],
+        argNames: ["fmfd", "friend"],
       );
 
   @override
   Future<List<Follow>> crateApiApiSelectFriend(
-      {required ArcPushState state,
+      {required JoinedOsConfig config,
       required FindMyFriendsClientDefaultAnisetteProvider client,
       String? friend}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyFriendsClientDefaultAnisetteProvider(
             client, serializer);
         sse_encode_opt_String(friend, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 159, port: port_);
+            funcId: 189, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_follow,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSelectFriendConstMeta,
-      argValues: [state, client, friend],
+      argValues: [config, client, friend],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSelectFriendConstMeta => const TaskConstMeta(
         debugName: "select_friend",
-        argNames: ["state", "client", "friend"],
+        argNames: ["config", "client", "friend"],
       );
 
   @override
   Future<bool> crateApiApiSend(
-      {required ArcPushState state, required MessageInst msg}) {
+      {required ArcImClient state,
+      required ArcSenderPushMessage local,
+      required MessageInst msg}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+            local, serializer);
         sse_encode_box_autoadd_message_inst(msg, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 160, port: port_);
+            funcId: 190, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_bool,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSendConstMeta,
-      argValues: [state, msg],
+      argValues: [state, local, msg],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSendConstMeta => const TaskConstMeta(
         debugName: "send",
-        argNames: ["state", "msg"],
+        argNames: ["state", "local", "msg"],
       );
 
   @override
   Future<LoginState> crateApiApiSend2FaSms(
-      {required ArcPushState state, required int phoneId}) {
+      {CircleClientSessionDefaultAnisetteProvider? locked,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required int phoneId}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+            locked, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
         sse_encode_u_32(phoneId, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 161, port: port_);
+            funcId: 191, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_login_state,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSend2FaSmsConstMeta,
-      argValues: [state, phoneId],
+      argValues: [locked, account, phoneId],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSend2FaSmsConstMeta => const TaskConstMeta(
         debugName: "send_2fa_sms",
-        argNames: ["state", "phoneId"],
+        argNames: ["locked", "account", "phoneId"],
       );
 
   @override
-  Future<(LoginState, String?)> crateApiApiSend2FaToDevices(
-      {required ArcPushState state}) {
+  Future<(CircleClientSessionDefaultAnisetteProvider, LoginState, String?)>
+      crateApiApiSend2FaToDevices(
+          {required ArcMutexAppleAccountDefaultAnisetteProvider state,
+          required ApsConnection conn}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 162, port: port_);
+            funcId: 192, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_record_login_state_opt_string,
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSend2FaToDevicesConstMeta,
-      argValues: [state],
+      argValues: [state, conn],
       apiImpl: this,
     ));
   }
@@ -5164,21 +6671,47 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiSend2FaToDevicesConstMeta =>
       const TaskConstMeta(
         debugName: "send_2fa_to_devices",
-        argNames: ["state"],
+        argNames: ["state", "conn"],
       );
 
   @override
-  Future<ArcPushState> crateApiApiServiceFromPtr({required String ptr}) {
+  (int, SharedPushState) crateApiApiSendDaemon(
+      {required SharedPushState state, required ApsWatcher watcher}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_box_autoadd_shared_push_state(state, serializer);
+        sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+            watcher, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 193)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_casted_primitive_u_64_shared_push_state,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSendDaemonConstMeta,
+      argValues: [state, watcher],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSendDaemonConstMeta => const TaskConstMeta(
+        debugName: "send_daemon",
+        argNames: ["state", "watcher"],
+      );
+
+  @override
+  Future<SharedPushState?> crateApiApiServiceFromPtr({required String ptr}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_String(ptr, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 163, port: port_);
+            funcId: 194, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState,
+        decodeSuccessData: sse_decode_opt_box_autoadd_shared_push_state,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiServiceFromPtrConstMeta,
@@ -5193,180 +6726,251 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiApiSetIdentity(
+      {required String statePath,
+      required JoinedOsConfig config,
+      required IdsngmIdentity identity}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(statePath, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+            identity, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 195, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData: sse_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSetIdentityConstMeta,
+      argValues: [statePath, config, identity],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSetIdentityConstMeta => const TaskConstMeta(
+        debugName: "set_identity",
+        argNames: ["statePath", "config", "identity"],
+      );
+
+  @override
   Future<ShareProfileMessage> crateApiApiSetProfile(
-      {required ArcPushState state,
+      {required ArcProfilesClientDefaultAnisetteProvider profiles,
       required IMessageNicknameRecord record,
       ShareProfileMessage? existing}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+            profiles, serializer);
         sse_encode_box_autoadd_i_message_nickname_record(record, serializer);
         sse_encode_opt_box_autoadd_share_profile_message(existing, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 164, port: port_);
+            funcId: 196, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_share_profile_message,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSetProfileConstMeta,
-      argValues: [state, record, existing],
+      argValues: [profiles, record, existing],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSetProfileConstMeta => const TaskConstMeta(
         debugName: "set_profile",
-        argNames: ["state", "record", "existing"],
+        argNames: ["profiles", "record", "existing"],
       );
 
   @override
   Future<void> crateApiApiSetStatus(
-      {required ArcPushState state, String? newStatus}) {
+      {required ArcStatusKitClientDefaultAnisetteProvider status,
+      String? newStatus}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+            status, serializer);
         sse_encode_opt_String(newStatus, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 165, port: port_);
+            funcId: 197, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSetStatusConstMeta,
-      argValues: [state, newStatus],
+      argValues: [status, newStatus],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSetStatusConstMeta => const TaskConstMeta(
         debugName: "set_status",
-        argNames: ["state", "newStatus"],
+        argNames: ["status", "newStatus"],
+      );
+
+  @override
+  Future<(ApsConnection, PushError?)> crateApiApiSetupPush(
+      {required JoinedOsConfig config,
+      required IdsngmIdentity identity,
+      ApsState? state,
+      required String statePath}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+            identity, serializer);
+        sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+            state, serializer);
+        sse_encode_String(statePath, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 198, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSetupPushConstMeta,
+      argValues: [config, identity, state, statePath],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSetupPushConstMeta => const TaskConstMeta(
+        debugName: "setup_push",
+        argNames: ["config", "identity", "state", "statePath"],
+      );
+
+  @override
+  Future<(SharedPushState, ApsWatcher)?> crateApiApiSharedPushStateRestore(
+      {required String path}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 199, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSharedPushStateRestoreConstMeta,
+      argValues: [path],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSharedPushStateRestoreConstMeta =>
+      const TaskConstMeta(
+        debugName: "shared_push_state_restore",
+        argNames: ["path"],
       );
 
   @override
   Future<List<SharedAlbum>> crateApiApiSubscribe(
-      {required ArcPushState state, required String guid}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 166, port: port_);
+            funcId: 200, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSubscribeConstMeta,
-      argValues: [state, guid],
+      argValues: [lock, guid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSubscribeConstMeta => const TaskConstMeta(
         debugName: "subscribe",
-        argNames: ["state", "guid"],
+        argNames: ["lock", "guid"],
+      );
+
+  @override
+  ReceiverApsMessage crateApiApiSubscribeConn({required ApsConnection conn}) {
+    return handler.executeSync(SyncTask(
+      callFfi: () {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 201)!;
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage,
+        decodeErrorData: null,
+      ),
+      constMeta: kCrateApiApiSubscribeConnConstMeta,
+      argValues: [conn],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiSubscribeConnConstMeta => const TaskConstMeta(
+        debugName: "subscribe_conn",
+        argNames: ["conn"],
       );
 
   @override
   Future<List<SharedAlbum>> crateApiApiSubscribeToken(
-      {required ArcPushState state, required String token}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String token}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_String(token, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 167, port: port_);
+            funcId: 202, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSubscribeTokenConstMeta,
-      argValues: [state, token],
+      argValues: [lock, token],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSubscribeTokenConstMeta => const TaskConstMeta(
         debugName: "subscribe_token",
-        argNames: ["state", "token"],
-      );
-
-  @override
-  Future<bool> crateApiApiSupportsKeychain({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 168, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: null,
-      ),
-      constMeta: kCrateApiApiSupportsKeychainConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiSupportsKeychainConstMeta =>
-      const TaskConstMeta(
-        debugName: "supports_keychain",
-        argNames: ["state"],
-      );
-
-  @override
-  Future<bool> crateApiApiSupportsSharedStreams({required ArcPushState state}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 169, port: port_);
-      },
-      codec: SseCodec(
-        decodeSuccessData: sse_decode_bool,
-        decodeErrorData: sse_decode_AnyhowException,
-      ),
-      constMeta: kCrateApiApiSupportsSharedStreamsConstMeta,
-      argValues: [state],
-      apiImpl: this,
-    ));
-  }
-
-  TaskConstMeta get kCrateApiApiSupportsSharedStreamsConstMeta =>
-      const TaskConstMeta(
-        debugName: "supports_shared_streams",
-        argNames: ["state"],
+        argNames: ["lock", "token"],
       );
 
   @override
   Future<(Uint8List, Map<String, CloudAttachment?>, int)>
       crateApiApiSyncAttachments(
-          {required ArcPushState state, Uint8List? continuationToken}) {
+          {required ArcCloudMessagesClientDefaultAnisetteProvider
+              cloudMessagesClient,
+          Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_opt_list_prim_u_8_strict(continuationToken, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 170, port: port_);
+            funcId: 203, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5374,27 +6978,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncAttachmentsConstMeta,
-      argValues: [state, continuationToken],
+      argValues: [cloudMessagesClient, continuationToken],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSyncAttachmentsConstMeta => const TaskConstMeta(
         debugName: "sync_attachments",
-        argNames: ["state", "continuationToken"],
+        argNames: ["cloudMessagesClient", "continuationToken"],
       );
 
   @override
   Future<(Uint8List, Map<String, CloudChat?>, int)> crateApiApiSyncChats(
-      {required ArcPushState state, Uint8List? continuationToken}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_opt_list_prim_u_8_strict(continuationToken, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 171, port: port_);
+            funcId: 204, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5402,27 +7008,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncChatsConstMeta,
-      argValues: [state, continuationToken],
+      argValues: [cloudMessagesClient, continuationToken],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSyncChatsConstMeta => const TaskConstMeta(
         debugName: "sync_chats",
-        argNames: ["state", "continuationToken"],
+        argNames: ["cloudMessagesClient", "continuationToken"],
       );
 
   @override
   Future<(Uint8List, Map<String, CloudMessage?>, int)> crateApiApiSyncMessages(
-      {required ArcPushState state, Uint8List? continuationToken}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      Uint8List? continuationToken}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_opt_list_prim_u_8_strict(continuationToken, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 172, port: port_);
+            funcId: 205, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5430,39 +7038,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncMessagesConstMeta,
-      argValues: [state, continuationToken],
+      argValues: [cloudMessagesClient, continuationToken],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSyncMessagesConstMeta => const TaskConstMeta(
         debugName: "sync_messages",
-        argNames: ["state", "continuationToken"],
+        argNames: ["cloudMessagesClient", "continuationToken"],
       );
 
   @override
-  Future<void> crateApiApiSyncNow({required ArcPushState state}) {
+  Future<void> crateApiApiSyncNow(
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 173, port: port_);
+            funcId: 206, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiSyncNowConstMeta,
-      argValues: [state],
+      argValues: [lock],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiSyncNowConstMeta => const TaskConstMeta(
         debugName: "sync_now",
-        argNames: ["state"],
+        argNames: ["lock"],
       );
 
   @override
@@ -5472,7 +7081,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSystemTime(
             time, serializer);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 174)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 207)!;
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_CastedPrimitive_u_64,
@@ -5492,32 +7101,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> crateApiApiTeardown2Fa(
-      {required ArcPushState state,
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
       required String action,
       required String txnid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
         sse_encode_String(action, serializer);
         sse_encode_String(txnid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 175, port: port_);
+            funcId: 208, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiTeardown2FaConstMeta,
-      argValues: [state, action, txnid],
+      argValues: [account, action, txnid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiTeardown2FaConstMeta => const TaskConstMeta(
         debugName: "teardown_2fa",
-        argNames: ["state", "action", "txnid"],
+        argNames: ["account", "action", "txnid"],
       );
 
   @override
@@ -5528,7 +7137,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_box_autoadd_simplified_transcript_poster(poster, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 176, port: port_);
+            funcId: 209, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_prim_u_8_strict,
@@ -5547,80 +7156,88 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(LoginState, IdsUser?)> crateApiApiTryAuth(
-      {required ArcPushState state,
-      required String username,
-      required String password}) {
+  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState, IdsUser?)>
+      crateApiApiTryAuth(
+          {required String path,
+          required JoinedOsConfig conf,
+          required ApsConnection conn,
+          required ArcAnisetteClientDefaultAnisetteProvider anisette,
+          (String, String)? creds}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
-        sse_encode_String(username, serializer);
-        sse_encode_String(password, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            conf, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_opt_box_autoadd_record_string_string(creds, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 177, port: port_);
+            funcId: 210, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_record_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user,
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiTryAuthConstMeta,
-      argValues: [state, username, password],
+      argValues: [path, conf, conn, anisette, creds],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiTryAuthConstMeta => const TaskConstMeta(
         debugName: "try_auth",
-        argNames: ["state", "username", "password"],
+        argNames: ["path", "conf", "conn", "anisette", "creds"],
       );
 
   @override
   Future<List<SharedAlbum>> crateApiApiUnsubscribe(
-      {required ArcPushState state, required String guid}) {
+      {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
+      required String guid}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            lock, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 178, port: port_);
+            funcId: 211, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUnsubscribeConstMeta,
-      argValues: [state, guid],
+      argValues: [lock, guid],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiUnsubscribeConstMeta => const TaskConstMeta(
         debugName: "unsubscribe",
-        argNames: ["state", "guid"],
+        argNames: ["lock", "guid"],
       );
 
   @override
   Future<String> crateApiApiUpdateAccountHeaders(
-      {required ArcPushState state}) {
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 179, port: port_);
+            funcId: 212, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_String,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUpdateAccountHeadersConstMeta,
-      argValues: [state],
+      argValues: [account],
       apiImpl: this,
     ));
   }
@@ -5628,27 +7245,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUpdateAccountHeadersConstMeta =>
       const TaskConstMeta(
         debugName: "update_account_headers",
-        argNames: ["state"],
+        argNames: ["account"],
       );
 
   @override
   Future<void> crateApiApiUpdateBeaconName(
-      {required ArcPushState state, required BeaconNamingRecord namingRecord}) {
+      {required ArcFindMyClientDefaultAnisetteProvider items,
+      required BeaconNamingRecord namingRecord}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            items, serializer);
         sse_encode_box_autoadd_beacon_naming_record(namingRecord, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 180, port: port_);
+            funcId: 213, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUpdateBeaconNameConstMeta,
-      argValues: [state, namingRecord],
+      argValues: [items, namingRecord],
       apiImpl: this,
     ));
   }
@@ -5656,12 +7274,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUpdateBeaconNameConstMeta =>
       const TaskConstMeta(
         debugName: "update_beacon_name",
-        argNames: ["state", "namingRecord"],
+        argNames: ["items", "namingRecord"],
       );
 
   @override
   Stream<TransferProgress> crateApiApiUploadAttachment(
-      {required ArcPushState state,
+      {required ApsConnection aps,
       required String path,
       required String mime,
       required String uti,
@@ -5671,21 +7289,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_transfer_progress_Sse(sink, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
         sse_encode_String(path, serializer);
         sse_encode_String(mime, serializer);
         sse_encode_String(uti, serializer);
         sse_encode_String(name, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 181, port: port_);
+            funcId: 214, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiUploadAttachmentConstMeta,
-      argValues: [sink, state, path, mime, uti, name],
+      argValues: [sink, aps, path, mime, uti, name],
       apiImpl: this,
     )));
     return sink.stream;
@@ -5694,20 +7312,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUploadAttachmentConstMeta =>
       const TaskConstMeta(
         debugName: "upload_attachment",
-        argNames: ["sink", "state", "path", "mime", "uti", "name"],
+        argNames: ["sink", "aps", "path", "mime", "uti", "name"],
       );
 
   @override
   Future<Map<String, Asset>> crateApiApiUploadCloudAttachments(
-      {required ArcPushState state, required List<(String, String)> files}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 182, port: port_);
+            funcId: 215, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5715,7 +7335,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUploadCloudAttachmentsConstMeta,
-      argValues: [state, files],
+      argValues: [cloudMessagesClient, files],
       apiImpl: this,
     ));
   }
@@ -5723,20 +7343,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUploadCloudAttachmentsConstMeta =>
       const TaskConstMeta(
         debugName: "upload_cloud_attachments",
-        argNames: ["state", "files"],
+        argNames: ["cloudMessagesClient", "files"],
       );
 
   @override
   Future<Map<String, Asset>> crateApiApiUploadGroupPhoto(
-      {required ArcPushState state, required List<(String, String)> files}) {
+      {required ArcCloudMessagesClientDefaultAnisetteProvider
+          cloudMessagesClient,
+      required List<(String, String)> files}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 183, port: port_);
+            funcId: 216, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5744,7 +7366,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUploadGroupPhotoConstMeta,
-      argValues: [state, files],
+      argValues: [cloudMessagesClient, files],
       apiImpl: this,
     ));
   }
@@ -5752,29 +7374,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUploadGroupPhotoConstMeta =>
       const TaskConstMeta(
         debugName: "upload_group_photo",
-        argNames: ["state", "files"],
+        argNames: ["cloudMessagesClient", "files"],
       );
 
   @override
   Stream<MMCSTransferProgress> crateApiApiUploadMmcs(
-      {required ArcPushState state, required String path}) {
+      {required ApsConnection aps, required String path}) {
     final sink = RustStreamSink<MMCSTransferProgress>();
     unawaited(handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_StreamSink_mmcs_transfer_progress_Sse(sink, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            aps, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 184, port: port_);
+            funcId: 217, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiUploadMmcsConstMeta,
-      argValues: [sink, state, path],
+      argValues: [sink, aps, path],
       apiImpl: this,
     )));
     return sink.stream;
@@ -5782,37 +7404,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiApiUploadMmcsConstMeta => const TaskConstMeta(
         debugName: "upload_mmcs",
-        argNames: ["sink", "state", "path"],
+        argNames: ["sink", "aps", "path"],
       );
 
   @override
   Future<void> crateApiApiUseLinkFor(
-      {required ArcPushState state,
+      {required ArcFtClient facetime,
       required String oldUsage,
       required String usage}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            facetime, serializer);
         sse_encode_String(oldUsage, serializer);
         sse_encode_String(usage, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 185, port: port_);
+            funcId: 218, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUseLinkForConstMeta,
-      argValues: [state, oldUsage, usage],
+      argValues: [facetime, oldUsage, usage],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiUseLinkForConstMeta => const TaskConstMeta(
         debugName: "use_link_for",
-        argNames: ["state", "oldUsage", "usage"],
+        argNames: ["facetime", "oldUsage", "usage"],
       );
 
   @override
@@ -5820,7 +7442,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 186)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 219)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5840,71 +7462,72 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<String>> crateApiApiValidateCert(
-      {required ArcPushState state, required IdsUser user}) {
+      {required ApsConnection conn, required IdsUser user}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            conn, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
             user, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 187, port: port_);
+            funcId: 220, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiValidateCertConstMeta,
-      argValues: [state, user],
+      argValues: [conn, user],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiValidateCertConstMeta => const TaskConstMeta(
         debugName: "validate_cert",
-        argNames: ["state", "user"],
+        argNames: ["conn", "user"],
       );
 
   @override
-  Future<String?> crateApiApiValidateRelay({required ArcPushState state}) {
+  Future<String?> crateApiApiValidateRelay(
+      {required JoinedOsConfig configRef}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            configRef, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 188, port: port_);
+            funcId: 221, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_String,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiValidateRelayConstMeta,
-      argValues: [state],
+      argValues: [configRef],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiValidateRelayConstMeta => const TaskConstMeta(
         debugName: "validate_relay",
-        argNames: ["state"],
+        argNames: ["configRef"],
       );
 
   @override
   Future<List<String>> crateApiApiValidateTargets(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required List<String> targets,
       required String sender}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_list_String(targets, serializer);
         sse_encode_String(sender, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 189, port: port_);
+            funcId: 222, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -5923,18 +7546,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<String>> crateApiApiValidateTargetsFacetime(
-      {required ArcPushState state,
+      {required ArcImClient state,
       required List<String> targets,
       required String sender}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
             state, serializer);
         sse_encode_list_String(targets, serializer);
         sse_encode_String(sender, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 190, port: port_);
+            funcId: 223, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -5954,15 +7577,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<(LoginState, IdsUser?)> crateApiApiVerify2Fa(
-      {required ArcPushState state, required String code}) {
+      {required String path,
+      required CircleClientSessionDefaultAnisetteProvider client,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig osConfig,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required ReceiverApsMessage watcher,
+      required ArcIdmsAuthListener idms,
+      required String code}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+            client, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            osConfig, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
+        sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+            watcher, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+            idms, serializer);
         sse_encode_String(code, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 191, port: port_);
+            funcId: 224, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -5970,31 +7611,57 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiVerify2FaConstMeta,
-      argValues: [state, code],
+      argValues: [
+        path,
+        client,
+        anisette,
+        osConfig,
+        account,
+        watcher,
+        idms,
+        code
+      ],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiVerify2FaConstMeta => const TaskConstMeta(
         debugName: "verify_2fa",
-        argNames: ["state", "code"],
+        argNames: [
+          "path",
+          "client",
+          "anisette",
+          "osConfig",
+          "account",
+          "watcher",
+          "idms",
+          "code"
+        ],
       );
 
   @override
   Future<(LoginState, IdsUser?)> crateApiApiVerify2FaSms(
-      {required ArcPushState state,
+      {required String path,
+      required ArcMutexAppleAccountDefaultAnisetteProvider accountMut,
+      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      required JoinedOsConfig config,
       required VerifyBody body,
       required String code}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-            state, serializer);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            accountMut, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            anisette, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerVerifyBody(
             body, serializer);
         sse_encode_String(code, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 192, port: port_);
+            funcId: 225, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -6002,29 +7669,222 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiVerify2FaSmsConstMeta,
-      argValues: [state, body, code],
+      argValues: [path, accountMut, anisette, config, body, code],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiVerify2FaSmsConstMeta => const TaskConstMeta(
         debugName: "verify_2fa_sms",
-        argNames: ["state", "body", "code"],
+        argNames: ["path", "accountMut", "anisette", "config", "body", "code"],
       );
 
+  Future<void> Function(int, dynamic)
+      encode_DartFn_Inputs_String_Output_String_AnyhowException(
+          FutureOr<String> Function(String) raw) {
+    return (callId, rawArg0) async {
+      final arg0 = dco_decode_String(rawArg0);
+
+      Box<String>? rawOutput;
+      Box<AnyhowException>? rawError;
+      try {
+        rawOutput = Box(await raw(arg0));
+      } catch (e, s) {
+        rawError = Box(AnyhowException("$e\n\n$s"));
+      }
+
+      final serializer = SseSerializer(generalizedFrbRustBinding);
+      assert((rawOutput != null) ^ (rawError != null));
+      if (rawOutput != null) {
+        serializer.buffer.putUint8(0);
+        sse_encode_String(rawOutput.value, serializer);
+      } else {
+        serializer.buffer.putUint8(1);
+        sse_encode_AnyhowException(rawError!.value, serializer);
+      }
+      final output = serializer.intoRaw();
+
+      generalizedFrbRustBinding.dartFnDeliverOutput(
+          callId: callId,
+          ptr: output.ptr,
+          rustVecLen: output.rustVecLen,
+          dataLen: output.dataLen);
+    };
+  }
+
   RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_ArcPushState => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState;
+      get rust_arc_increment_strong_count_ApsConnection => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection;
 
   RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_ArcPushState => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState;
+      get rust_arc_decrement_strong_count_ApsConnection => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ApsState => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ApsState => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ApsWatcher => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ApsWatcher => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcAnisetteClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcCloudKitClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcFtClient => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcFtClient => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcFindMyClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcImClient => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcImClient => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcIdmsAuthListener => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcIdmsAuthListener => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcKeychainClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcMutexVecActiveCircleSession => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSession => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcProfilesClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcSenderPushMessage => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcSenderPushMessage => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcSharedPushState => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcSharedPushState => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcStatusKitClientDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ArcTokenProviderDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider;
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Asset =>
       wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset;
 
   RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Asset =>
       wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ChannelInterestToken => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ChannelInterestToken => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_CircleClientSessionDefaultAnisetteProvider =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProvider =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_ConversationLink => wire
@@ -6121,6 +7981,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto4;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_IdsngmIdentity => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_IdsngmIdentity => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_IdsUser => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser;
 
@@ -6169,12 +8037,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata;
 
   RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_PushError => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_PushError => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_ReceiverApsMessage => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_ReceiverApsMessage => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SavedHardwareState => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SavedHardwareState => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_Sender => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_Sender => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender;
+
+  RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StCollapsedValue => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue;
 
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_StCollapsedValue => wire
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue;
+
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager =>
+          wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager =>
+          wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager;
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_SystemTime => wire
@@ -6207,11 +8115,166 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+    return ApsConnectionImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ApsState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApsStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ApsWatcher
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFtClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcImClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSharedPushState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6220,6 +8283,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AssetImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ChannelInterestToken
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ChannelInterestTokenImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6327,6 +8407,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   IdsUser
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw) {
@@ -6376,11 +8464,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PushError
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PushErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ReceiverApsMessage
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SavedHardwareState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  Sender
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   StCollapsedValue
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -6405,6 +8534,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return ViableBottleImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ApsWatcher
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6434,6 +8580,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ReceiverApsMessage
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SavedHardwareState
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   ViableBottle
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           dynamic raw) {
@@ -6442,11 +8604,150 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+    return ApsConnectionImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFtClient
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcImClient
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSharedPushState
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6511,6 +8812,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   IdsUser
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw) {
@@ -6543,11 +8852,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SavedHardwareState
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  Sender
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   StCollapsedValue
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -6585,6 +8919,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     throw UnimplementedError(
         'Not implemented in this codec, please use the other one');
+  }
+
+  @protected
+  FutureOr<String> Function(String)
+      dco_decode_DartFn_Inputs_String_Output_String_AnyhowException(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    throw UnimplementedError('');
+  }
+
+  @protected
+  Object dco_decode_DartOpaque(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return decodeDartOpaque(raw, generalizedFrbRustBinding);
   }
 
   @protected
@@ -6729,11 +9077,166 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+    return ApsConnectionImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ApsState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApsStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ApsWatcher
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFtClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcImClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcSharedPushState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6742,6 +9245,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return AssetImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ChannelInterestToken
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ChannelInterestTokenImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+        raw as List<dynamic>);
   }
 
   @protected
@@ -6849,6 +9369,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   IdsUser
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw) {
@@ -6898,11 +9426,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PushError
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return PushErrorImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  ReceiverApsMessage
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SavedHardwareState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  Sender
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SenderImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
   StCollapsedValue
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalDcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -7138,11 +9707,83 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ApsState
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+        raw);
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+        raw);
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+        raw);
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+        raw);
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+        raw);
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+        raw);
+  }
+
+  @protected
   Asset
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+        raw);
+  }
+
+  @protected
+  ChannelInterestToken
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+        raw);
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
         raw);
   }
 
@@ -7219,15 +9860,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  JoinedOsConfig
-      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-        raw);
-  }
-
-  @protected
   LocationReport
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw) {
@@ -7251,6 +9883,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+        raw);
+  }
+
+  @protected
+  PushError
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+        raw);
+  }
+
+  @protected
+  SavedHardwareState
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+        raw);
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
         raw);
   }
 
@@ -7656,6 +10315,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) dco_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as (SharedPushState, ApsWatcher);
+  }
+
+  @protected
+  (String, String) dco_decode_box_autoadd_record_string_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as (String, String);
+  }
+
+  @protected
   (String, BigInt) dco_decode_box_autoadd_record_string_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as (String, BigInt);
@@ -7708,9 +10383,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices dco_decode_box_autoadd_shared_i_cloud_services(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_shared_i_cloud_services(raw);
+  }
+
+  @protected
   SharedPoster dco_decode_box_autoadd_shared_poster(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return dco_decode_shared_poster(raw);
+  }
+
+  @protected
+  SharedPushState dco_decode_box_autoadd_shared_push_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_shared_push_state(raw);
   }
 
   @protected
@@ -9464,6 +12152,72 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ApsState?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+            raw);
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            raw);
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            raw);
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            raw);
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            raw);
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            raw);
+  }
+
+  @protected
   Asset?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           dynamic raw) {
@@ -9471,6 +12225,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return raw == null
         ? null
         : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+            raw);
+  }
+
+  @protected
+  ChannelInterestToken?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+            raw);
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
             raw);
   }
 
@@ -9563,17 +12339,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  JoinedOsConfig?
-      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return raw == null
-        ? null
-        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-            raw);
-  }
-
-  @protected
   LocationReport?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw) {
@@ -9603,6 +12368,39 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return raw == null
         ? null
         : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+            raw);
+  }
+
+  @protected
+  PushError?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+            raw);
+  }
+
+  @protected
+  SavedHardwareState?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+            raw);
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
             raw);
   }
 
@@ -9825,6 +12623,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  )? dco_decode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+            raw);
+  }
+
+  @protected
+  (String, String)? dco_decode_opt_box_autoadd_record_string_string(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_record_string_string(raw);
+  }
+
+  @protected
   (String, BigInt)? dco_decode_opt_box_autoadd_record_string_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_record_string_u_64(raw);
@@ -9856,9 +12676,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices? dco_decode_opt_box_autoadd_shared_i_cloud_services(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_shared_i_cloud_services(raw);
+  }
+
+  @protected
   SharedPoster? dco_decode_opt_box_autoadd_shared_poster(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_shared_poster(raw);
+  }
+
+  @protected
+  SharedPushState? dco_decode_opt_box_autoadd_shared_push_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_shared_push_state(raw);
   }
 
   @protected
@@ -9889,6 +12724,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw == null ? null : dco_decode_box_autoadd_u_64(raw);
+  }
+
+  @protected
+  List<IdsUser>?
+      dco_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            raw);
   }
 
   @protected
@@ -10338,6 +13184,120 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   (
+    ApsConnection,
+    PushError?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          arr[0]),
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          arr[1]),
+    );
+  }
+
+  @protected
+  (
+    ArcMutexAppleAccountDefaultAnisetteProvider,
+    LoginState,
+    IdsUser?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          arr[0]),
+      dco_decode_login_state(arr[1]),
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          arr[2]),
+    );
+  }
+
+  @protected
+  (
+    ArcSharedPushState,
+    SharedPushState
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          arr[0]),
+      dco_decode_shared_push_state(arr[1]),
+    );
+  }
+
+  @protected
+  (
+    CircleClientSessionDefaultAnisetteProvider,
+    LoginState,
+    String?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          arr[0]),
+      dco_decode_login_state(arr[1]),
+      dco_decode_opt_String(arr[2]),
+    );
+  }
+
+  @protected
+  (
+    Sender,
+    ArcSenderPushMessage,
+    ApsWatcher
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 3) {
+      throw Exception('Expected 3 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          arr[0]),
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          arr[1]),
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          arr[2]),
+    );
+  }
+
+  @protected
+  (int, SharedPushState)
+      dco_decode_record_casted_primitive_u_64_shared_push_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_CastedPrimitive_u_64(arr[0]),
+      dco_decode_shared_push_state(arr[1]),
+    );
+  }
+
+  @protected
+  (
     Uint8List,
     Map<String, CloudAttachment?>,
     int
@@ -10456,19 +13416,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (LoginState, String?) dco_decode_record_login_state_opt_string(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      dco_decode_login_state(arr[0]),
-      dco_decode_opt_String(arr[1]),
-    );
-  }
-
-  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
@@ -10482,6 +13429,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return (
       dco_decode_Map_String_sync_status(arr[0]),
       dco_decode_opt_box_autoadd_record_string_u_64(arr[1]),
+    );
+  }
+
+  @protected
+  (
+    List<IdsUser>?,
+    SupportAlert?
+  ) dco_decode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          arr[0]),
+      dco_decode_opt_box_autoadd_support_alert(arr[1]),
+    );
+  }
+
+  @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) dco_decode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_shared_push_state(arr[0]),
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          arr[1]),
     );
   }
 
@@ -10772,12 +13755,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RegistrationPhase dco_decode_registration_phase(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    return RegistrationPhase.values[raw as int];
-  }
-
-  @protected
   RenameMessage dco_decode_rename_message(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -10891,6 +13868,43 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices dco_decode_shared_i_cloud_services(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 9)
+      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
+    return SharedICloudServices(
+      account:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+              arr[0]),
+      tokenProvider:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+              arr[1]),
+      cloudkitClient:
+          dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+              arr[2]),
+      keychain:
+          dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+              arr[3]),
+      profilesClient:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+              arr[4]),
+      fmfd:
+          dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+              arr[5]),
+      sharedstreams:
+          dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+              arr[6]),
+      cloudMessagesClient:
+          dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+              arr[7]),
+      statuskitClient:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+              arr[8]),
+    );
+  }
+
+  @protected
   SharedPoster dco_decode_shared_poster(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -10900,6 +13914,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       lowResWallpaperTag: dco_decode_list_prim_u_8_strict(arr[0]),
       wallpaperTag: dco_decode_list_prim_u_8_strict(arr[1]),
       messageTag: dco_decode_list_prim_u_8_strict(arr[2]),
+    );
+  }
+
+  @protected
+  SharedPushState dco_decode_shared_push_state(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 12)
+      throw Exception('unexpected arr length: expect 12 but see ${arr.length}');
+    return SharedPushState(
+      osConfig:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+              arr[0]),
+      cancelPoll:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+              arr[1]),
+      confDir: dco_decode_String(arr[2]),
+      localBroadcast:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+              arr[3]),
+      anisette:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+              arr[4]),
+      conn:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+              arr[5]),
+      icloudServices:
+          dco_decode_opt_box_autoadd_shared_i_cloud_services(arr[6]),
+      client:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+              arr[7]),
+      ftClient:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+              arr[8]),
+      idmsClient:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+              arr[9]),
+      activeCircleSessions:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+              arr[10]),
+      clientSession:
+          dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+              arr[11]),
     );
   }
 
@@ -11269,11 +14326,175 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalSseDecode(
+    return ApsConnectionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ApsState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ApsStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ApsWatcher
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFtClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcImClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSharedPushState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11283,6 +14504,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return AssetImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ChannelInterestToken
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ChannelInterestTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11395,6 +14634,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   IdsUser
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer) {
@@ -11449,12 +14697,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PushError
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PushErrorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ReceiverApsMessage
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SavedHardwareState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Sender
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   StCollapsedValue
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -11481,6 +14775,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return ViableBottleImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ApsWatcher
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11512,6 +14824,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ReceiverApsMessage
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SavedHardwareState
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   ViableBottle
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           SseDeserializer deserializer) {
@@ -11521,11 +14851,157 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalSseDecode(
+    return ApsConnectionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFtClient
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcImClient
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSharedPushState
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11593,6 +15069,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   IdsUser
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer) {
@@ -11629,12 +15114,40 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SavedHardwareState
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Sender
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   StCollapsedValue
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -11674,6 +15187,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_usize(deserializer);
     return inner.toInt();
+  }
+
+  @protected
+  Object sse_decode_DartOpaque(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var inner = sse_decode_usize(deserializer);
+    return decodeDartOpaque(inner, generalizedFrbRustBinding);
   }
 
   @protected
@@ -11827,11 +15347,175 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  ArcPushState
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return ArcPushStateImpl.frbInternalSseDecode(
+    return ApsConnectionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ApsState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ApsStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ApsWatcher
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ApsWatcherImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcCloudMessagesClientDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFtClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFtClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcImClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcImClientImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcIdmsAuthListenerImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcMutexVecActiveCircleSessionImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSenderPushMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcSharedPushState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcSharedPushStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11841,6 +15525,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return AssetImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ChannelInterestToken
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ChannelInterestTokenImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return CircleClientSessionDefaultAnisetteProviderImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -11953,6 +15655,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  IdsngmIdentity
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return IdsngmIdentityImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   IdsUser
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer) {
@@ -12007,12 +15718,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PushError
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return PushErrorImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  ReceiverApsMessage
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return ReceiverApsMessageImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SavedHardwareState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SavedHardwareStateImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Sender
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SenderImpl.frbInternalSseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
   StCollapsedValue
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return StCollapsedValueImpl.frbInternalSseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return SyncManagerDefaultAnisetteProviderMyFilePackagerImpl
+        .frbInternalSseDecode(
+            sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -12278,11 +16035,83 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ApsState
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+        deserializer));
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+        deserializer));
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+        deserializer));
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+        deserializer));
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+        deserializer));
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+        deserializer));
+  }
+
+  @protected
   Asset
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+        deserializer));
+  }
+
+  @protected
+  ChannelInterestToken
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+        deserializer));
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
         deserializer));
   }
 
@@ -12359,15 +16188,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  JoinedOsConfig
-      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-        deserializer));
-  }
-
-  @protected
   LocationReport
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer) {
@@ -12391,6 +16211,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+        deserializer));
+  }
+
+  @protected
+  PushError
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+        deserializer));
+  }
+
+  @protected
+  SavedHardwareState
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+        deserializer));
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
         deserializer));
   }
 
@@ -12830,6 +16677,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) sse_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+        deserializer));
+  }
+
+  @protected
+  (String, String) sse_decode_box_autoadd_record_string_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_record_string_string(deserializer));
+  }
+
+  @protected
   (String, BigInt) sse_decode_box_autoadd_record_string_u_64(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -12888,10 +16753,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices sse_decode_box_autoadd_shared_i_cloud_services(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_shared_i_cloud_services(deserializer));
+  }
+
+  @protected
   SharedPoster sse_decode_box_autoadd_shared_poster(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_shared_poster(deserializer));
+  }
+
+  @protected
+  SharedPushState sse_decode_box_autoadd_shared_push_state(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_shared_push_state(deserializer));
   }
 
   @protected
@@ -14981,6 +18860,90 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ApsState?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   Asset?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           SseDeserializer deserializer) {
@@ -14988,6 +18951,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  ChannelInterestToken?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           deserializer));
     } else {
       return null;
@@ -15107,20 +19098,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  JoinedOsConfig?
-      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    if (sse_decode_bool(deserializer)) {
-      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          deserializer));
-    } else {
-      return null;
-    }
-  }
-
-  @protected
   LocationReport?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer) {
@@ -15156,6 +19133,48 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  PushError?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  SavedHardwareState?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           deserializer));
     } else {
       return null;
@@ -15552,6 +19571,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  )? sse_decode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  (String, String)? sse_decode_opt_box_autoadd_record_string_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_record_string_string(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   (String, BigInt)? sse_decode_opt_box_autoadd_record_string_u_64(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -15602,12 +19649,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices? sse_decode_opt_box_autoadd_shared_i_cloud_services(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_shared_i_cloud_services(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   SharedPoster? sse_decode_opt_box_autoadd_shared_poster(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_shared_poster(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  SharedPushState? sse_decode_opt_box_autoadd_shared_push_state(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_shared_push_state(deserializer));
     } else {
       return null;
     }
@@ -15666,6 +19737,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_u_64(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<IdsUser>?
+      sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          deserializer));
     } else {
       return null;
     }
@@ -16167,6 +20252,100 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   (
+    ApsConnection,
+    PushError?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            deserializer);
+    var var_field1 =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+            deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (
+    ArcMutexAppleAccountDefaultAnisetteProvider,
+    LoginState,
+    IdsUser?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            deserializer);
+    var var_field1 = sse_decode_login_state(deserializer);
+    var var_field2 =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            deserializer);
+    return (var_field0, var_field1, var_field2);
+  }
+
+  @protected
+  (
+    ArcSharedPushState,
+    SharedPushState
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+            deserializer);
+    var var_field1 = sse_decode_shared_push_state(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (
+    CircleClientSessionDefaultAnisetteProvider,
+    LoginState,
+    String?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+            deserializer);
+    var var_field1 = sse_decode_login_state(deserializer);
+    var var_field2 = sse_decode_opt_String(deserializer);
+    return (var_field0, var_field1, var_field2);
+  }
+
+  @protected
+  (
+    Sender,
+    ArcSenderPushMessage,
+    ApsWatcher
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+            deserializer);
+    var var_field1 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+            deserializer);
+    var var_field2 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+            deserializer);
+    return (var_field0, var_field1, var_field2);
+  }
+
+  @protected
+  (int, SharedPushState)
+      sse_decode_record_casted_primitive_u_64_shared_push_state(
+          SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_CastedPrimitive_u_64(deserializer);
+    var var_field1 = sse_decode_shared_push_state(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (
     Uint8List,
     Map<String, CloudAttachment?>,
     int
@@ -16255,15 +20434,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (LoginState, String?) sse_decode_record_login_state_opt_string(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_login_state(deserializer);
-    var var_field1 = sse_decode_opt_String(deserializer);
-    return (var_field0, var_field1);
-  }
-
-  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
@@ -16273,6 +20443,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_field0 = sse_decode_Map_String_sync_status(deserializer);
     var var_field1 =
         sse_decode_opt_box_autoadd_record_string_u_64(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (
+    List<IdsUser>?,
+    SupportAlert?
+  ) sse_decode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 =
+        sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+            deserializer);
+    var var_field1 = sse_decode_opt_box_autoadd_support_alert(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) sse_decode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_shared_push_state(deserializer);
+    var var_field1 =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+            deserializer);
     return (var_field0, var_field1);
   }
 
@@ -16480,14 +20678,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  RegistrationPhase sse_decode_registration_phase(
-      SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var inner = sse_decode_i_32(deserializer);
-    return RegistrationPhase.values[inner];
-  }
-
-  @protected
   RenameMessage sse_decode_rename_message(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_newName = sse_decode_String(deserializer);
@@ -16612,6 +20802,49 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  SharedICloudServices sse_decode_shared_i_cloud_services(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_account =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            deserializer);
+    var var_tokenProvider =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+            deserializer);
+    var var_cloudkitClient =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+            deserializer);
+    var var_keychain =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+            deserializer);
+    var var_profilesClient =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+            deserializer);
+    var var_fmfd =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+            deserializer);
+    var var_sharedstreams =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+            deserializer);
+    var var_cloudMessagesClient =
+        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+            deserializer);
+    var var_statuskitClient =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+            deserializer);
+    return SharedICloudServices(
+        account: var_account,
+        tokenProvider: var_tokenProvider,
+        cloudkitClient: var_cloudkitClient,
+        keychain: var_keychain,
+        profilesClient: var_profilesClient,
+        fmfd: var_fmfd,
+        sharedstreams: var_sharedstreams,
+        cloudMessagesClient: var_cloudMessagesClient,
+        statuskitClient: var_statuskitClient);
+  }
+
+  @protected
   SharedPoster sse_decode_shared_poster(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_lowResWallpaperTag = sse_decode_list_prim_u_8_strict(deserializer);
@@ -16621,6 +20854,57 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         lowResWallpaperTag: var_lowResWallpaperTag,
         wallpaperTag: var_wallpaperTag,
         messageTag: var_messageTag);
+  }
+
+  @protected
+  SharedPushState sse_decode_shared_push_state(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_osConfig =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            deserializer);
+    var var_cancelPoll =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+            deserializer);
+    var var_confDir = sse_decode_String(deserializer);
+    var var_localBroadcast =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+            deserializer);
+    var var_anisette =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+            deserializer);
+    var var_conn =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+            deserializer);
+    var var_icloudServices =
+        sse_decode_opt_box_autoadd_shared_i_cloud_services(deserializer);
+    var var_client =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+            deserializer);
+    var var_ftClient =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+            deserializer);
+    var var_idmsClient =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+            deserializer);
+    var var_activeCircleSessions =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+            deserializer);
+    var var_clientSession =
+        sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+            deserializer);
+    return SharedPushState(
+        osConfig: var_osConfig,
+        cancelPoll: var_cancelPoll,
+        confDir: var_confDir,
+        localBroadcast: var_localBroadcast,
+        anisette: var_anisette,
+        conn: var_conn,
+        icloudServices: var_icloudServices,
+        client: var_client,
+        ftClient: var_ftClient,
+        idmsClient: var_idmsClient,
+        activeCircleSessions: var_activeCircleSessions,
+        clientSession: var_clientSession);
   }
 
   @protected
@@ -16973,11 +21257,208 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer) {
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ArcPushStateImpl).frbInternalSseEncode(move: true),
+        (self as ApsConnectionImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ApsStateImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ApsWatcherImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcAnisetteClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudMessagesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFtClientImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFindMyClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcImClientImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcIdmsAuthListenerImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcKeychainClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexAppleAccountDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexVecActiveCircleSessionImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcProfilesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSenderPushMessageImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSharedPushStateImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcStatusKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcTokenProviderDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
         serializer);
   }
 
@@ -16988,6 +21469,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as AssetImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ChannelInterestTokenImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: true),
+        serializer);
   }
 
   @protected
@@ -17115,6 +21618,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as IdsngmIdentityImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17174,11 +21687,61 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PushErrorImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ReceiverApsMessageImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SavedHardwareStateImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SenderImpl).frbInternalSseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as StCollapsedValueImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SyncManagerDefaultAnisetteProviderMyFilePackagerImpl)
+            .frbInternalSseEncode(move: true),
         serializer);
   }
 
@@ -17207,6 +21770,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as ViableBottleImpl).frbInternalSseEncode(move: true),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ApsWatcherImpl).frbInternalSseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
         serializer);
   }
 
@@ -17246,6 +21830,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ReceiverApsMessageImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SavedHardwareStateImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           ViableBottle self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17256,11 +21860,192 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer) {
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ArcPushStateImpl).frbInternalSseEncode(move: false),
+        (self as ApsConnectionImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcAnisetteClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudMessagesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFtClientImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFindMyClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcImClientImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcIdmsAuthListenerImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcKeychainClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexAppleAccountDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexVecActiveCircleSessionImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcProfilesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSenderPushMessageImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSharedPushStateImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcStatusKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcTokenProviderDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: false),
         serializer);
   }
 
@@ -17339,6 +22124,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as IdsngmIdentityImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17378,11 +22173,42 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SavedHardwareStateImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SenderImpl).frbInternalSseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as StCollapsedValueImpl).frbInternalSseEncode(move: false),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SyncManagerDefaultAnisetteProviderMyFilePackagerImpl)
+            .frbInternalSseEncode(move: false),
         serializer);
   }
 
@@ -17421,6 +22247,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_CastedPrimitive_usize(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(sseEncodeCastedPrimitiveU64(self), serializer);
+  }
+
+  @protected
+  void sse_encode_DartFn_Inputs_String_Output_String_AnyhowException(
+      FutureOr<String> Function(String) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_DartOpaque(
+        encode_DartFn_Inputs_String_Output_String_AnyhowException(self),
+        serializer);
+  }
+
+  @protected
+  void sse_encode_DartOpaque(Object self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        BigInt.from(PlatformPointerUtil.ptrToInt(encodeDartOpaque(
+                self, portManager.dartHandlerPort, generalizedFrbRustBinding)))
+            .toUnsigned(64),
+        serializer);
   }
 
   @protected
@@ -17563,11 +22408,208 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer) {
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
-        (self as ArcPushStateImpl).frbInternalSseEncode(move: null),
+        (self as ApsConnectionImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ApsStateImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ApsWatcherImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcAnisetteClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcCloudMessagesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFtClientImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcFindMyClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcImClientImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcIdmsAuthListenerImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcKeychainClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexAppleAccountDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcMutexVecActiveCircleSessionImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcProfilesClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSenderPushMessageImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcSharedPushStateImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcStatusKitClientDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ArcTokenProviderDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
         serializer);
   }
 
@@ -17578,6 +22620,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as AssetImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ChannelInterestTokenImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as CircleClientSessionDefaultAnisetteProviderImpl)
+            .frbInternalSseEncode(move: null),
+        serializer);
   }
 
   @protected
@@ -17705,6 +22769,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as IdsngmIdentityImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -17764,11 +22838,61 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as PushErrorImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as ReceiverApsMessageImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SavedHardwareStateImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SenderImpl).frbInternalSseEncode(move: null), serializer);
+  }
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_usize(
         (self as StCollapsedValueImpl).frbInternalSseEncode(move: null),
+        serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+        (self as SyncManagerDefaultAnisetteProviderMyFilePackagerImpl)
+            .frbInternalSseEncode(move: null),
         serializer);
   }
 
@@ -17987,10 +23111,88 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+        self, serializer);
+  }
+
+  @protected
+  void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
         self, serializer);
   }
 
@@ -18068,15 +23270,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          JoinedOsConfig self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-        self, serializer);
-  }
-
-  @protected
-  void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           LocationReport self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -18099,6 +23292,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           NsArrayLpImageMetadata self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+        self, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
         self, serializer);
   }
 
@@ -18551,6 +23772,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void
+      sse_encode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+        self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_record_string_string(
+      (String, String) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_record_string_string(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_record_string_u_64(
       (String, BigInt) self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -18607,10 +23844,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_shared_i_cloud_services(
+      SharedICloudServices self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_shared_i_cloud_services(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_shared_poster(
       SharedPoster self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_shared_poster(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_autoadd_shared_push_state(
+      SharedPushState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_shared_push_state(self, serializer);
   }
 
   @protected
@@ -20203,6 +25454,89 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -20210,6 +25544,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           self, serializer);
     }
   }
@@ -20320,19 +25681,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          JoinedOsConfig? self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-
-    sse_encode_bool(self != null, serializer);
-    if (self != null) {
-      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          self, serializer);
-    }
-  }
-
-  @protected
-  void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           LocationReport? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -20366,6 +25714,46 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager? self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           self, serializer);
     }
   }
@@ -20732,6 +26120,30 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void
+      sse_encode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher)? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_record_string_string(
+      (String, String)? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_record_string_string(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_record_string_u_64(
       (String, BigInt)? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -20777,6 +26189,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_shared_i_cloud_services(
+      SharedICloudServices? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_shared_i_cloud_services(self, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_opt_box_autoadd_shared_poster(
       SharedPoster? self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -20784,6 +26207,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_shared_poster(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_shared_push_state(
+      SharedPushState? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_shared_push_state(self, serializer);
     }
   }
 
@@ -20837,6 +26271,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_u_64(self, serializer);
+    }
+  }
+
+  @protected
+  void
+      sse_encode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          List<IdsUser>? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          self, serializer);
     }
   }
 
@@ -21251,6 +26698,83 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+          (ApsConnection, PushError?) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+        self.$1, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+        self.$2, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+          (
+            ArcMutexAppleAccountDefaultAnisetteProvider,
+            LoginState,
+            IdsUser?
+          ) self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+        self.$1, serializer);
+    sse_encode_login_state(self.$2, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+        self.$3, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+          (ArcSharedPushState, SharedPushState) self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+        self.$1, serializer);
+    sse_encode_shared_push_state(self.$2, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+          (
+            CircleClientSessionDefaultAnisetteProvider,
+            LoginState,
+            String?
+          ) self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+        self.$1, serializer);
+    sse_encode_login_state(self.$2, serializer);
+    sse_encode_opt_String(self.$3, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (Sender, ArcSenderPushMessage, ApsWatcher) self,
+          SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+        self.$1, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+        self.$2, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+        self.$3, serializer);
+  }
+
+  @protected
+  void sse_encode_record_casted_primitive_u_64_shared_push_state(
+      (int, SharedPushState) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_CastedPrimitive_u_64(self.$1, serializer);
+    sse_encode_shared_push_state(self.$2, serializer);
+  }
+
+  @protected
+  void
       sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
           (Uint8List, Map<String, CloudAttachment?>, int) self,
           SseSerializer serializer) {
@@ -21317,14 +26841,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_record_login_state_opt_string(
-      (LoginState, String?) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_login_state(self.$1, serializer);
-    sse_encode_opt_String(self.$2, serializer);
-  }
-
-  @protected
   void
       sse_encode_record_map_string_sync_status_opt_box_autoadd_record_string_u_64(
           (Map<String, SyncStatus>, (String, BigInt)?) self,
@@ -21332,6 +26848,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_Map_String_sync_status(self.$1, serializer);
     sse_encode_opt_box_autoadd_record_string_u_64(self.$2, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+          (List<IdsUser>?, SupportAlert?) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+        self.$1, serializer);
+    sse_encode_opt_box_autoadd_support_alert(self.$2, serializer);
+  }
+
+  @protected
+  void
+      sse_encode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_shared_push_state(self.$1, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+        self.$2, serializer);
   }
 
   @protected
@@ -21509,13 +27045,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_registration_phase(
-      RegistrationPhase self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_i_32(self.index, serializer);
-  }
-
-  @protected
   void sse_encode_rename_message(RenameMessage self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.newName, serializer);
@@ -21615,11 +27144,64 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_shared_i_cloud_services(
+      SharedICloudServices self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+        self.account, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+        self.tokenProvider, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+        self.cloudkitClient, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+        self.keychain, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+        self.profilesClient, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+        self.fmfd, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+        self.sharedstreams, serializer);
+    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+        self.cloudMessagesClient, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+        self.statuskitClient, serializer);
+  }
+
+  @protected
   void sse_encode_shared_poster(SharedPoster self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(self.lowResWallpaperTag, serializer);
     sse_encode_list_prim_u_8_strict(self.wallpaperTag, serializer);
     sse_encode_list_prim_u_8_strict(self.messageTag, serializer);
+  }
+
+  @protected
+  void sse_encode_shared_push_state(
+      SharedPushState self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+        self.osConfig, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+        self.cancelPoll, serializer);
+    sse_encode_String(self.confDir, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+        self.localBroadcast, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+        self.anisette, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+        self.conn, serializer);
+    sse_encode_opt_box_autoadd_shared_i_cloud_services(
+        self.icloudServices, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+        self.client, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+        self.ftClient, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+        self.idmsClient, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+        self.activeCircleSessions, serializer);
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+        self.clientSession, serializer);
   }
 
   @protected
@@ -21919,22 +27501,420 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 }
 
 @sealed
-class ArcPushStateImpl extends RustOpaque implements ArcPushState {
+class ApsConnectionImpl extends RustOpaque implements ApsConnection {
   // Not to be used by end users
-  ArcPushStateImpl.frbInternalDcoDecode(List<dynamic> wire)
+  ApsConnectionImpl.frbInternalDcoDecode(List<dynamic> wire)
       : super.frbInternalDcoDecode(wire, _kStaticData);
 
   // Not to be used by end users
-  ArcPushStateImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+  ApsConnectionImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
       : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_ArcPushState,
+        RustLib.instance.api.rust_arc_increment_strong_count_ApsConnection,
     rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_ArcPushState,
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsConnection,
     rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_ArcPushStatePtr,
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsConnectionPtr,
+  );
+}
+
+@sealed
+class ApsStateImpl extends RustOpaque implements ApsState {
+  // Not to be used by end users
+  ApsStateImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ApsStateImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ApsState,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsState,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsStatePtr,
+  );
+}
+
+@sealed
+class ApsWatcherImpl extends RustOpaque implements ApsWatcher {
+  // Not to be used by end users
+  ApsWatcherImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ApsWatcherImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ApsWatcher,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsWatcher,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ApsWatcherPtr,
+  );
+}
+
+@sealed
+class ArcAnisetteClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcAnisetteClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcAnisetteClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcAnisetteClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcCloudKitClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcCloudKitClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcCloudKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcCloudKitClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcCloudMessagesClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcCloudMessagesClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcCloudMessagesClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcCloudMessagesClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcFindMyClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcFindMyClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcFindMyClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcFindMyClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcFtClientImpl extends RustOpaque implements ArcFtClient {
+  // Not to be used by end users
+  ArcFtClientImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcFtClientImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ArcFtClient,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ArcFtClient,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ArcFtClientPtr,
+  );
+}
+
+@sealed
+class ArcIdmsAuthListenerImpl extends RustOpaque
+    implements ArcIdmsAuthListener {
+  // Not to be used by end users
+  ArcIdmsAuthListenerImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcIdmsAuthListenerImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_ArcIdmsAuthListener,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ArcIdmsAuthListener,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ArcIdmsAuthListenerPtr,
+  );
+}
+
+@sealed
+class ArcImClientImpl extends RustOpaque implements ArcImClient {
+  // Not to be used by end users
+  ArcImClientImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcImClientImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ArcImClient,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ArcImClient,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ArcImClientPtr,
+  );
+}
+
+@sealed
+class ArcKeychainClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcKeychainClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcKeychainClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcKeychainClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcMutexAppleAccountDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcMutexAppleAccountDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcMutexAppleAccountDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl
+    extends RustOpaque
+    implements ArcMutexOptionCircleClientSessionDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcMutexVecActiveCircleSessionImpl extends RustOpaque
+    implements ArcMutexVecActiveCircleSession {
+  // Not to be used by end users
+  ArcMutexVecActiveCircleSessionImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcMutexVecActiveCircleSessionImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcMutexVecActiveCircleSession,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSession,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSessionPtr,
+  );
+}
+
+@sealed
+class ArcProfilesClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcProfilesClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcProfilesClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcProfilesClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcSenderPushMessageImpl extends RustOpaque
+    implements ArcSenderPushMessage {
+  // Not to be used by end users
+  ArcSenderPushMessageImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcSenderPushMessageImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_ArcSenderPushMessage,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ArcSenderPushMessage,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ArcSenderPushMessagePtr,
+  );
+}
+
+@sealed
+class ArcSharedPushStateImpl extends RustOpaque implements ArcSharedPushState {
+  // Not to be used by end users
+  ArcSharedPushStateImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcSharedPushStateImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ArcSharedPushState,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ArcSharedPushState,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ArcSharedPushStatePtr,
+  );
+}
+
+@sealed
+class ArcStatusKitClientDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcStatusKitClientDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcStatusKitClientDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcStatusKitClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProviderPtr,
+  );
+}
+
+@sealed
+class ArcTokenProviderDefaultAnisetteProviderImpl extends RustOpaque
+    implements ArcTokenProviderDefaultAnisetteProvider {
+  // Not to be used by end users
+  ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ArcTokenProviderDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_ArcTokenProviderDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProviderPtr,
   );
 }
 
@@ -21955,6 +27935,51 @@ class AssetImpl extends RustOpaque implements Asset {
         RustLib.instance.api.rust_arc_decrement_strong_count_Asset,
     rustArcDecrementStrongCountPtr:
         RustLib.instance.api.rust_arc_decrement_strong_count_AssetPtr,
+  );
+}
+
+@sealed
+class ChannelInterestTokenImpl extends RustOpaque
+    implements ChannelInterestToken {
+  // Not to be used by end users
+  ChannelInterestTokenImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ChannelInterestTokenImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib
+        .instance.api.rust_arc_increment_strong_count_ChannelInterestToken,
+    rustArcDecrementStrongCount: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ChannelInterestToken,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ChannelInterestTokenPtr,
+  );
+}
+
+@sealed
+class CircleClientSessionDefaultAnisetteProviderImpl extends RustOpaque
+    implements CircleClientSessionDefaultAnisetteProvider {
+  // Not to be used by end users
+  CircleClientSessionDefaultAnisetteProviderImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  CircleClientSessionDefaultAnisetteProviderImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_CircleClientSessionDefaultAnisetteProvider,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProvider,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProviderPtr,
   );
 }
 
@@ -22240,6 +28265,26 @@ class IdsUserImpl extends RustOpaque implements IdsUser {
 }
 
 @sealed
+class IdsngmIdentityImpl extends RustOpaque implements IdsngmIdentity {
+  // Not to be used by end users
+  IdsngmIdentityImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  IdsngmIdentityImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_IdsngmIdentity,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_IdsngmIdentity,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_IdsngmIdentityPtr,
+  );
+}
+
+@sealed
 class JoinedOsConfigImpl extends RustOpaque implements JoinedOsConfig {
   // Not to be used by end users
   JoinedOsConfigImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -22409,6 +28454,114 @@ class NsArrayLpImageMetadataImpl extends RustOpaque
 }
 
 @sealed
+class PushErrorImpl extends RustOpaque implements PushError {
+  // Not to be used by end users
+  PushErrorImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  PushErrorImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_PushError,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_PushError,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_PushErrorPtr,
+  );
+}
+
+@sealed
+class ReceiverApsMessageImpl extends RustOpaque implements ReceiverApsMessage {
+  // Not to be used by end users
+  ReceiverApsMessageImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  ReceiverApsMessageImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_ReceiverApsMessage,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_ReceiverApsMessage,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_ReceiverApsMessagePtr,
+  );
+}
+
+@sealed
+class SavedHardwareStateImpl extends RustOpaque implements SavedHardwareState {
+  // Not to be used by end users
+  SavedHardwareStateImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  SavedHardwareStateImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_SavedHardwareState,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_SavedHardwareState,
+    rustArcDecrementStrongCountPtr: RustLib
+        .instance.api.rust_arc_decrement_strong_count_SavedHardwareStatePtr,
+  );
+
+  IdsngmIdentity get identity =>
+      RustLib.instance.api.crateApiApiSavedHardwareStateAutoAccessorGetIdentity(
+        that: this,
+      );
+
+  JoinedOsConfig get osConfig =>
+      RustLib.instance.api.crateApiApiSavedHardwareStateAutoAccessorGetOsConfig(
+        that: this,
+      );
+
+  ApsState get push =>
+      RustLib.instance.api.crateApiApiSavedHardwareStateAutoAccessorGetPush(
+        that: this,
+      );
+
+  set identity(IdsngmIdentity identity) =>
+      RustLib.instance.api.crateApiApiSavedHardwareStateAutoAccessorSetIdentity(
+          that: this, identity: identity);
+
+  set osConfig(JoinedOsConfig osConfig) =>
+      RustLib.instance.api.crateApiApiSavedHardwareStateAutoAccessorSetOsConfig(
+          that: this, osConfig: osConfig);
+
+  set push(ApsState push) => RustLib.instance.api
+      .crateApiApiSavedHardwareStateAutoAccessorSetPush(that: this, push: push);
+}
+
+@sealed
+class SenderImpl extends RustOpaque implements Sender {
+  // Not to be used by end users
+  SenderImpl.frbInternalDcoDecode(List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  SenderImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_Sender,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_Sender,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_SenderPtr,
+  );
+}
+
+@sealed
 class StCollapsedValueImpl extends RustOpaque implements StCollapsedValue {
   // Not to be used by end users
   StCollapsedValueImpl.frbInternalDcoDecode(List<dynamic> wire)
@@ -22426,6 +28579,29 @@ class StCollapsedValueImpl extends RustOpaque implements StCollapsedValue {
         RustLib.instance.api.rust_arc_decrement_strong_count_StCollapsedValue,
     rustArcDecrementStrongCountPtr: RustLib
         .instance.api.rust_arc_decrement_strong_count_StCollapsedValuePtr,
+  );
+}
+
+@sealed
+class SyncManagerDefaultAnisetteProviderMyFilePackagerImpl extends RustOpaque
+    implements SyncManagerDefaultAnisetteProviderMyFilePackager {
+  // Not to be used by end users
+  SyncManagerDefaultAnisetteProviderMyFilePackagerImpl.frbInternalDcoDecode(
+      List<dynamic> wire)
+      : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  SyncManagerDefaultAnisetteProviderMyFilePackagerImpl.frbInternalSseDecode(
+      BigInt ptr, int externalSizeOnNative)
+      : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount: RustLib.instance.api
+        .rust_arc_increment_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager,
+    rustArcDecrementStrongCount: RustLib.instance.api
+        .rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackager,
+    rustArcDecrementStrongCountPtr: RustLib.instance.api
+        .rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackagerPtr,
   );
 }
 

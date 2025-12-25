@@ -566,7 +566,6 @@ class MessagesViewState extends OptimizedState<MessagesView> {
                                                           alignment: Alignment.centerLeft),
                                                         onPressed: () async {
                                                           var msg = await api.newMsg(
-                                                            state: pushService.state,
                                                             conversation: await chat.getConversationData(),
                                                             sender: await chat.ensureHandle(),
                                                             message: const api.Message.notifyAnyways(),

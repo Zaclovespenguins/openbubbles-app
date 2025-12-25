@@ -376,7 +376,6 @@ class MaterialHeader extends StatelessWidget implements PreferredSizeWidget {
                               pushService.updateShareState();
 
                               var msg = await api.newMsg(
-                                state: pushService.state,
                                 conversation: api.ConversationData(participants: [RustPushBBUtils.bbHandleToRust(controller.chat.participants.first)]),
                                 sender: await controller.chat.ensureHandle(),
                                 message: api.Message.shareProfile(await api.decodeProfileMessage(s: ss.settings.shareProfileMessage.value!)),

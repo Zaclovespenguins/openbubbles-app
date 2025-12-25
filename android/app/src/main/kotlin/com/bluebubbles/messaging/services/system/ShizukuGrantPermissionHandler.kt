@@ -58,7 +58,7 @@ class ShizukuGrantPermissionHandler : MethodCallHandlerImpl() {
     override fun handleMethodCall(
         call: MethodCall,
         result: MethodChannel.Result,
-        context: Context
+        context: Context 
     ) {
 
         if (!Shizuku.pingBinder()) {

@@ -272,7 +272,7 @@ class NotificationsService extends GetxService {
         "caller": caller,
         "call_uuid": callUuid,
         "link": link,
-        "name": ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value,
+        "name": ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state!.client)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value,
         "poster": poster,
       });
     }
@@ -733,16 +733,16 @@ class NotificationsService extends GetxService {
             actions: [
               TextButton(
                   onPressed: () {
-                    api.teardown2Fa(state: pushService.state, action: "albtn", txnid: message.txnid);
+                    api.teardown2Fa(account: pushService.state!.icloudServices!.account, action: "albtn", txnid: message.txnid);
                     Get.back();
                   },
                   child: Text(message.aps.alert.albtn, style: Get.textTheme.bodyLarge!.copyWith(color: Get.theme.colorScheme.primary))),
               TextButton(
                   onPressed: () async {
-                    api.teardown2Fa(state: pushService.state, action: "defbtn", txnid: message.txnid);
+                    api.teardown2Fa(account: pushService.state!.icloudServices!.account, action: "defbtn", txnid: message.txnid);
                     Get.back();
 
-                    var code = await api.approveCircle(state: pushService.state, txnid: message.txnid);
+                    var code = await api.approveCircle(state: pushService.state!.activeCircleSessions, account: pushService.state!.icloudServices!.account, txnid: message.txnid);
                     pushService.authing = true;
                     var context = Get.context!;
                     await showDialog(

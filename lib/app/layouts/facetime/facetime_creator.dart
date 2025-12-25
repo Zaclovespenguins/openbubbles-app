@@ -136,7 +136,7 @@ class FaceTimeCreatorState extends OptimizedState<FaceTimeCreator> {
     try {
       var target = await RustPushBBUtils.formatAndAddPrefix(c.address);
       c.iMessage.value = (await api.validateTargetsFacetime(
-        state: pushService.state,
+        state: pushService.state!.client,
         targets: [target],
         sender: handle,
       )).isNotEmpty;

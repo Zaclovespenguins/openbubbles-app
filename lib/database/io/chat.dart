@@ -496,7 +496,7 @@ class Chat {
     if (usingHandle != null && isRpSms) {
       var acceptableHandles = [];
       if (isRoutingStub) {
-        acceptableHandles = await api.getMyPhoneHandles(state: pushService.state);
+        acceptableHandles = await api.getMyPhoneHandles(state: pushService.state!.client);
       } else {
         acceptableHandles = ss.settings.smsForwardingTargets.keys.toList();
       }
@@ -507,7 +507,7 @@ class Chat {
     if (usingHandle == null) {
       if (isRpSms) {
         if (isRoutingStub) {
-          usingHandle = (await api.getMyPhoneHandles(state: pushService.state))[0];
+          usingHandle = (await api.getMyPhoneHandles(state: pushService.state!.client))[0];
         } else {
           usingHandle = ss.settings.smsForwardingTargets.keys.firstOrNull!;
         }
@@ -522,7 +522,7 @@ class Chat {
 
   // return true if we should route this conversation as a router
   Future<bool> shouldRoute() async {
-    var handles = await api.getMyPhoneHandles(state: pushService.state);
+    var handles = await api.getMyPhoneHandles(state: pushService.state!.client);
     return handles.contains(await ensureHandle());
   }
 
@@ -724,9 +724,11 @@ class Chat {
     bool wantsZenMode = (shareZenMode ?? true) && participants.firstOrNull?.contact?.isShared == false;
     var config = wantsZenMode ? await getPersonalConfig() : null;
     if (config == zenModeIsShared) return;
+    var statuskit = pushService.state?.icloudServices?.statuskitClient;
+    if (statuskit == null) return;
 
     if (wantsZenMode) {
-      await api.inviteToChannel(state: pushService.state, handle: await ensureHandle(), to: {
+      await api.inviteToChannel(status: statuskit, handle: await ensureHandle(), to: {
         getRustHandlesExcludingMine()[0]: await configForMask(config!)
       });
       zenModeIsShared = config;
@@ -746,9 +748,9 @@ class Chat {
         sendMap[handle]![result.getRustHandlesExcludingMine()[0]] = await configForMask(result.zenModeIsShared!);
       }
       
-      await api.resetChannelKeys(state: pushService.state);
+      await api.resetChannelKeys(status: statuskit);
       for (var handle in sendMap.entries) {
-        await api.inviteToChannel(state: pushService.state, handle: handle.key, to: handle.value);
+        await api.inviteToChannel(status: statuskit, handle: handle.key, to: handle.value);
       }
       zenModeIsShared = null;
       save(updateZenModeIsShared: true);

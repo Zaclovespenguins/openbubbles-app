@@ -386,7 +386,7 @@ class ShareButton extends StatelessWidget {
                   TextButton(
                           onPressed: () async {
                               Get.back();
-                              String code = await pushService.uploadCode(false, await api.getDeviceInfoState(state: pushService.state));
+                              String code = await pushService.uploadCode(false, await api.getDeviceInfo(config: pushService.state!.osConfig));
                               String text = "$rpApiRoot/$code";
                               cvc(chat).textController.text = text;
                               Navigator.of(ctx).pop();

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -23,6 +24,8 @@ import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/main.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
+import 'package:bluebubbles/src/rust/frb_generated.dart';
+import 'package:bluebubbles/src/rust/lib.dart';
 import 'package:bluebubbles/utils/crypto_utils.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:crypto/crypto.dart';
@@ -65,10 +68,31 @@ class SetupViewController extends StatefulController {
 
   api.LoginState state = const api.LoginState.needsLogin();
   api.IdsUser? currentAppleUser;
+  ArcMutexAppleAccountDefaultAnisetteProvider? currentAppleAccount;
   Map<int, api.IdsUser> currentPhoneUsers = {};
+
+
+  api.ReceiverApsMessage? connReceiver;
+  ArcIdmsAuthListener? connListener;
+
+  ApsConnection? connection;
+  api.JoinedOsConfig? config;
+  IdsngmIdentity? identity;
+  ApsState? cachedState;
+  ArcAnisetteClientDefaultAnisetteProvider? anisette;
+
+
+  api.CircleClientSessionDefaultAnisetteProvider? circleSession;
+
+  @override
+  void dispose() {
+    super.dispose();
+    destroyConnection();
+  }
 
   RxBool phoneValidating = false.obs;
   Rxn<SubscriptionOfferDetailsWrapper> availableIAP = Rxn();
+  bool hasDanglingSubscription = false;
   String? token;
   DateTime tokenExpiry = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -98,6 +122,9 @@ class SetupViewController extends StatefulController {
       if (response2.statusCode == 429) {
         throw Exception("Too many reserved tickets!");
       }
+      if (response2.statusCode != 200) {
+        throw Exception(response2.data);
+      }
 
       token = response2.data["code"];
       tokenExpiry = DateTime.fromMillisecondsSinceEpoch(response2.data["expiry"] * 1000, isUtc: true);
@@ -109,6 +136,7 @@ class SetupViewController extends StatefulController {
   bool fetchedReferrer = false;
 
   Future<void> updateIAPState() async {
+    hasDanglingSubscription = false;
     if (currentWaitlist == null && !fetchedReferrer) {
       try {
         ReferrerDetails referrerDetails = await AndroidPlayInstallReferrer.installReferrer;
@@ -126,13 +154,17 @@ class SetupViewController extends StatefulController {
     }
 
     if (!hasValidToken()) {
-      var details = await pushService.getPurchaseDetails();
+      var details = (await pushService.getPurchaseDetails())?.purchaseToken;
+      details ??= ss.settings.hostedToken.value;
       if (details != null) {
-        final status = await http.dio.post("https://hw.openbubbles.app/restore", data: {"purchase_token": details.purchaseToken});
+        final status = await http.dio.post("https://hw.openbubbles.app/restore", data: {"purchase_token": details});
         if (status.statusCode == 200) {
           var ticket = status.data["code"];
           await restoreTicket(ticket, const Duration(days: 7));
           return;
+        } else if (status.statusCode == 404) {
+          // we have a valid token, but no subscription
+          hasDanglingSubscription = true;
         }
       }
 
@@ -164,8 +196,8 @@ class SetupViewController extends StatefulController {
     finish(true);
     updateConnectError('');
     try {
-      currentAppleUser = await api.retryLogin(state: pushService.state);
-      ss.settings.userName.value = await api.getUserName(state: pushService.state);
+      currentAppleUser = await api.doLogin(path: pushService.statePath, account: currentAppleAccount!, anisette: anisette!, osConfig: config!, cookie: "termsAccepted=true");
+      ss.settings.userName.value = await api.getUserName(state: currentAppleAccount!);
       await doRegister();
     } catch (e) {
       if (e is AnyhowException) {
@@ -181,7 +213,7 @@ class SetupViewController extends StatefulController {
   }
 
   Future<void> updateAccountUi(Function finish) async {
-    var data = await api.updateAccountHeaders(state: pushService.state);
+    var data = await api.updateAccountHeaders(account: currentAppleAccount!);
     var request = URLRequest(url: WebUri("https://inappwebview.dev/"));
     
     double height = 400;
@@ -200,14 +232,14 @@ class SetupViewController extends StatefulController {
           useShouldInterceptFetchRequest: true,
         ),
         shouldInterceptAjaxRequest: (controller, request) async {
-          var anisette = await api.getAnisetteHeaders(state: pushService.state);
+          var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
           for (var header in anisette.entries) {
             request.headers!.setRequestHeader(header.key, header.value);
           }
           return request;
         },
         shouldInterceptFetchRequest: (controller, request) async {
-          var anisette = await api.getAnisetteHeaders(state: pushService.state);
+          var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
           request.headers ??= {};
           request.headers!.addAll(anisette);
           return request;
@@ -243,11 +275,23 @@ class SetupViewController extends StatefulController {
   Future<api.LoginState> updateLoginState(api.LoginState ret) async {
     if (ret is api.LoginState_NeedsLogin) {
       api.IdsUser? user;
-      (ret, user) = await api.tryAuth(state: pushService.state, username: twoFaUser, password: twoFaPass);
+      ArcMutexAppleAccountDefaultAnisetteProvider account;
+      (account, ret, user) = await api.tryAuth(
+        path: pushService.statePath,
+        conf: config!,
+        conn: connection!,
+        anisette: anisette!, 
+
+        creds: twoFaCreds
+      );
       currentAppleUser = user;
+      currentAppleAccount?.dispose();
+      currentAppleAccount = account;
     }
     if (ret is api.LoginState_NeedsDevice2FA) {
-      var (rett, sid) = await api.send2FaToDevices(state: pushService.state);
+      // subscribe now to not miss the 2fa message
+      await ensureWatcher();
+      var (provider, rett, sid) = await api.send2FaToDevices(state: currentAppleAccount!, conn: connection!);
       if (sid != null) {
         mcs.invokeMethod("circle-proximity-session", {
           'sid': sid
@@ -255,16 +299,18 @@ class SetupViewController extends StatefulController {
       }
       ret = rett;
       isSms.value = false;
+      circleSession = provider;
     }
     if (ret is api.LoginState_NeedsSMS2FA) {
       mcs.invokeMethod("circle-proximity-session", {
         'sid': null
       });
-      var options = await api.get2FaSmsOpts(state: pushService.state);
+      var options = await api.get2FaSmsOpts(state: currentAppleAccount!);
       if (options.$2 != null) {
         ret = options.$2!;
       } else if (options.$1.length == 1) {
-        ret = await api.send2FaSms(state: pushService.state, phoneId: options.$1[0].id);
+        ret = await api.send2FaSms(locked: circleSession, account: currentAppleAccount!, phoneId: options.$1[0].id);
+        circleSession = null;
       } else {
         int selectedRadio = -1;
         await showDialog(
@@ -306,7 +352,8 @@ class SetupViewController extends StatefulController {
         if (selectedRadio == -1) {
           return ret;
         }
-        ret = await api.send2FaSms(state: pushService.state, phoneId: selectedRadio);
+        ret = await api.send2FaSms(locked: circleSession, account: currentAppleAccount!, phoneId: options.$1[0].id);
+        circleSession = null;
       }
       isSms.value = true;
     }
@@ -315,7 +362,7 @@ class SetupViewController extends StatefulController {
       mcs.invokeMethod("circle-proximity-session", {
         'sid': null
       });
-      ss.settings.userName.value = await api.getUserName(state: pushService.state);
+      ss.settings.userName.value = await api.getUserName(state: currentAppleAccount!);
       await doRegister();
     }
     return ret;
@@ -369,10 +416,16 @@ class SetupViewController extends StatefulController {
     if (users.isEmpty) {
       throw Exception("No users to register!");
     }
-    try {
-      var response = await api.registerIds(state: pushService.state, users: users);
+      var (newUsers, response) = await api.registerIds(
+        path: pushService.statePath,
+        aps: connection!,
+        identity: identity!, 
+        config: config!, 
+        // stupid FRB will take ownership for us, so we have to do this
+        users: users.map((i) => api.duplicateUser(user: i)).toList(),
+      );
       if (response != null) {
-        var devInfo = await api.getDeviceInfoState(state: pushService.state);
+        var devInfo = await api.getDeviceInfo(config: config!);
         await showDialog(
           context: Get.context!,
           builder: (context) => AlertDialog(
@@ -412,6 +465,57 @@ class SetupViewController extends StatefulController {
               ));
         return;
       }
+
+      var imclient = await api.makeImclient(path: pushService.statePath, conn: connection!, users: newUsers!, identity: identity!);
+      await ensureWatcher();
+      var watcher = api.importWatcher(queue: connReceiver!, client: imclient);
+
+      var clientSession = api.makeClientSession(circle: circleSession);
+
+      var stagingPushState = api.SharedPushState(
+        osConfig: config!, 
+        cancelPoll: watcher.$1, 
+        confDir: pushService.statePath, 
+        localBroadcast: watcher.$2, 
+
+        anisette: anisette!, 
+        conn: connection!, 
+        client: imclient, 
+
+        icloudServices: currentAppleAccount == null ? null : await (() async {
+          var tokenProvider = api.makeTokenProvider(account: currentAppleAccount!, config: config!);
+          var cloudkit = await api.makeCloudkit(path: pushService.statePath, anisette: anisette!, config: config!, tokenProvider: tokenProvider);
+          var keychain = cloudkit == null ? null : api.makeKeychain(path: pushService.statePath, cloudkit: cloudkit, anisette: anisette!, config: config!, tokenProvider: tokenProvider);
+          return api.SharedICloudServices(
+            account: currentAppleAccount!, 
+            tokenProvider: tokenProvider, 
+            
+            cloudkitClient: cloudkit,
+            keychain: keychain,
+            profilesClient: await api.makeProfiles(cloudkit: cloudkit!),
+            fmfd: keychain == null ? null : await api.makeFindmy(path: pushService.statePath, tokenProvider: tokenProvider, conn: connection!, cloudkit: cloudkit, keychain: keychain, anisette: anisette!, config: config!, client: imclient), 
+            sharedstreams: await api.makeSharedStreams(path: pushService.statePath, conn: connection!, anisette: anisette!, config: config!, token: tokenProvider),
+            cloudMessagesClient: api.makeCloudMessagesClient(cloudkit: cloudkit, keychain: keychain!),
+            statuskitClient: await api.makeStatuskit(path: pushService.statePath, provider: tokenProvider, conn: connection!, config: config!, client: imclient),
+          );
+        })(),
+
+        ftClient: await api.makeFacetime(path: pushService.statePath, conn: connection!, client: imclient), 
+        idmsClient: connListener!, 
+        activeCircleSessions: api.makeCircleSessions(), 
+        clientSession: clientSession,
+      );
+
+      if (Platform.isAndroid) {
+        var (daemon, pushState) = api.sendDaemon(state: stagingPushState, watcher: watcher.$3);
+        pushService.state = pushState;
+        mcs.invokeMethod("provision-native", {"native": "$daemon"});
+      } else {
+        var (pollState, deskState) = api.dupDaemonDesk(state: stagingPushState);
+        pushService.state = deskState;
+        pushService.doPoll(watcher.$3, pollState);
+      }
+
       success = true;
       // persisting SMS auth certs is actually really useful
       // ss.settings.cachedCodes.clear();
@@ -421,29 +525,24 @@ class SetupViewController extends StatefulController {
       }
       await pushService.configured();
 
-      var handles = await api.getHandles(state: pushService.state);
+      var handles = await api.getHandles(state: pushService.state!.client);
       var phone = handles.firstWhereOrNull((h) => h.startsWith("tel:"));
       if (phone != null) {
         ss.settings.defaultHandle.value = phone;
         ss.saveSettings();
       }
 
-      var defaultPassword = Random.secure().nextInt(1000000).toString().padLeft(6, '0');
-      ss.settings.keychainDefaultPassword.value = defaultPassword;
-      ss.saveSettings();
+      var keychain = pushService.state?.icloudServices?.keychain;
+      if (keychain != null && circleSession != null) {
+        var defaultPassword = Random.secure().nextInt(1000000).toString().padLeft(6, '0');
+        ss.settings.keychainDefaultPassword.value = defaultPassword;
+        ss.saveSettings();
 
-      await api.circleSetupClique(state: pushService.state, devicePassword: defaultPassword);
+        await api.circleSetupClique(client: pushService.state!.clientSession, keychain: keychain, devicePassword: defaultPassword);
+      }
 
       Logger.debug("Finishing!");
       setup.finishSetup();
-    } catch(e) {
-      // reset currentPhoneUser because frb *insists* on taking ownership.
-      var cpy = currentPhoneUsers.keys.toList(); // this is what happens when crappy languages have ambiguous reference semantics
-      for (var item in cpy) {
-        currentPhoneUsers[item] = await api.restoreUser(user: ss.settings.cachedCodes["sms-auth-$item"]!);
-      }
-      rethrow;
-    }
   }
 
   Future<void> cacheCode(String code) async {
@@ -474,22 +573,58 @@ class SetupViewController extends StatefulController {
     ss.saveSettings();
   }
 
+  Future<void> ensureWatcher() async {
+    if (connReceiver != null) return;
+    connReceiver = api.subscribeConn(conn: connection!);
+    connListener = await api.makeIdms(conn: connection!);
+  }
+
+  void destroyConnection() {
+    connReceiver?.dispose();
+    connReceiver = null;
+
+    connListener?.dispose();
+    connListener = null;
+
+    connection?.dispose();
+    connection = null;
+  }
+  
+
   Future<api.LoginState> submitCode(String code) async {
     if (state is api.LoginState_Needs2FAVerification) {
-      var (dart, isAnnoying) = await api.verify2Fa(state: pushService.state, code: code);
+      var (dart, isAnnoying) = await api.verify2Fa(
+        path: pushService.statePath,
+        client: circleSession!,
+        anisette: anisette!, 
+        osConfig: config!,
+        watcher: connReceiver!,
+        idms: connListener!,
+
+
+        account: currentAppleAccount!,
+        code: code
+      );
       state = dart;
       currentAppleUser = isAnnoying;
     } else if (state is api.LoginState_NeedsSMS2FAVerification) {
       var myState = state as api.LoginState_NeedsSMS2FAVerification;
-      var (dart, isAnnoying) = await api.verify2FaSms(state: pushService.state, body: myState.field0, code: code);
+      var (dart, isAnnoying) = await api.verify2FaSms(
+        path: pushService.statePath,
+        accountMut: currentAppleAccount!,
+        anisette: anisette!, 
+        config: config!, 
+
+        body: myState.field0, 
+        code: code
+      );
       state = dart;
       currentAppleUser = isAnnoying;
     }
     return await updateLoginState(state);
   }
 
-  String twoFaUser = "";
-  String twoFaPass = "";
+  (String, String)? twoFaCreds;
 
   int get pageOfNoReturn => kIsWeb || kIsDesktop ? 3 : 5;
 
@@ -499,6 +634,35 @@ class SetupViewController extends StatefulController {
     if (availableIAP.value == null) {
       await updateIAPState();
     }
+  }
+
+  Future<void> configureHostedDevice(api.JoinedOsConfig newConfig) async {
+
+      identity = api.newNgmIdentity();
+      config = newConfig;
+      cachedState = null;
+      destroyConnection();
+
+      api.resetAnisette(path: pushService.statePath);
+      anisette?.dispose();
+      anisette = null;
+
+
+      currentPhoneUsers = {}; // reset validated phone numbers as we have a new token now
+      var list = ss.settings.cachedCodes.entries.toList();
+      for (var items in list) {
+        if (!items.key.startsWith("sms-auth-")) continue;
+        ss.settings.cachedCodes.remove(items.key);
+      }
+      ss.saveSettings();
+
+      await setupConnection();
+  }
+
+  Future<void> setupConnection() async {
+    var data = await api.setupPush(config: config!, identity: identity!, statePath: pushService.statePath, state: cachedState!);
+    connection = data.$1;
+    anisette = await api.makeAnisette(path: pushService.statePath, config: config!, conn: connection!);
   }
 
   void updatePage(int newPage) {
@@ -512,6 +676,14 @@ class SetupViewController extends StatefulController {
   }
 
   void handleOfflineError(String newError, String? currentTicket) {
+    if (newError.contains("Device not reserved!")) {
+      destroyConnection();
+      config = null;
+      tokenExpiry = DateTime.fromMillisecondsSinceEpoch(0);
+      token = null;
+      pageController.jumpToPage(4);
+    }
+
     if (newError.contains("Sorry, your hosted device is currently offline!")) {
       showDialog(
         context: Get.context!,
@@ -538,7 +710,7 @@ class SetupViewController extends StatefulController {
               onPressed: () {
                 Navigator.of(context).pop();
                 wrapPromise((() async {
-                  var relay = currentTicket ?? await api.validateRelay(state: pushService.state);
+                  var relay = currentTicket ?? await api.validateRelay(configRef: this.config!);
                   if (relay == null) {
                     throw Exception("Failed to validate!");
                   }
@@ -549,20 +721,17 @@ class SetupViewController extends StatefulController {
                   ));
 
                   if (status.statusCode != 200) {
+                    if (status.data.contains("No device available!")) {
+                      Timer(const Duration(milliseconds: 100), () => pushService.offerHostedRefund(false));
+                    }
                     throw Exception("Failed to swap ${status.statusCode}");
                   }
 
                   var newTicket = status.data["new_ticket"];
 
                   var config = await api.configFromRelay(code: newTicket, host: "https://hw.openbubbles.app");
-                  await api.configureMacos(state: pushService.state, config: config);
+                  await configureHostedDevice(config);
 
-                  var list = ss.settings.cachedCodes.entries.toList();
-                  for (var items in list) {
-                    if (!items.key.startsWith("sms-auth-")) continue;
-                    ss.settings.cachedCodes.remove(items.key);
-                  }
-                  ss.saveSettings();
                   pageController.jumpToPage(4);
                   updateConnectError('');
                 })(), "Changing device...");
@@ -589,10 +758,6 @@ class SetupViewController extends StatefulController {
       pageController.jumpToPage(5);
       return;
     }
-    if (newError.contains("Wrong phase!")) {
-      pushService.correctState();
-      return;
-    }
     if (newError.contains("6001")) {
       newError += " Make sure Contact Key Verification and Advanced Data Protection are off.";
     }
@@ -605,7 +770,9 @@ class SetupViewController extends StatefulController {
 }
 
 class SetupView extends StatefulWidget {
-  SetupView({super.key});
+  (ApsConnection, ApsState, api.JoinedOsConfig, IdsngmIdentity, ArcAnisetteClientDefaultAnisetteProvider)? prefix;
+
+  SetupView({super.key, this.prefix});
 
   @override
   State<SetupView> createState() => _SetupViewState();
@@ -626,6 +793,24 @@ class _SetupViewState extends OptimizedState<SetupView> {
         Logger.debug("Migrated sms auth");
       }
       await pushService.initFuture; // wait for ready
+
+      var restored = api.readHardware(path: pushService.statePath);
+
+      if (widget.prefix != null) {
+        controller.connection = widget.prefix!.$1;
+        controller.cachedState = widget.prefix!.$2;
+        controller.config = widget.prefix!.$3;
+        controller.identity = widget.prefix!.$4;
+        controller.anisette = widget.prefix!.$5;
+      }
+
+      if (restored != null && pushService.state == null && controller.connection == null) {
+        controller.identity = restored.identity;
+        controller.config = restored.osConfig;
+        controller.cachedState = restored.push;
+        await controller.setupConnection();
+      }
+
       var list = ss.settings.cachedCodes.entries.toList();
       for (var items in list) {
         if (!items.key.startsWith("sms-auth-")) continue;
@@ -634,7 +819,7 @@ class _SetupViewState extends OptimizedState<SetupView> {
         controller.phoneValidating.value = true;
         try {
           Logger.info("restore validating!");
-          await api.validateCert(state: pushService.state, user: user);
+          await api.validateCert(conn: controller.connection!, user: user);
           Logger.info("restore validated");
         } catch (e) {
           Logger.info("restore resetting! $e");
@@ -996,7 +1181,7 @@ class _ErrorTextState extends CustomState<ErrorText, String, SetupViewController
 
                         Map<String, dynamic> deviceInfo = {};
 
-                        var config = await api.getConfigState(state: pushService.state);
+                        var config = controller.config;
                         if (config != null) {
                           var info = await api.getDeviceInfo(config: config);
                           deviceInfo = {

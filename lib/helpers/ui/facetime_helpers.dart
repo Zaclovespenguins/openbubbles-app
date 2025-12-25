@@ -89,7 +89,7 @@ Future<void> showFaceTimeOverlay(String callUuid, String caller, Uint8List? chat
               ),
               onPressed: () async {
                 hideFaceTimeOverlay(callUuid);
-                await api.declineFacetime(state: pushService.state, guid: callUuid);
+                await api.declineFacetime(facetime: pushService.state!.ftClient, guid: callUuid);
               },
             ),
             const SizedBox(width: 16.0),
@@ -115,7 +115,7 @@ Future<void> showFaceTimeOverlay(String callUuid, String caller, Uint8List? chat
               onPressed: () async {
                 hideFaceTimeOverlay(callUuid);
                 if (Platform.isAndroid) {
-                  await mcs.invokeMethod("launch-facetime", {'link': link, 'callUuid': callUuid, 'desc': caller, 'name': ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value, 'answer': true});
+                  await mcs.invokeMethod("launch-facetime", {'link': link, 'callUuid': callUuid, 'desc': caller, 'name': ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state!.client)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value, 'answer': true});
                 } else {
                   await launchUrl(
                       Uri.parse(link),
@@ -279,7 +279,7 @@ Future<void> showOutgoingFaceTimeOverlay(RxString callState, String desc, String
                   phoneButton("End", Colors.red, ss.settings.skin.value == Skins.iOS ? CupertinoIcons.phone_down_fill : Icons.call_end, () async {
                       hideFaceTimeOverlay(callUuid, timeout: true);
                       pushService.outgoingCallTimer?.cancel();
-                      await api.cancelFacetime(state: pushService.state, guid: callUuid);
+                      await api.cancelFacetime(facetime: pushService.state!.ftClient, guid: callUuid);
                       pushService.currentOutgoingCall = null;
                     },),
                 ],),

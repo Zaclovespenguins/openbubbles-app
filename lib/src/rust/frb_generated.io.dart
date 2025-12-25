@@ -20,11 +20,89 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   });
 
   CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_ArcPushStatePtr => wire
-          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushStatePtr;
+      get rust_arc_decrement_strong_count_ApsConnectionPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnectionPtr;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ApsStatePtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSStatePtr;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_ApsWatcherPtr =>
+      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcherPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcAnisetteClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcCloudKitClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcCloudMessagesClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcFtClientPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClientPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcFindMyClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcImClientPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClientPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcIdmsAuthListenerPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListenerPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcKeychainClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexAppleAccountDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcMutexVecActiveCircleSessionPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcSenderPushMessagePtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessagePtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcSharedPushStatePtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushStatePtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcStatusKitClientDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcTokenProviderDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProviderPtr;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_AssetPtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAssetPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ChannelInterestTokenPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestTokenPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_CircleClientSessionDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProviderPtr;
 
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_ConversationLinkPtr => wire
@@ -72,6 +150,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       get rust_arc_decrement_strong_count_GZipWrapperMessageProto4Ptr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerGZipWrapperMessageProto4Ptr;
 
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_IdsngmIdentityPtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentityPtr;
+
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_IdsUserPtr => wire
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUserPtr;
 
@@ -95,9 +177,27 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       get rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadataPtr;
 
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_PushErrorPtr =>
+      wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ReceiverApsMessagePtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessagePtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SavedHardwareStatePtr => wire
+          ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareStatePtr;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_SenderPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSenderPtr;
+
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_StCollapsedValuePtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValuePtr;
+
+  CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_SyncManagerDefaultAnisetteProviderMyFilePackagerPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackagerPtr;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_SystemTimePtr =>
       wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSystemTimePtr;
@@ -113,13 +213,113 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException dco_decode_AnyhowException(dynamic raw);
 
   @protected
-  ArcPushState
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          dynamic raw);
+
+  @protected
+  ApsState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw);
+
+  @protected
+  ApsWatcher
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcFtClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcImClient
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw);
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw);
+
+  @protected
+  ArcSharedPushState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
   Asset
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          dynamic raw);
+
+  @protected
+  ChannelInterestToken
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -183,6 +383,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  IdsngmIdentity
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw);
+
+  @protected
   IdsUser
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw);
@@ -213,8 +418,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  PushError
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw);
+
+  @protected
+  ReceiverApsMessage
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw);
+
+  @protected
+  SavedHardwareState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
+  Sender
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw);
+
+  @protected
   StCollapsedValue
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          dynamic raw);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           dynamic raw);
 
   @protected
@@ -233,6 +463,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  ApsWatcher
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
   FindMyFriendsClientDefaultAnisetteProvider
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyFriendsClientDefaultAnisetteProvider(
           dynamic raw);
@@ -248,13 +488,103 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  ReceiverApsMessage
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw);
+
+  @protected
+  SavedHardwareState
+      dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
   ViableBottle
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           dynamic raw);
 
   @protected
-  ArcPushState
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          dynamic raw);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcFtClient
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcImClient
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw);
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw);
+
+  @protected
+  ArcSharedPushState
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -293,6 +623,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  IdsngmIdentity
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw);
+
+  @protected
   IdsUser
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw);
@@ -313,8 +648,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  SavedHardwareState
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
+  Sender
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw);
+
+  @protected
   StCollapsedValue
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          dynamic raw);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           dynamic raw);
 
   @protected
@@ -335,6 +685,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int dco_decode_CastedPrimitive_usize(dynamic raw);
+
+  @protected
+  FutureOr<String> Function(String)
+      dco_decode_DartFn_Inputs_String_Output_String_AnyhowException(
+          dynamic raw);
+
+  @protected
+  Object dco_decode_DartOpaque(dynamic raw);
 
   @protected
   Map<String, Asset>
@@ -400,13 +758,113 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, SyncStatus> dco_decode_Map_String_sync_status(dynamic raw);
 
   @protected
-  ArcPushState
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          dynamic raw);
+
+  @protected
+  ApsState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw);
+
+  @protected
+  ApsWatcher
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          dynamic raw);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcFtClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          dynamic raw);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcImClient
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          dynamic raw);
+
+  @protected
+  ArcIdmsAuthListener
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          dynamic raw);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcSenderPushMessage
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          dynamic raw);
+
+  @protected
+  ArcSharedPushState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          dynamic raw);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
   Asset
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          dynamic raw);
+
+  @protected
+  ChannelInterestToken
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -470,6 +928,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  IdsngmIdentity
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          dynamic raw);
+
+  @protected
   IdsUser
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw);
@@ -500,8 +963,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  PushError
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw);
+
+  @protected
+  ReceiverApsMessage
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          dynamic raw);
+
+  @protected
+  SavedHardwareState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
+  Sender
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          dynamic raw);
+
+  @protected
   StCollapsedValue
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          dynamic raw);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           dynamic raw);
 
   @protected
@@ -570,8 +1058,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  ApsState
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
   Asset
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          dynamic raw);
+
+  @protected
+  ChannelInterestToken
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -615,11 +1143,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  JoinedOsConfig
-      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          dynamic raw);
-
-  @protected
   LocationReport
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw);
@@ -632,6 +1155,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          dynamic raw);
+
+  @protected
+  PushError
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw);
+
+  @protected
+  SavedHardwareState
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           dynamic raw);
 
   @protected
@@ -839,6 +1377,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Reaction dco_decode_box_autoadd_reaction(dynamic raw);
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) dco_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw);
+
+  @protected
+  (String, String) dco_decode_box_autoadd_record_string_string(dynamic raw);
+
+  @protected
   (String, BigInt) dco_decode_box_autoadd_record_string_u_64(dynamic raw);
 
   @protected
@@ -865,7 +1413,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedAlbum dco_decode_box_autoadd_shared_album(dynamic raw);
 
   @protected
+  SharedICloudServices dco_decode_box_autoadd_shared_i_cloud_services(
+      dynamic raw);
+
+  @protected
   SharedPoster dco_decode_box_autoadd_shared_poster(dynamic raw);
+
+  @protected
+  SharedPushState dco_decode_box_autoadd_shared_push_state(dynamic raw);
 
   @protected
   SimplifiedIncomingCallPoster
@@ -1313,8 +1868,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? dco_decode_opt_String(dynamic raw);
 
   @protected
+  ApsState?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          dynamic raw);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
   Asset?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          dynamic raw);
+
+  @protected
+  ChannelInterestToken?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          dynamic raw);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -1358,11 +1953,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  JoinedOsConfig?
-      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          dynamic raw);
-
-  @protected
   LocationReport?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           dynamic raw);
@@ -1375,6 +1965,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          dynamic raw);
+
+  @protected
+  PushError?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          dynamic raw);
+
+  @protected
+  SavedHardwareState?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          dynamic raw);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           dynamic raw);
 
   @protected
@@ -1484,6 +2089,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PushMessage? dco_decode_opt_box_autoadd_push_message(dynamic raw);
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  )? dco_decode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw);
+
+  @protected
+  (String, String)? dco_decode_opt_box_autoadd_record_string_string(
+      dynamic raw);
+
+  @protected
   (String, BigInt)? dco_decode_opt_box_autoadd_record_string_u_64(dynamic raw);
 
   @protected
@@ -1499,7 +2115,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  SharedICloudServices? dco_decode_opt_box_autoadd_shared_i_cloud_services(
+      dynamic raw);
+
+  @protected
   SharedPoster? dco_decode_opt_box_autoadd_shared_poster(dynamic raw);
+
+  @protected
+  SharedPushState? dco_decode_opt_box_autoadd_shared_push_state(dynamic raw);
 
   @protected
   SupportAction? dco_decode_opt_box_autoadd_support_action(dynamic raw);
@@ -1515,6 +2138,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
+
+  @protected
+  List<IdsUser>?
+      dco_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          dynamic raw);
 
   @protected
   List<String>? dco_decode_opt_list_String(dynamic raw);
@@ -1602,6 +2230,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (
+    ApsConnection,
+    PushError?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+      dynamic raw);
+
+  @protected
+  (
+    ArcMutexAppleAccountDefaultAnisetteProvider,
+    LoginState,
+    IdsUser?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+      dynamic raw);
+
+  @protected
+  (
+    ArcSharedPushState,
+    SharedPushState
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+      dynamic raw);
+
+  @protected
+  (
+    CircleClientSessionDefaultAnisetteProvider,
+    LoginState,
+    String?
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+      dynamic raw);
+
+  @protected
+  (
+    Sender,
+    ArcSenderPushMessage,
+    ApsWatcher
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      dynamic raw);
+
+  @protected
+  (int, SharedPushState)
+      dco_decode_record_casted_primitive_u_64_shared_push_state(dynamic raw);
+
+  @protected
+  (
     Uint8List,
     Map<String, CloudAttachment?>,
     int
@@ -1646,13 +2316,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
-  (LoginState, String?) dco_decode_record_login_state_opt_string(dynamic raw);
-
-  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
   ) dco_decode_record_map_string_sync_status_opt_box_autoadd_record_string_u_64(
+      dynamic raw);
+
+  @protected
+  (
+    List<IdsUser>?,
+    SupportAlert?
+  ) dco_decode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+      dynamic raw);
+
+  @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) dco_decode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
       dynamic raw);
 
   @protected
@@ -1733,9 +2414,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RegisterState dco_decode_register_state(dynamic raw);
 
   @protected
-  RegistrationPhase dco_decode_registration_phase(dynamic raw);
-
-  @protected
   RenameMessage dco_decode_rename_message(dynamic raw);
 
   @protected
@@ -1759,7 +2437,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedAlbum dco_decode_shared_album(dynamic raw);
 
   @protected
+  SharedICloudServices dco_decode_shared_i_cloud_services(dynamic raw);
+
+  @protected
   SharedPoster dco_decode_shared_poster(dynamic raw);
+
+  @protected
+  SharedPushState dco_decode_shared_push_state(dynamic raw);
 
   @protected
   SimplifiedIncomingCallPoster dco_decode_simplified_incoming_call_poster(
@@ -1853,13 +2537,113 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
-  ArcPushState
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          SseDeserializer deserializer);
+
+  @protected
+  ApsState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer);
+
+  @protected
+  ApsWatcher
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFtClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcImClient
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSharedPushState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
   Asset
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          SseDeserializer deserializer);
+
+  @protected
+  ChannelInterestToken
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -1923,6 +2707,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  IdsngmIdentity
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer);
+
+  @protected
   IdsUser
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer);
@@ -1953,8 +2742,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  PushError
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer);
+
+  @protected
+  ReceiverApsMessage
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  SavedHardwareState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
+  Sender
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer);
+
+  @protected
   StCollapsedValue
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          SseDeserializer deserializer);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           SseDeserializer deserializer);
 
   @protected
@@ -1973,6 +2787,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  ApsWatcher
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
   FindMyFriendsClientDefaultAnisetteProvider
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFindMyFriendsClientDefaultAnisetteProvider(
           SseDeserializer deserializer);
@@ -1988,13 +2812,103 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  ReceiverApsMessage
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  SavedHardwareState
+      sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
   ViableBottle
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           SseDeserializer deserializer);
 
   @protected
-  ArcPushState
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFtClient
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcImClient
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSharedPushState
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -2033,6 +2947,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  IdsngmIdentity
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer);
+
+  @protected
   IdsUser
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer);
@@ -2053,8 +2972,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  SavedHardwareState
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
+  Sender
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer);
+
+  @protected
   StCollapsedValue
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          SseDeserializer deserializer);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           SseDeserializer deserializer);
 
   @protected
@@ -2075,6 +3009,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int sse_decode_CastedPrimitive_usize(SseDeserializer deserializer);
+
+  @protected
+  Object sse_decode_DartOpaque(SseDeserializer deserializer);
 
   @protected
   Map<String, Asset>
@@ -2149,13 +3086,113 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  ArcPushState
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+  ApsConnection
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          SseDeserializer deserializer);
+
+  @protected
+  ApsState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer);
+
+  @protected
+  ApsWatcher
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcAnisetteClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFtClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcImClient
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcIdmsAuthListener
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexVecActiveCircleSession
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcProfilesClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSenderPushMessage
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcSharedPushState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcStatusKitClientDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcTokenProviderDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
   Asset
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          SseDeserializer deserializer);
+
+  @protected
+  ChannelInterestToken
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -2219,6 +3256,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  IdsngmIdentity
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          SseDeserializer deserializer);
+
+  @protected
   IdsUser
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer);
@@ -2249,8 +3291,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  PushError
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer);
+
+  @protected
+  ReceiverApsMessage
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          SseDeserializer deserializer);
+
+  @protected
+  SavedHardwareState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
+  Sender
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          SseDeserializer deserializer);
+
+  @protected
   StCollapsedValue
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
+          SseDeserializer deserializer);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           SseDeserializer deserializer);
 
   @protected
@@ -2322,8 +3389,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  ApsState
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
   Asset
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          SseDeserializer deserializer);
+
+  @protected
+  ChannelInterestToken
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -2367,11 +3474,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  JoinedOsConfig
-      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          SseDeserializer deserializer);
-
-  @protected
   LocationReport
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer);
@@ -2384,6 +3486,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          SseDeserializer deserializer);
+
+  @protected
+  PushError
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer);
+
+  @protected
+  SavedHardwareState
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           SseDeserializer deserializer);
 
   @protected
@@ -2621,6 +3738,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Reaction sse_decode_box_autoadd_reaction(SseDeserializer deserializer);
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) sse_decode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer);
+
+  @protected
+  (String, String) sse_decode_box_autoadd_record_string_string(
+      SseDeserializer deserializer);
+
+  @protected
   (String, BigInt) sse_decode_box_autoadd_record_string_u_64(
       SseDeserializer deserializer);
 
@@ -2654,7 +3782,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedAlbum sse_decode_box_autoadd_shared_album(SseDeserializer deserializer);
 
   @protected
+  SharedICloudServices sse_decode_box_autoadd_shared_i_cloud_services(
+      SseDeserializer deserializer);
+
+  @protected
   SharedPoster sse_decode_box_autoadd_shared_poster(
+      SseDeserializer deserializer);
+
+  @protected
+  SharedPushState sse_decode_box_autoadd_shared_push_state(
       SseDeserializer deserializer);
 
   @protected
@@ -3144,8 +4280,48 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
+  ApsState?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudKitClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcCloudMessagesClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcFindMyClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcKeychainClientDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcMutexAppleAccountDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
   Asset?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
+          SseDeserializer deserializer);
+
+  @protected
+  ChannelInterestToken?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          SseDeserializer deserializer);
+
+  @protected
+  CircleClientSessionDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -3189,11 +4365,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  JoinedOsConfig?
-      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          SseDeserializer deserializer);
-
-  @protected
   LocationReport?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           SseDeserializer deserializer);
@@ -3206,6 +4377,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
+          SseDeserializer deserializer);
+
+  @protected
+  PushError?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          SseDeserializer deserializer);
+
+  @protected
+  SavedHardwareState?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SseDeserializer deserializer);
+
+  @protected
+  SyncManagerDefaultAnisetteProviderMyFilePackager?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
           SseDeserializer deserializer);
 
   @protected
@@ -3332,6 +4518,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  )? sse_decode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer);
+
+  @protected
+  (String, String)? sse_decode_opt_box_autoadd_record_string_string(
+      SseDeserializer deserializer);
+
+  @protected
   (String, BigInt)? sse_decode_opt_box_autoadd_record_string_u_64(
       SseDeserializer deserializer);
 
@@ -3349,7 +4546,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  SharedICloudServices? sse_decode_opt_box_autoadd_shared_i_cloud_services(
+      SseDeserializer deserializer);
+
+  @protected
   SharedPoster? sse_decode_opt_box_autoadd_shared_poster(
+      SseDeserializer deserializer);
+
+  @protected
+  SharedPushState? sse_decode_opt_box_autoadd_shared_push_state(
       SseDeserializer deserializer);
 
   @protected
@@ -3369,6 +4574,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
+
+  @protected
+  List<IdsUser>?
+      sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          SseDeserializer deserializer);
 
   @protected
   List<String>? sse_decode_opt_list_String(SseDeserializer deserializer);
@@ -3466,6 +4676,49 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (
+    ApsConnection,
+    PushError?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    ArcMutexAppleAccountDefaultAnisetteProvider,
+    LoginState,
+    IdsUser?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    ArcSharedPushState,
+    SharedPushState
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    CircleClientSessionDefaultAnisetteProvider,
+    LoginState,
+    String?
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    Sender,
+    ArcSenderPushMessage,
+    ApsWatcher
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+      SseDeserializer deserializer);
+
+  @protected
+  (int, SharedPushState)
+      sse_decode_record_casted_primitive_u_64_shared_push_state(
+          SseDeserializer deserializer);
+
+  @protected
+  (
     Uint8List,
     Map<String, CloudAttachment?>,
     int
@@ -3511,14 +4764,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  (LoginState, String?) sse_decode_record_login_state_opt_string(
-      SseDeserializer deserializer);
-
-  @protected
   (
     Map<String, SyncStatus>,
     (String, BigInt)?
   ) sse_decode_record_map_string_sync_status_opt_box_autoadd_record_string_u_64(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    List<IdsUser>?,
+    SupportAlert?
+  ) sse_decode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    SharedPushState,
+    ApsWatcher
+  ) sse_decode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
       SseDeserializer deserializer);
 
   @protected
@@ -3609,9 +4872,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   RegisterState sse_decode_register_state(SseDeserializer deserializer);
 
   @protected
-  RegistrationPhase sse_decode_registration_phase(SseDeserializer deserializer);
-
-  @protected
   RenameMessage sse_decode_rename_message(SseDeserializer deserializer);
 
   @protected
@@ -3637,7 +4897,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   SharedAlbum sse_decode_shared_album(SseDeserializer deserializer);
 
   @protected
+  SharedICloudServices sse_decode_shared_i_cloud_services(
+      SseDeserializer deserializer);
+
+  @protected
   SharedPoster sse_decode_shared_poster(SseDeserializer deserializer);
+
+  @protected
+  SharedPushState sse_decode_shared_push_state(SseDeserializer deserializer);
 
   @protected
   SimplifiedIncomingCallPoster sse_decode_simplified_incoming_call_poster(
@@ -3737,13 +5004,124 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer);
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -3809,6 +5187,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer);
 
@@ -3839,8 +5222,34 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -3856,6 +5265,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           ViableBottle self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -3876,13 +5296,113 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerViableBottle(
           ViableBottle self, SseSerializer serializer);
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer);
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -3921,6 +5441,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer);
 
@@ -3941,8 +5466,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -3962,6 +5503,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_CastedPrimitive_usize(int self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartFn_Inputs_String_Output_String_AnyhowException(
+      FutureOr<String> Function(String) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartOpaque(Object self, SseSerializer serializer);
 
   @protected
   void
@@ -4035,13 +5583,124 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
-          ArcPushState self, SseSerializer serializer);
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
+          ApsConnection self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+          ApsWatcher self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+          ArcAnisetteClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+          ArcFtClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+          ArcImClient self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+          ArcIdmsAuthListener self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+          ArcMutexOptionCircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          ArcMutexVecActiveCircleSession self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+          ArcProfilesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+          ArcSenderPushMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+          ArcSharedPushState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+          ArcStatusKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+          ArcTokenProviderDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -4107,6 +5766,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+          IdsngmIdentity self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           IdsUser self, SseSerializer serializer);
 
@@ -4137,8 +5801,34 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+          ReceiverApsMessage self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+          Sender self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
           StCollapsedValue self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -4211,8 +5901,54 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -4256,11 +5992,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          JoinedOsConfig self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           LocationReport self, SseSerializer serializer);
 
@@ -4273,6 +6004,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
           NsArrayLpImageMetadata self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -4525,6 +6272,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_reaction(Reaction self, SseSerializer serializer);
 
   @protected
+  void
+      sse_encode_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_record_string_string(
+      (String, String) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_record_string_u_64(
       (String, BigInt) self, SseSerializer serializer);
 
@@ -4557,8 +6313,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SharedAlbum self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_shared_i_cloud_services(
+      SharedICloudServices self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_shared_poster(
       SharedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_shared_push_state(
+      SharedPushState self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_simplified_incoming_call_poster(
@@ -5063,8 +6827,54 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+          ApsState? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+          ArcCloudKitClientDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+          ArcCloudMessagesClientDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+          ArcFindMyClientDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+          ArcKeychainClientDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          ArcMutexAppleAccountDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset(
           Asset? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+          ChannelInterestToken? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+          CircleClientSessionDefaultAnisetteProvider? self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -5108,11 +6918,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
-          JoinedOsConfig? self, SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerLocationReport(
           LocationReport? self, SseSerializer serializer);
 
@@ -5125,6 +6930,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
           NsArrayLpImageMetadata? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+          PushError? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+          SavedHardwareState? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+          SyncManagerDefaultAnisetteProviderMyFilePackager? self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -5256,6 +7077,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PushMessage? self, SseSerializer serializer);
 
   @protected
+  void
+      sse_encode_opt_box_autoadd_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher)? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_record_string_string(
+      (String, String)? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_record_string_u_64(
       (String, BigInt)? self, SseSerializer serializer);
 
@@ -5272,8 +7102,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ShareProfileMessage? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_shared_i_cloud_services(
+      SharedICloudServices? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_shared_poster(
       SharedPoster? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_shared_push_state(
+      SharedPushState? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_support_action(
@@ -5292,6 +7130,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
+          List<IdsUser>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_list_String(List<String>? self, SseSerializer serializer);
@@ -5391,6 +7234,46 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_connection_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_push_error(
+          (ApsConnection, PushError?) self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+          (
+            ArcMutexAppleAccountDefaultAnisetteProvider,
+            LoginState,
+            IdsUser?
+          ) self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_shared_push_state_shared_push_state(
+          (ArcSharedPushState, SharedPushState) self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_circle_client_session_default_anisette_provider_login_state_opt_string(
+          (
+            CircleClientSessionDefaultAnisetteProvider,
+            LoginState,
+            String?
+          ) self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_sender_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_sender_push_message_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (Sender, ArcSenderPushMessage, ApsWatcher) self,
+          SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_casted_primitive_u_64_shared_push_state(
+      (int, SharedPushState) self, SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
           (Uint8List, Map<String, CloudAttachment?>, int) self,
           SseSerializer serializer);
@@ -5425,14 +7308,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           (LoginState, IdsUser?) self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_login_state_opt_string(
-      (LoginState, String?) self, SseSerializer serializer);
-
-  @protected
   void
       sse_encode_record_map_string_sync_status_opt_box_autoadd_record_string_u_64(
           (Map<String, SyncStatus>, (String, BigInt)?) self,
           SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_opt_list_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user_opt_box_autoadd_support_alert(
+          (List<IdsUser>?, SupportAlert?) self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
+          (SharedPushState, ApsWatcher) self, SseSerializer serializer);
 
   @protected
   void
@@ -5516,10 +7405,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_register_state(RegisterState self, SseSerializer serializer);
 
   @protected
-  void sse_encode_registration_phase(
-      RegistrationPhase self, SseSerializer serializer);
-
-  @protected
   void sse_encode_rename_message(RenameMessage self, SseSerializer serializer);
 
   @protected
@@ -5544,7 +7429,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_shared_album(SharedAlbum self, SseSerializer serializer);
 
   @protected
+  void sse_encode_shared_i_cloud_services(
+      SharedICloudServices self, SseSerializer serializer);
+
+  @protected
   void sse_encode_shared_poster(SharedPoster self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_shared_push_state(
+      SharedPushState self, SseSerializer serializer);
 
   @protected
   void sse_encode_simplified_incoming_call_poster(
@@ -5660,35 +7553,611 @@ class RustLibWire implements BaseWire {
       : _lookup = dynamicLibrary.lookup;
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
       ptr,
     );
   }
 
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushStatePtr =
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnectionPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushStatePtr
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnectionPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState(
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection(
       ptr,
     );
   }
 
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushStatePtr =
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnectionPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushState =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPushStatePtr
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnection =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSConnectionPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSState =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcherPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcherPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcherPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcher =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAPSWatcherPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudKitClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcCloudMessagesClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClientPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClientPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClientPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClient =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFTClientPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcFindMyClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClientPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClientPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClientPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClient =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIMClientPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListenerPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListenerPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListenerPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListener =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcIdmsAuthListenerPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcKeychainClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexOptionCircleClientSessionDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessagePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessagePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessagePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessage =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSenderPushMessagePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushState =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcSharedPushStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcStatusKitClientDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcTokenProviderDefaultAnisetteProviderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
@@ -5721,6 +8190,70 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAsset =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerAssetPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestTokenPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestTokenPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestTokenPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestToken =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerChannelInterestTokenPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerCircleClientSessionDefaultAnisetteProviderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
@@ -6108,6 +8641,38 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentityPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentityPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentityPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentity =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSNGMIdentityPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -6300,6 +8865,134 @@ class RustLibWire implements BaseWire {
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessagePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessagePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessagePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessage =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerReceiverAPSMessagePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareStatePtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareStatePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSenderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSenderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSenderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSender =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSenderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue(
     ffi.Pointer<ffi.Void> ptr,
   ) {
@@ -6329,6 +9022,38 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValue =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerStCollapsedValuePtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackagerPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackagerPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackagerPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackager =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSyncManagerDefaultAnisetteProviderMyFilePackagerPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

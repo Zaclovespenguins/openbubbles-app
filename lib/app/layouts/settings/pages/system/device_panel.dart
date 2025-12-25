@@ -83,7 +83,7 @@ class _DevicePanelState extends CustomState<DevicePanel, void, DevicePanelContro
               child: Text("OK", style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)),
               onPressed: () async {
                 Get.back();
-                await wrapPromise(api.changeEscrowPassword(state: pushService.state, devicePassword: codeController.text), "Changing password...");
+                await wrapPromise(api.changeEscrowPassword(keychain: pushService.state!.icloudServices!.keychain!, devicePassword: codeController.text), "Changing password...");
                 ss.settings.keychainDefaultPassword.value = null;
                 ss.saveSettings();
               },
@@ -161,13 +161,13 @@ class _DevicePanelState extends CustomState<DevicePanel, void, DevicePanelContro
   @override
   void initState() {
     super.initState();
-    api.getDeviceInfoState(state: pushService.state).then((value) {
+    api.getDeviceInfo(config: pushService.state!.osConfig).then((value) {
       setState(() {
         deviceInfo = value;
         deviceName = RustPushBBUtils.modelToUser(deviceInfo!.name);
       });
     });
-    api.isInClique(state: pushService.state).then((clique) => isInClique.value = clique);
+    if (pushService.state!.icloudServices != null) api.isInClique(keychain: pushService.state!.icloudServices!.keychain!).then((clique) => isInClique.value = clique);
   }
 
   @override

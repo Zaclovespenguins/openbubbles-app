@@ -585,7 +585,7 @@ class ActionHandler extends GetxService {
 
     if (Platform.isAndroid) {
       mcs.invokeMethod("update-call-state", {
-        "name": ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value,
+        "name": ss.settings.userName.value == "You" ? (await api.getHandles(state: pushService.state!.client)).first.replaceFirst("tel:", "").replaceFirst("mailto:", "") : ss.settings.userName.value,
         "desc": caller,
         "url": link,
         "callUuid": callUuid,

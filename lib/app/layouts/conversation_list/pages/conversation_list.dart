@@ -152,16 +152,21 @@ class _ConversationListState extends CustomState<ConversationList, void, Convers
               : "Messages";
 
     if (!ss.settings.reachedConversationList.value) {
-      Timer.periodic(const Duration(seconds: 1), (Timer t) {
-        bool notInSettings = ns.isTabletMode(context)
-            ? !Get.keys.containsKey(3) || Get.keys[3]?.currentContext == null
-            : Get.rawRoute?.settings.name == "/";
-        // This only runs once
-        if (notInSettings) {
-          ss.settings.reachedConversationList.value = true;
-          ss.saveSettings();
-          ss.getServerDetails(refresh: true);
-          t.cancel();
+      Timer? timer;
+      timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+        try {
+          bool notInSettings = ns.isTabletMode(context)
+              ? !Get.keys.containsKey(3) || Get.keys[3]?.currentContext == null
+              : Get.rawRoute?.settings.name == "/";
+          // This only runs once
+          if (notInSettings) {
+            ss.settings.reachedConversationList.value = true;
+            ss.saveSettings();
+            ss.getServerDetails(refresh: true);
+            t.cancel();
+          }
+        } catch (e) {
+          timer?.cancel();
         }
       });
     }

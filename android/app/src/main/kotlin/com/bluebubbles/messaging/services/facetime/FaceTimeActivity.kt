@@ -92,7 +92,7 @@ class FaceTimeActivity : Activity() {
             val client = APNClient(applicationContext)
             client.bind { service: APNService ->
                 try {
-                    service.pushState.declineFacetime(callUuid)
+                    service.pushState?.declineFacetime(callUuid)
                 } finally {
                     client.destroy()
                 }

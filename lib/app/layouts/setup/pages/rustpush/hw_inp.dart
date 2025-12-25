@@ -245,7 +245,21 @@ class HwInpState extends OptimizedState<HwInp> {
       });
       controller.updateConnectError("");
       try {
-        await api.configureAppReview(state: pushService.state);
+        await api.configureAppReview(path: pushService.statePath);
+        
+        controller.destroyConnection();
+
+        var data = (await api.SharedPushState.restore(path: pushService.statePath))!;
+        if (Platform.isAndroid) {
+          var (daemon, pushState) = api.sendDaemon(state: data.$1, watcher: data.$2);
+          pushService.state = pushState;
+          mcs.invokeMethod("provision-native", {"native": "$daemon"});
+        } else {
+          var (pollState, deskState) = api.dupDaemonDesk(state: data.$1);
+          pushService.state = deskState;
+          pushService.doPoll(data.$2, pollState);
+        }
+
         ss.settings.cachedCodes.clear();
         ss.settings.isTester.value = true;
         ss.saveSettings();
@@ -324,13 +338,11 @@ class HwInpState extends OptimizedState<HwInp> {
     if (link != null && link.toString().startsWith(rpApiRoot)) {
       checkCode(link.toString());
     } else {
-      var state = await api.getPhase(state: pushService.state);
-      if (state != api.RegistrationPhase.wantsOsConfig) {
+      if (controller.config != null) {
         // restore
         stagingNonInp = true;
         alreadyActivated = true;
-        var parsed = (await api.getConfigState(state: pushService.state))!;
-        select(parsed, ss.settings.macIsMine.value);
+        select(controller.config!, ss.settings.macIsMine.value);
       }
     }
   }
@@ -385,26 +397,28 @@ class HwInpState extends OptimizedState<HwInp> {
     try {
       token = await controller.ensureToken();
     } catch (e, s) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(
-            "We're so sorry!",
-            style: context.theme.textTheme.titleLarge,
-          ),
-          backgroundColor: context.theme.colorScheme.properSurface,
-          content: Text("When you start the subscription process, we reserve a device for you for 15 minutes. Unfortunately, it appears you took longer to complete the subscription, and, in that time, we gave your device to someone else and no longer have a device free. Feel free to retry periodically in the app, and, if you don't manage to get in within the next few days, your subscription will be automatically refunded by Google.", style: context.theme.textTheme.bodyLarge),
-          actions: [
-            TextButton(
-              child: Text(
-                  "Close",
-                  style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
-              ),
-              onPressed: () => Navigator.of(context).pop(),
+      Timer(const Duration(milliseconds: 100), () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              "We're so sorry!",
+              style: context.theme.textTheme.titleLarge,
             ),
-          ],
-        ),
-      );
+            backgroundColor: context.theme.colorScheme.properSurface,
+            content: Text("When you start the subscription process, we reserve a device for you for 15 minutes. Unfortunately, it appears you took longer to complete the subscription, and, in that time, we gave your device to someone else and no longer have a device free. Feel free to retry periodically in the app, and, if you don't manage to get in within the next few days, your subscription will be automatically refunded by Google.", style: context.theme.textTheme.bodyLarge),
+            actions: [
+              TextButton(
+                child: Text(
+                    "Close",
+                    style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      });
       return;
     }
     
@@ -424,11 +438,7 @@ class HwInpState extends OptimizedState<HwInp> {
   Future<bool> handlePurchases(PurchasesResultWrapper details) async {
     for (var detail in details.purchasesList) {
       if (detail.purchaseState != PurchaseStateWrapper.purchased) continue;
-      if (!detail.isAcknowledged) {
-        ss.settings.hostedPendingTransaction.value = detail.purchaseToken;
-      } else {
-        ss.settings.hostedPendingTransaction.value = null;
-      }
+      ss.settings.hostedToken.value = detail.purchaseToken;
       ss.saveSettings();
       await wrapSubscriptionPromise(handleSubscriptionToken(detail.purchaseToken));
       Logger.info("Purchased token ${detail.purchaseToken}");
@@ -447,7 +457,12 @@ class HwInpState extends OptimizedState<HwInp> {
 
     updateInitial();
 
-    controller.updateIAPState();
+    controller.updateIAPState().then((_) {
+      if (controller.hasDanglingSubscription && controller.availableIAP.value == null) {
+        // offer a refund
+        pushService.offerHostedRefund(true);
+      }
+    });
 
     if (ss.settings.cachedCodes.containsKey("restore")) {
       handleOpenAbsinthe("restore");
@@ -537,7 +552,7 @@ class HwInpState extends OptimizedState<HwInp> {
                         labelStyle: TextStyle(color: context.theme.colorScheme.outline),
                       ),
                     ),
-                    child: Obx(() => Column(
+                    child: Column(
                       children: [
                         if(stagingInfo != null)
                           SettingsSection(
@@ -669,39 +684,6 @@ class HwInpState extends OptimizedState<HwInp> {
                           ],
                           mainAxisSize: MainAxisSize.max,
                         ),
-                        if (!stagingNonInp && hosted && stagingInfo == null && controller.availableIAP.value == null && Platform.isAndroid)
-                        const SizedBox(height: 10),
-                        if (!stagingNonInp && hosted && controller.availableIAP.value == null && Platform.isAndroid)
-                        Container(
-                          child: Focus(
-                            focusNode: focusNode,
-                            onKey: (node, event) {
-                              if (event is RawKeyDownEvent &&
-                                  !event.data.isShiftPressed &&
-                                  event.logicalKey == LogicalKeyboardKey.tab) {
-                                node.nextFocus();
-                                return KeyEventResult.handled;
-                              }
-                              return KeyEventResult.ignored;
-                            },
-                            child: TextField(
-                              cursorColor: context.theme.colorScheme.primary,
-                              autocorrect: false,
-                              autofocus: false,
-                              controller: hostedCodeController,
-                              textInputAction: TextInputAction.done,
-                              decoration: InputDecoration(
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: context.theme.colorScheme.outline),
-                                    borderRadius: BorderRadius.circular(20)),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: context.theme.colorScheme.primary),
-                                    borderRadius: BorderRadius.circular(20)),
-                                labelText: "Enter waitlist invite code",
-                              ),
-                            ),
-                          ),
-                        ),
                         if(!stagingNonInp && stagingInfo == null)
                         const SizedBox(height: 15),
                         if(!stagingNonInp && stagingInfo == null)
@@ -768,7 +750,7 @@ class HwInpState extends OptimizedState<HwInp> {
                             ),
                           ),
                         ),
-                        if (!stagingNonInp && !hosted)
+                        if (!stagingNonInp && !hosted && stagingInfo == null)
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.fromLTRB(3, 12, 3, 5),
@@ -926,7 +908,7 @@ class HwInpState extends OptimizedState<HwInp> {
                           ],
                         ),
                       ],
-                    )),
+                    ),
                   ),
           ),
         ],
@@ -935,8 +917,7 @@ class HwInpState extends OptimizedState<HwInp> {
   }
 
   void goBack() {
-    controller.twoFaUser = "";
-    controller.twoFaPass = "";
+    controller.twoFaCreds = null;
     FocusManager.instance.primaryFocus?.unfocus();
     controller.pageController.previousPage(
       duration: const Duration(milliseconds: 300),
@@ -953,8 +934,21 @@ class HwInpState extends OptimizedState<HwInp> {
       if (!alreadyActivated) {
         ss.settings.macIsMine.value = stagingMine;
         ss.settings.deviceIsHosted.value = isHosted;
+        if (!isHosted) {
+          ss.settings.hostedToken.value = null;
+        }
         ss.settings.save();
-        await api.configureMacos(state: pushService.state, config: config);
+
+        controller.identity = api.newNgmIdentity();
+        controller.config = config;
+        controller.cachedState = null;
+        controller.destroyConnection();
+
+        api.resetAnisette(path: pushService.statePath);
+        controller.anisette?.dispose();
+        controller.anisette = null;
+
+
         controller.currentPhoneUsers = {}; // reset validated phone numbers as we have a new token now
         var list = ss.settings.cachedCodes.entries.toList();
         for (var items in list) {
@@ -966,8 +960,14 @@ class HwInpState extends OptimizedState<HwInp> {
           pushService.mixpanel?.track("hosted-device-configured");
         }
       }
+      
+      if (controller.connection == null) {
+        var data = await api.setupPush(config: controller.config!, identity: controller.identity!, statePath: pushService.statePath, state: controller.cachedState);
+        controller.connection = data.$1;
+        controller.anisette = await api.makeAnisette(path: pushService.statePath, config: controller.config!, conn: controller.connection!);
+      }
 
-      var state = await api.getDeviceInfoState(state: pushService.state);
+      var state = await api.getDeviceInfo(config: controller.config!);
       controller.supportsPhoneReg.value = state.name.contains("iPhone") || state.name.contains("iPod") || state.name.contains("iPad");
       // controller.updatePhoneReg();
       Future.delayed(const Duration(milliseconds: 200), () {

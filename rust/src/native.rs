@@ -1,4 +1,4 @@
-use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, LazyLock, OnceLock, RwLock}, time::Duration};
+use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, LazyLock, OnceLock, RwLock, Weak}, time::Duration};
 
 use flexi_logger::{FileSpec, Logger, WriteMode};
 use log::{error, info, warn};
@@ -6,7 +6,7 @@ use rustpush::{EntitlementAuthState, PushError, get_gateways_for_mccmnc};
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
-use crate::{RUNTIME, api::api::{PollResult, PushMessage, PushState, RegistrationPhase, approve_circle, decline_facetime, get_2fa_code, get_entitlements, get_phase, new_push_state, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
+use crate::{RUNTIME, api::api::{APSWatcher, DaemonData, PollResult, PushMessage, RegistrationPhase, SharedPushState, approve_circle, decline_facetime, do_first_time_init, get_2fa_code, get_entitlements, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
 
 #[derive(uniffi::Record)] 
 pub struct FileInfo {
@@ -33,8 +33,9 @@ pub static PACKAGER_LOCK: OnceLock<Arc<dyn KotlinFilePackager>> = OnceLock::new(
 #[uniffi::export(with_foreign)]
 pub trait MsgReceiver: Send + Sync + Debug {
     fn receieved_msg(&self, msg: u64, retry: u64);
-    fn native_ready(&self, is_ready: bool, state: Arc<NativePushState>);
+    fn native_ready(&self, state: Option<Arc<NativePushState>>);
     fn twofa_event(&self, success: bool);
+    fn finish(&self);
 }
 
 #[uniffi::export(with_foreign)]
@@ -42,25 +43,41 @@ pub trait CarrierHandler: Send + Sync + Debug {
     fn got_gateway(&self, gateway: Option<String>, error: Option<String>);
 }
 
+
 #[derive(uniffi::Object)] 
 pub struct NativePushState {
-    state: Arc<PushState>
+    state: Arc<SharedPushState>,
+    watcher: Mutex<APSWatcher>,
 }
 
 #[uniffi::export]
-pub fn init_native(dir: String, handler: Arc<dyn MsgReceiver>, packager: Arc<dyn KotlinFilePackager>) {
+pub fn start(dir: String, packager: Arc<dyn KotlinFilePackager>) {
+    let _ = PACKAGER_LOCK.set(packager);
+    do_first_time_init(dir);
+}
+
+#[uniffi::export]
+pub fn init_native(dir: String, handle: Option<String>, handler: Arc<dyn MsgReceiver>) {
     info!("rpljslf start");
     RUNTIME.spawn(async move {
         info!("rpljslf initting");
 
-        let _ = PACKAGER_LOCK.set(packager);
+        let result = if let Some(handle) = handle {
+            let parsed: u64 = handle.parse().expect("bad handle??");
+            let daemondata: DaemonData = *unsafe { Box::from_raw(parsed as *mut DaemonData) };
+            Some(Arc::new(NativePushState {
+                state: Arc::new(daemondata.state),
+                watcher: Mutex::new(daemondata.watcher),
+            }))
+        } else {
+            SharedPushState::restore(dir).await.map(|a| Arc::new(NativePushState {
+                state: Arc::new(a.0),
+                watcher: Mutex::new(a.1),
+            }))
+        };
 
-        // TODO retry if this *unwrap* fails
-        let state = Arc::new(NativePushState {
-            state: new_push_state(dir).await
-        });
         info!("rpljslf raed");
-        handler.native_ready(state.get_ready().await, state.clone());
+        handler.native_ready(result);
         info!("rpljslf dom");
     });
 }
@@ -76,11 +93,6 @@ pub fn get_carrier(handler: Arc<dyn CarrierHandler>, mccmnc: String) {
 }
 
 
-#[uniffi::export(with_foreign)]
-pub trait EntitlementHandler: Send + Sync + Debug {
-    fn got_user(&self, gateway: Option<String>, error: Option<String>);
-    fn perform_challenge(&self, challenge: String) -> Option<String>;
-}
 
 pub fn plist_to_buf<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, plist::Error> {
     let mut buf: Vec<u8> = Vec::new();
@@ -101,8 +113,9 @@ impl NativePushState {
 
     pub fn start_loop(self: Arc<NativePushState>, handler: Arc<dyn MsgReceiver>) {
         RUNTIME.spawn(async move {
+            let mut watcher = self.watcher.lock().await;
             loop {
-                match std::panic::AssertUnwindSafe(recv_wait(&self.state)).catch_unwind().await {
+                match std::panic::AssertUnwindSafe(recv_wait(&mut watcher, &self.state)).catch_unwind().await {
                     Ok(yes) => {
                         match yes {
                             PollResult::Cont(Some(msg)) => {
@@ -152,34 +165,18 @@ impl NativePushState {
                 }
             }
             info!("finishing loop");
-        });
-    }
-
-    pub fn get_entitlements(&self, handler: Arc<dyn EntitlementHandler>, mccmnc: String, subscriber: String, imei: String) {
-        let state_ref = self.state.clone();
-        RUNTIME.spawn(async move {
-            let handler_copy = handler.clone();
-            match get_entitlements(&state_ref, mccmnc, subscriber, imei, |challenge| async move {
-                handler_copy.perform_challenge(challenge).ok_or(PushError::ICCAuthFailed)
-            }).await {
-                Ok(entitlements) => handler.got_user(Some(plist_to_string(&entitlements).unwrap()), None),
-                Err(err) => handler.got_user(None, Some(err.to_string())),
-            }
+            handler.finish();
         });
     }
 
     pub fn get_state(self: Arc<NativePushState>) -> u64 {
-        let arc_val = Arc::into_raw(self.state.clone()) as u64;
+        let arc_val = Arc::downgrade(&self.state).into_raw() as u64;
         info!("emitting state {arc_val}");
         arc_val
     }
 
-    async fn get_ready(&self) -> bool {
-        matches!(get_phase(&self.state).await, RegistrationPhase::Registered)
-    }
-
     pub fn decline_facetime(&self, guid: String) {
-        let state_ref = self.state.clone();
+        let state_ref = self.state.ft_client.clone();
         RUNTIME.spawn(async move {
             if let Err(e) = decline_facetime(&state_ref, guid).await {
                 warn!("Failed to decline facetime {e}");
@@ -188,7 +185,7 @@ impl NativePushState {
     }
 
     pub fn teardown_2fa(&self, action: String, txnid: String) {
-        let state_ref = self.state.clone();
+        let state_ref = self.state.icloud_services.as_ref().expect("no icloud!").account.clone();
         RUNTIME.spawn(async move {
             if let Err(e) = teardown_2fa(&state_ref, action, txnid).await {
                 warn!("Failed to teardown 2fa {e}");
@@ -197,9 +194,11 @@ impl NativePushState {
     }
 
     pub fn get_auth_code(&self, txnid: String) -> u32 {
-        let state_ref = self.state.clone();
+        let icloud = self.state.icloud_services.as_ref().expect("no icloud!");
+        let state_ref = icloud.account.clone();
+        let data_ref = self.state.active_circle_sessions.clone();
         RUNTIME.block_on(async move {
-            match approve_circle(&state_ref, txnid).await {
+            match approve_circle(&data_ref, &state_ref, txnid).await {
                 Ok(e) => e,
                 Err(e) => {
                     warn!("Failed to get auth code {e}");
@@ -210,7 +209,7 @@ impl NativePushState {
     }
     
     pub fn publish_status(&self, guid: Option<String>) {
-        let state_ref = self.state.clone();
+        let state_ref = self.state.icloud_services.as_ref().expect("no icloud!").statuskit_client.clone();
         RUNTIME.spawn(async move {
             if let Err(e) = set_status(&state_ref, guid).await {
                 warn!("Failed to decline publish status {e}");

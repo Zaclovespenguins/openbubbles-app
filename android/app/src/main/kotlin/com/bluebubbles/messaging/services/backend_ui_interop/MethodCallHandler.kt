@@ -39,7 +39,9 @@ import com.bluebubbles.messaging.services.foreground.StartForegroundServiceHandl
 import com.bluebubbles.messaging.services.foreground.StopForegroundServiceHandler
 import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNotification
 import com.bluebubbles.messaging.services.rustpush.AppleAccountLoginHandler
+import com.bluebubbles.messaging.services.rustpush.EAPAKAGateway
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
+import com.bluebubbles.messaging.services.rustpush.ProvisionNative
 import com.bluebubbles.messaging.services.rustpush.SMSLessAuthGateway
 import com.bluebubbles.messaging.services.system.EnableBTHandler
 import com.bluebubbles.messaging.services.system.CircleProximitySessionHandler
@@ -135,6 +137,8 @@ class MethodCallHandler {
             NativeSyncIsolateHandler.tag -> NativeSyncIsolateHandler().handleMethodCall(call, result, context)
             SMSLessAuthGateway.tag -> SMSLessAuthGateway().handleMethodCall(call, result, context)
             ShizukuGrantPermissionHandler.tag -> ShizukuGrantPermissionHandler().handleMethodCall(call, result, context)
+            ProvisionNative.tag -> ProvisionNative().handleMethodCall(call, result, context)
+            EAPAKAGateway.tag -> EAPAKAGateway().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

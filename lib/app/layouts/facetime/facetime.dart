@@ -97,7 +97,7 @@ class _FaceTimePanelState extends OptimizedState<FaceTimePanel> {
         }
         pushService.chosenFTRoomGuid = session.groupId;
         // should be cached
-        var link = await api.getFtLink(state: pushService.state, usage: "next");
+        var link = await api.getFtLink(facetime: pushService.state!.ftClient, usage: "next");
         var desc = participants.map((p) => p.displayName).join(" & ");
         // rotate link
         pushService.rotateLink().catchError((e, s) {

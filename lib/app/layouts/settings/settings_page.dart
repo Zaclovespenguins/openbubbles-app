@@ -84,7 +84,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
     
     (() async {
       await pushService.initFuture;
-      var value = await api.getDeviceInfoState(state: pushService.state);
+      var value = await api.getDeviceInfo(config: pushService.state!.osConfig);
       setState(() {
         deviceInfo = value;
       });
@@ -1062,7 +1062,8 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                                     .colorScheme
                                                                     .primary)),
                                                     onPressed: () async {
-                                                      (backend as RustPushBackend).markFailedToLogin();
+                                                      Navigator.of(context).pop();
+                                                      pushService.markFailedToLogin(ui: true);
                                                     }
                                                   ),
                                                 ],
@@ -1135,19 +1136,20 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                                     .colorScheme
                                                                     .primary)),
                                                     onPressed: () async {
+                                                      Navigator.of(context).pop();
                                                       if (ss.settings.deviceIsHosted.value) {
-                                                        String? ticket = await api.validateRelay(state: pushService.state);
+                                                        String? ticket = await api.validateRelay(configRef: pushService.state!.osConfig);
                                                         if (ticket != null) {
                                                           var activated = await http.dio.post("https://hw.openbubbles.app/ticket/$ticket/release");
                                                           if (activated.statusCode == 200) {
-                                                            (backend as RustPushBackend).markFailedToLogin(hw: true);
+                                                            pushService.markFailedToLogin(hw: true, ui: true);
                                                             return;
                                                           }
                                                         }
-                                                        (backend as RustPushBackend).markFailedToLogin();
+                                                        pushService.markFailedToLogin();
                                                         return;
                                                       } else {
-                                                        (backend as RustPushBackend).markFailedToLogin(hw: true);
+                                                        pushService.markFailedToLogin(hw: true, ui: true);
                                                       }
                                                     }
                                                   ),
@@ -1222,11 +1224,10 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                                   .colorScheme
                                                                   .primary)),
                                                   onPressed: () async {
+                                                    Navigator.of(context).pop();
                                                     fs.deleteDB();
                                                     socket.forgetConnection();
-                                                    if (usingRustPush) {
-                                                      await pushService.reset(false, true);
-                                                    }
+                                                    await pushService.markFailedToLogin(hw: false, logout: true, ui: true);
                                                     ss.settings = Settings();
                                                     await ss.settings.saveAsync();
 
@@ -1261,11 +1262,10 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                                   .colorScheme
                                                                   .primary)),
                                                   onPressed: () async {
+                                                    Navigator.of(context).pop();
                                                     fs.deleteDB();
                                                     socket.forgetConnection();
-                                                    if (usingRustPush) {
-                                                      await pushService.reset(true, true);
-                                                    }
+                                                    await pushService.markFailedToLogin(hw: true, logout: true, ui: true);
                                                     ss.settings = Settings();
                                                     await ss.settings.saveAsync();
 

@@ -1029,7 +1029,7 @@ class _MessagePopupState extends OptimizedState<MessagePopup> with SingleTickerP
                   final response = await http.dio.post(
                       url,
                       data: FormData.fromMap({
-                        "content": "Handle: ${(await api.getHandles(state: pushService.state)).first} \nDesc: ${participantController.text}",
+                        "content": "Handle: ${(await api.getHandles(state: pushService.state!.client)).first} \nDesc: ${participantController.text}",
                         "username": ss.settings.userName.value,
                         "files[0]": MultipartFile.fromBytes(total, filename: "rustpush-logs.log"),
                         "files[1]": MultipartFile.fromString(messageMeta, filename: "message.json"),

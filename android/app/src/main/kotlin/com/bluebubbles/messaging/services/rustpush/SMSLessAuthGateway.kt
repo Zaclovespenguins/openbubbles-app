@@ -12,10 +12,11 @@ import com.bluebubbles.messaging.models.MethodCallHandlerImpl
 import com.bluebubbles.messaging.services.rustpush.eap_aka.EapAkaChallenge
 import com.bluebubbles.messaging.services.rustpush.eap_aka.EapAkaResponse
 import com.bluebubbles.messaging.services.rustpush.eap_aka.EapAkaResponse.getImsiEap
+import com.google.gson.GsonBuilder
+import com.google.gson.ToNumberPolicy
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import uniffi.rust_lib_bluebubbles.CarrierHandler
-import uniffi.rust_lib_bluebubbles.EntitlementHandler
 import uniffi.rust_lib_bluebubbles.getCarrier
 import java.util.Random
 
@@ -47,7 +48,7 @@ class SMSLessAuthGateway: MethodCallHandlerImpl() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             telephonyManager = telephonyManager.createForSubscriptionId(subscription)
         }
-        val carrierMccMnc = telephonyManager.simOperator    
+        val carrierMccMnc = telephonyManager.simOperator
 
 
         if (!hasIccAuthWithDeviceIdentifierPermission(context)) {
@@ -58,29 +59,20 @@ class SMSLessAuthGateway: MethodCallHandlerImpl() {
 
         val realm = "nai.epc"
 
-        val client = APNClient(context)
-        client.bind { service: APNService ->
-            service.pushState.getEntitlements(object : EntitlementHandler {
-                override fun gotUser(gateway: String?, error: String?) {
-                    if (gateway == null) {
-                        result.error(error ?: "No error", null, null)
-                        return
-                    }
+        val gson = GsonBuilder()
+            .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+            .create()
 
-                    result.success(gateway)
-                }
-
-                override fun performChallenge(challenge: String): String? {
-                    val challenge2 = EapAkaChallenge.parseEapAkaChallenge(challenge)
-                    return EapAkaResponse.respondToEapAkaChallenge(context, subscription, challenge2, realm).response()
-                }
-
-            }, carrierMccMnc, getImsiEap(
+        val r = hashMapOf(
+            "mccmnc" to carrierMccMnc,
+            "subscriber" to getImsiEap(
                 telephonyManager.simOperator,
                 telephonyManager.subscriberId,
-                realm)!!, telephonyManager.imei)
-            client.destroy()
-        }
+                realm)!!,
+            "imei" to telephonyManager.imei,
+        )
+
+        result.success(gson.toJson(r).toString())
 
     }
 

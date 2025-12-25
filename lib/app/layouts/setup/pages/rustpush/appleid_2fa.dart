@@ -254,8 +254,10 @@ class _AppleId2FAState extends OptimizedState<AppleId2FA> {
   }
 
   void goBack() {
-    controller.twoFaUser = "";
-    controller.twoFaPass = "";
+    controller.currentAppleAccount?.dispose();
+    controller.currentAppleAccount = null;
+
+    controller.twoFaCreds = null;
     controller.pageController.previousPage(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOut,

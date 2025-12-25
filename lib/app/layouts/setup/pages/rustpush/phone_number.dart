@@ -80,18 +80,37 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
     if (trySmsLess) {
       try {
         String resp = await mcs.invokeMethod("sms-less-auth-gateway", {'subscription': subscription});
+        Map<dynamic, dynamic> parsed = json.decode(resp);
 
-        controller.currentPhoneUsers[subscription] = await api.restoreUser(user: resp);
-        ss.settings.cachedCodes["sms-auth-$subscription"] = resp;
+        var user = await api.getEntitlements(
+          config: controller.config!, 
+          conn: controller.connection!, 
+          mccmnc: parsed["mccmnc"], 
+          subscriber: parsed["subscriber"], 
+          imei: parsed["imei"], 
+          processChallenge: (challenge) async {
+            return await mcs.invokeMethod("eap-aka-gateway", {'subscription': subscription, 'challenge': challenge});
+          }
+        );
+
+        controller.currentPhoneUsers[subscription] = user;
+        ss.settings.cachedCodes["sms-auth-$subscription"] = await api.saveUser(user: user);
         ss.saveSettings();
         controller.updateConnectError("");
         setState(() { });
         controller.phoneValidating.value = false;
         return;
       } catch (e) {
-        if (e is PlatformException) {
+        if (e is AnyhowException) {
+          var msg = e.message;
+          if (!msg.contains("No ICC auth permission!") && !msg.contains("Carrier does not support ICC auth!")) {
+            controller.updateConnectError(msg);
+            controller.phoneValidating.value = false;
+            rethrow;
+          }
+        } else if (e is PlatformException) {
           var msg = e.code;
-          if (!msg.contains("No ICC auth permission!")) {
+          if (!msg.contains("No ICC auth permission!") && !msg.contains("Carrier does not support ICC auth!")) {
             controller.updateConnectError(msg);
             controller.phoneValidating.value = false;
             rethrow;
@@ -110,11 +129,19 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
         return;
       }
       // always get new token for PNR
-      if (controller.currentPhoneUsers.isEmpty) await api.refreshToken(state: pushService.state);
-      var token = await api.getToken(state: pushService.state);
+      if (controller.currentPhoneUsers.isEmpty) {
+        controller.destroyConnection();
+        controller.cachedState = null;
+
+        var data = await api.setupPush(config: controller.config!, identity: controller.identity!, statePath: pushService.statePath, state: controller.cachedState);
+        controller.connection = data.$1;
+        controller.anisette?.dispose();
+        controller.anisette = await api.makeAnisette(path: pushService.statePath, config: controller.config!, conn: controller.connection!);
+      }
+      var token = await api.getToken(state: pushService.state!.conn);
 
       String resp = await mcs.invokeMethod("sms-auth-gateway", {'token': hex.encode(token).toUpperCase(), 'subscription': subscription});
-      controller.currentPhoneUsers[subscription] = await api.authPhone(state: pushService.state, number: resp.split("|").first, sig: hex.decode(resp.split("|").last));
+      controller.currentPhoneUsers[subscription] = await api.authPhone(conn: controller.connection!, config: controller.config!, number: resp.split("|").first, sig: hex.decode(resp.split("|").last));
       ss.settings.cachedCodes["sms-auth-$subscription"] = await api.saveUser(user: controller.currentPhoneUsers[subscription]!);
       ss.saveSettings();
       controller.updateConnectError("");

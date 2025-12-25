@@ -170,7 +170,7 @@ class MaterialOverflowMenu extends StatelessWidget {
                 style: context.textTheme.bodyLarge!.apply(color: context.theme.colorScheme.properOnSurface),
               ),
             ),
-          if (pushService.sharedStreams)
+          if (pushService.state?.icloudServices?.sharedstreams != null)
             PopupMenuItem(
               value: 9,
               child: Text(
@@ -312,7 +312,7 @@ class CupertinoOverflowMenu extends StatelessWidget {
             icon: CupertinoIcons.location,
             onTap: () => goToFindMy(context),
           ),
-        if (pushService.sharedStreams)
+        if (pushService.state?.icloudServices?.sharedstreams != null)
           PullDownMenuItem(
             title: 'Shared Albums',
             icon: CupertinoIcons.photo,

@@ -63,7 +63,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
     (() async {
       try {
         reregisteringIds.value = true;
-        await api.doReregister(state: pushService.state);
+        await api.doReregister(state: pushService.state!.client);
         getDetails();
         showSnackbar("Success", "Registered");
       } catch (e) {
@@ -112,11 +112,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
   Future<bool> handlePurchases(PurchasesResultWrapper details) async {
     for (var detail in details.purchasesList) {
       if (detail.purchaseState != PurchaseStateWrapper.purchased) continue;
-      if (!detail.isAcknowledged) {
-        ss.settings.hostedPendingTransaction.value = detail.purchaseToken;
-      } else {
-        ss.settings.hostedPendingTransaction.value = null;
-      }
+      ss.settings.hostedToken.value = detail.purchaseToken;
       ss.saveSettings();
       await wrapPromise(handleSubscriptionToken(detail.purchaseToken), "Validating subscription...");
       Logger.info("Purchased token ${detail.purchaseToken}");
@@ -132,7 +128,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
     subscription = pushService.client.purchasesUpdatedStream.listen((PurchasesResultWrapper details) {
       handlePurchases(details);
     });
-    api.getQuotaInfo(state: pushService.state).then((quota) => quotaInfo.value = quota);
+    if (pushService.state!.icloudServices != null) api.getQuotaInfo(info: pushService.state!.icloudServices!.tokenProvider).then((quota) => quotaInfo.value = quota);
     // api.countRecords(state: pushService.state).then((summary) => cloudMessageSummary.value = summary);
   }
 
@@ -185,7 +181,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
 
           api.ShareProfileMessage message;
           try {
-            message = await api.setProfile(state: pushService.state, record: api.IMessageNicknameRecord(
+            message = await api.setProfile(profiles: pushService.state!.icloudServices!.profilesClient, record: api.IMessageNicknameRecord(
               name: api.IMessageNameRecord(name: ss.settings.userName.value, first: ss.settings.firstName.value!, last: ss.settings.lastName.value!),
               image: image,
               poster: poster != null ? await api.fromPoster(poster: poster) : null,
@@ -206,9 +202,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
 
         pushService.updateShareState();
 
-        var handle = (await api.getHandles(state: pushService.state)).first;
+        var handle = (await api.getHandles(state: pushService.state!.client)).first;
         var msg = await api.newMsg(
-          state: pushService.state,
           conversation: api.ConversationData(participants: [handle]),
           sender: handle,
           message: api.Message.updateProfile(api.UpdateProfileMessage(shareContacts: ss.settings.shareContactAutomatically.value, profile: profile)),
@@ -228,9 +223,9 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
     } catch (_) {
 
     }
-    var myHandles = (await api.getMyPhoneHandles(state: pushService.state));
+    var myHandles = (await api.getMyPhoneHandles(state: pushService.state!.client));
     if (myHandles.isNotEmpty) {
-      List<api.PrivateDeviceInfo> pendingTargets = ss.settings.isSmsRouter.value ? await api.getSmsTargets(state: pushService.state, handle: myHandles.first, refresh: true) : [];
+      List<api.PrivateDeviceInfo> pendingTargets = ss.settings.isSmsRouter.value ? await api.getSmsTargets(state: pushService.state!.client, handle: myHandles.first, refresh: true) : [];
       ss.saveSettings();
       forwardingTargets.value = pendingTargets;
     }
@@ -417,8 +412,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                     children: [
                       Obx(() => SettingsSwitch(
                         onChanged: (bool val) async {
-                          var canShare = await api.canProfileShare(state: pushService.state);
-                          if (val && !canShare) {
+                          if (val && pushService.state!.icloudServices?.profilesClient == null) {
                             showSnackbar("Relog required!", "Relog required to use profile sharing! Relog in Settings -> Reconfigure");
                             return;
                           }
@@ -462,8 +456,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                     children: [
                       SettingsSwitch(
                         onChanged: (bool val) async {
-                          var supportsKeychain = await api.supportsKeychain(state: pushService.state);
-                          if (!supportsKeychain && val) {
+                          if (pushService.state!.icloudServices?.keychain == null && val) {
                             showSnackbar("Relog required!", "Relog required to use Backup! Relog in Settings -> Reconfigure");
                             return;
                           }
@@ -581,43 +574,14 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                         ),
                       if ((accountInfo['login_status_message']?.startsWith("Deregistered") ?? false) || (accountInfo['login_status_message']?.contains("Subscription not active!") ?? false))
                         SettingsTile(
-                        title: accountInfo['login_status_message']!.contains("Ticket not reserved!") ? "Reserve a new device" : accountInfo['login_status_message']!.contains("Subscription not active!") ? "Renew subscription" : "Retry now",
+                        title: accountInfo['login_status_message']!.contains("Device not reserved!") ? "Reserve a new device" : accountInfo['login_status_message']!.contains("Subscription not active!") ? "Renew subscription" : "Retry now",
                         onTap: () async {
-                          if (accountInfo['login_status_message']!.contains("Ticket not reserved!")) {
-                            final status = await http.dio.get("https://hw.openbubbles.app/status");
-                            var hasCapacity = status.data["available"];
-                            if (!hasCapacity) {
-                              var description = "We had to release your device for maintenance purposes, and cannot currently reserve another device. Please contact support@openbubbles.app for assistance. We apologize for the inconvenience, and will process refunds if we don't have another device for you.";
-                              // if we're not told we're not active, that means we have lost privileges to our device.
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text(
-                                    "We're so sorry!",
-                                    style: context.theme.textTheme.titleLarge,
-                                  ),
-                                  backgroundColor: context.theme.colorScheme.properSurface,
-                                  content: Text(description, style: context.theme.textTheme.bodyLarge),
-                                  actions: [
-                                    TextButton(
-                                      child: Text(
-                                          "Close",
-                                          style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
-                                      ),
-                                      onPressed: () => Navigator.of(context).pop(),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              (backend as RustPushBackend).markFailedToLogin(hw: true);
-                            }
-                            return;
-                          }
-                          if (accountInfo['login_status_message']!.contains("Subscription not active!")) {
+                          if (accountInfo['login_status_message']!.contains("Subscription not active!") || accountInfo['login_status_message']!.contains("Device not reserved!")) {
                             wrapPromise((() async {
-                              ticket = await api.validateRelay(state: pushService.state);
+                              ticket = await api.validateRelay(configRef: pushService.state!.osConfig);
                               if (ticket == null) {
+                                var isNotReserved = accountInfo['login_status_message']!.contains("Device not reserved!");
+
                                 final status = await http.dio.get("https://hw.openbubbles.app/status");
                                 var hasCapacity = status.data["available"];
                                 var description = "When an OpenBubbles subscription becomes invalid, we reserve your device for a few days as a courtesy should you choose to restart your subscription. Unfortunately, however, we have already released your device to another user.";
@@ -627,7 +591,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                   description += " Double unfortunately, we are currently out of devices. Please check back later.";
                                 }
                                 // if we're not told we're not active, that means we have lost privileges to our device.
-                                showDialog(
+                                Timer(const Duration(milliseconds: 100), () {
+                                  showDialog(
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     title: Text(
@@ -647,16 +612,29 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                       if (hasCapacity)
                                       TextButton(
                                         child: Text(
-                                            "Restart subscription",
+                                            isNotReserved ? "Get a new device" :"Restart subscription",
                                             style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
                                         ),
                                         onPressed: () {
-                                          (backend as RustPushBackend).markFailedToLogin(hw: true);
+                                          Navigator.of(context).pop();
+                                          pushService.markFailedToLogin(hw: true, ui: true);
+                                        }
+                                      ),
+                                      if (!hasCapacity && isNotReserved)
+                                      TextButton(
+                                        child: Text(
+                                            "Get a refund",
+                                            style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          pushService.offerHostedRefund(true);
                                         }
                                       ),
                                     ],
                                   ),
                                 );
+                                });
                                 return;
                               }
                               pushService.client.runWithClientNonRetryable<void>((client) async {
@@ -674,7 +652,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           }
                           try {
                             reregisteringIds.value = true;
-                            await api.doReregister(state: pushService.state);
+                            await api.doReregister(state: pushService.state!.client);
                             getDetails();
                             showSnackbar("Success", "Registered");
                           } catch (e) {
@@ -734,7 +712,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                   onPressed: () {
                                     wrapPromise((() async {
                                       Navigator.of(context).pop();
-                                      var relay = await api.validateRelay(state: pushService.state);
+                                      var relay = await api.validateRelay(configRef: pushService.state!.osConfig);
                                       if (relay == null) {
                                         throw Exception("Failed to validate!");
                                       }
@@ -745,14 +723,18 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                       ));
 
                                       if (status.statusCode != 200) {
-                                        throw Exception("Failed to swap ${status.statusCode}");
+                                        if (status.data.contains("No device available!")) {
+                                          Timer(const Duration(milliseconds: 100), () => pushService.offerHostedRefund(false));
+                                        }
+                                        throw Exception("Failed to swap ${status.data}");
                                       }
 
                                       var newTicket = status.data["new_ticket"];
-                                      await (backend as RustPushBackend).markFailedToLogin(hw: true, logout: true);
-
                                       var config = await api.configFromRelay(code: newTicket, host: "https://hw.openbubbles.app");
-                                      await api.configureMacos(state: pushService.state, config: config);
+                                      await api.setIdentity(statePath: pushService.statePath, config: config, identity: api.newNgmIdentity());
+                                      api.resetAnisette(path: pushService.statePath);
+
+                                      await pushService.markFailedToLogin(hw: true, logout: true);
 
                                       var list = ss.settings.cachedCodes.entries.toList();
                                       for (var items in list) {
@@ -783,7 +765,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                         SettingsTile(
                           title: "Get a verification code",
                           onTap: () async {
-                            var code = await api.get2FaCode(state: pushService.state);
+                            var code = await api.get2FaCode(anisette: pushService.state!.anisette);
                             await showDialog(
                               context: context,
                               builder: (_) {
@@ -849,10 +831,10 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                 return;
                               }
                             }
-                            var myHandles = (await api.getMyPhoneHandles(state: pushService.state));
+                            var myHandles = (await api.getMyPhoneHandles(state: pushService.state!.client));
                             ss.settings.isSmsRouter.value = val;
 
-                            List<api.PrivateDeviceInfo> pendingTargets = val ? await api.getSmsTargets(state: pushService.state, handle: myHandles.first, refresh: true) : [];
+                            List<api.PrivateDeviceInfo> pendingTargets = val ? await api.getSmsTargets(state: pushService.state!.client, handle: myHandles.first, refresh: true) : [];
                             if (!val) {
                               await (backend as RustPushBackend).broadcastSmsForwardingState(false, ss.settings.smsRoutingTargets);
                             }

@@ -151,7 +151,7 @@ class FaceTimeBtnState extends OptimizedState<FaceTimeBtn> {
     super.initState();
     (() async {
       var data = await chat.getConversationData();
-      ftSupportedParticipants = await api.validateTargetsFacetime(state: pushService.state, targets: data.participants, sender: await chat.ensureHandle());
+      ftSupportedParticipants = await api.validateTargetsFacetime(state: pushService.state!.client, targets: data.participants, sender: await chat.ensureHandle());
       setState(() { });
     })();
   }
@@ -182,7 +182,7 @@ class FaceTimeBtnState extends OptimizedState<FaceTimeBtn> {
                 }).toList();
                 pushService.chosenFTRoomGuid = session.groupId;
                 // should be cached
-                var link = await api.getFtLink(state: pushService.state, usage: "next");
+                var link = await api.getFtLink(facetime: pushService.state!.ftClient, usage: "next");
                 var desc = participants.map((p) => p.displayName).join(" & ");
                 // rotate link
                 pushService.rotateLink().catchError((e, s) {

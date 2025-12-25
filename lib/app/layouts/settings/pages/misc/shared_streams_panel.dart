@@ -53,11 +53,11 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
   
 
   void updateSyncState() async {
-    var items = await api.getAlbums(state: pushService.state, refresh: false);
+    var items = await api.getAlbums(lock: pushService.state!.icloudServices!.sharedstreams!, refresh: false);
     myAlbums = items.$1.where((album) => album.sharingtype == "subscribed" || album.sharingtype == "owned").toList();
     pendingAlbums = items.$1.where((album) => album.sharingtype == "pending").toList();
     albumItems = items.$2;
-    var (status, error) = await api.getSyncstatus(state: pushService.state);
+    var (status, error) = await api.getSyncstatus(lock: pushService.state!.icloudServices!.sharedstreams!);
     syncStatuses = status;
     failure = error;
     setState(() {});
@@ -69,7 +69,7 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
     refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) => updateSyncState());
     (() async {
       updateSyncState();
-      await api.getAlbums(state: pushService.state, refresh: true);
+      await api.getAlbums(lock: pushService.state!.icloudServices!.sharedstreams!, refresh: true);
       updateSyncState();
     })();
   }
@@ -194,12 +194,12 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
             loading[pending.albumguid] = true;
             setState(() { });
             try {
-              await api.subscribe(state: pushService.state, guid: pending.albumguid);
+              await api.subscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: pending.albumguid);
             } catch (e) {
               // sometimes first one can give 500, try again
-              await api.subscribe(state: pushService.state, guid: pending.albumguid);
+              await api.subscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: pending.albumguid);
             }
-            await api.getAlbums(state: pushService.state, refresh: true);
+            await api.getAlbums(lock: pushService.state!.icloudServices!.sharedstreams!, refresh: true);
             updateSyncState();
           } catch (e, stack) {
             Logger.error("Failed to subscribe!!", error: e, trace: stack);
@@ -212,11 +212,11 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
       ), (context) async {
         try {
           try {
-            await api.unsubscribe(state: pushService.state, guid: pending.albumguid);
+            await api.unsubscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: pending.albumguid);
           } catch (e) {
-            await api.unsubscribe(state: pushService.state, guid: pending.albumguid);
+            await api.unsubscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: pending.albumguid);
           }
-          await api.getAlbums(state: pushService.state, refresh: true);
+          await api.getAlbums(lock: pushService.state!.icloudServices!.sharedstreams!, refresh: true);
           updateSyncState();
         } catch (e, stack) {
           Logger.error("Failed to remove!!", error: e, trace: stack);
@@ -248,7 +248,7 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
             try {
               failure = null;
               setState(() {});
-              await api.syncNow(state: pushService.state);
+              await api.syncNow(lock: pushService.state!.icloudServices!.sharedstreams!);
             } finally {
               updateSyncState();
             }
@@ -285,11 +285,11 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
             }
             if (path == null) return;
             print(path);
-            await api.addAlbum(state: pushService.state, guid: album.albumguid, folder: path);
+            await api.addAlbum(lock: pushService.state!.icloudServices!.sharedstreams!, guid: album.albumguid, folder: path);
             albumItems.add(album.albumguid);
             updateSyncState();
           } else {
-            await api.removeAlbum(state: pushService.state, guid: album.albumguid);
+            await api.removeAlbum(lock: pushService.state!.icloudServices!.sharedstreams!, guid: album.albumguid);
             albumItems.remove(album.albumguid);
             setState(() {});
           }
@@ -299,11 +299,11 @@ class _SharedStreamsPanelState extends OptimizedState<SharedStreamsPanel> {
       albums.add(album.email == null ? item : wrapDelete(item, (context) async {
         try {
           try {
-            await api.unsubscribe(state: pushService.state, guid: album.albumguid);
+            await api.unsubscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: album.albumguid);
           } catch (e) {
-            await api.unsubscribe(state: pushService.state, guid: album.albumguid);
+            await api.unsubscribe(lock: pushService.state!.icloudServices!.sharedstreams!, guid: album.albumguid);
           }
-          await api.getAlbums(state: pushService.state, refresh: true);
+          await api.getAlbums(lock: pushService.state!.icloudServices!.sharedstreams!, refresh: true);
           updateSyncState();
         } catch (e, stack) {
           Logger.error("Failed to remove!!", error: e, trace: stack);

@@ -86,7 +86,7 @@ class _FindMyState extends OptimizedState<FindMy> with AutomaticKeepAliveClientM
       locatingInProgress: true,
     );
     (() async {
-      updateFollows(await api.getBackgroundFollowing(state: pushService.state));
+      updateFollows(await api.getBackgroundFollowing(fmfd: pushService.state!.icloudServices!.fmfd!));
     })();
 
     cancel = pushService.subscribeToLocationUpdates((updates) {
@@ -97,7 +97,7 @@ class _FindMyState extends OptimizedState<FindMy> with AutomaticKeepAliveClientM
   @override
   void dispose() {
     if (widget.isPopup) {
-      api.selectBackgroundFriend(state: pushService.state, friend: null);
+      api.selectBackgroundFriend(fmfd: pushService.state!.icloudServices!.fmfd!, friend: null);
     }
     locationSub?.cancel();
     cancel();
@@ -127,7 +127,7 @@ class _FindMyState extends OptimizedState<FindMy> with AutomaticKeepAliveClientM
         expires = DateTime.fromMillisecondsSinceEpoch(e!.expires);
       }
       if (e != null && handle == mainLocation && widget.isPopup) {
-        api.selectBackgroundFriend(state: pushService.state, friend: e.id);
+        api.selectBackgroundFriend(fmfd: pushService.state!.icloudServices!.fmfd!, friend: e.id);
       }
       if (e?.lastLocation == null) continue;
 
