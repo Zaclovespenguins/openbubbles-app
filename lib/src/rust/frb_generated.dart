@@ -740,7 +740,7 @@ abstract class RustLibApi extends BaseApi {
           {required ArcMutexAppleAccountDefaultAnisetteProvider state,
           required ApsConnection conn});
 
-  (int, SharedPushState) crateApiApiSendDaemon(
+  (String, SharedPushState) crateApiApiSendDaemon(
       {required SharedPushState state, required ApsWatcher watcher});
 
   Future<SharedPushState?> crateApiApiServiceFromPtr({required String ptr});
@@ -6675,7 +6675,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  (int, SharedPushState) crateApiApiSendDaemon(
+  (String, SharedPushState) crateApiApiSendDaemon(
       {required SharedPushState state, required ApsWatcher watcher}) {
     return handler.executeSync(SyncTask(
       callFfi: () {
@@ -6686,8 +6686,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 193)!;
       },
       codec: SseCodec(
-        decodeSuccessData:
-            sse_decode_record_casted_primitive_u_64_shared_push_state,
+        decodeSuccessData: sse_decode_record_string_shared_push_state,
         decodeErrorData: null,
       ),
       constMeta: kCrateApiApiSendDaemonConstMeta,
@@ -13283,20 +13282,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (int, SharedPushState)
-      dco_decode_record_casted_primitive_u_64_shared_push_state(dynamic raw) {
-    // Codec=Dco (DartCObject based), see doc to use other codecs
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2) {
-      throw Exception('Expected 2 elements, got ${arr.length}');
-    }
-    return (
-      dco_decode_CastedPrimitive_u_64(arr[0]),
-      dco_decode_shared_push_state(arr[1]),
-    );
-  }
-
-  @protected
   (
     Uint8List,
     Map<String, CloudAttachment?>,
@@ -13664,6 +13649,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return (
       dco_decode_String(arr[0]),
       dco_decode_opt_box_autoadd_cloud_message(arr[1]),
+    );
+  }
+
+  @protected
+  (String, SharedPushState) dco_decode_record_string_shared_push_state(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_String(arr[0]),
+      dco_decode_shared_push_state(arr[1]),
     );
   }
 
@@ -20335,16 +20334,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  (int, SharedPushState)
-      sse_decode_record_casted_primitive_u_64_shared_push_state(
-          SseDeserializer deserializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    var var_field0 = sse_decode_CastedPrimitive_u_64(deserializer);
-    var var_field1 = sse_decode_shared_push_state(deserializer);
-    return (var_field0, var_field1);
-  }
-
-  @protected
   (
     Uint8List,
     Map<String, CloudAttachment?>,
@@ -20608,6 +20597,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 = sse_decode_String(deserializer);
     var var_field1 = sse_decode_opt_box_autoadd_cloud_message(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (String, SharedPushState) sse_decode_record_string_shared_push_state(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_String(deserializer);
+    var var_field1 = sse_decode_shared_push_state(deserializer);
     return (var_field0, var_field1);
   }
 
@@ -26766,14 +26764,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  void sse_encode_record_casted_primitive_u_64_shared_push_state(
-      (int, SharedPushState) self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    sse_encode_CastedPrimitive_u_64(self.$1, serializer);
-    sse_encode_shared_push_state(self.$2, serializer);
-  }
-
-  @protected
   void
       sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
           (Uint8List, Map<String, CloudAttachment?>, int) self,
@@ -26984,6 +26974,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.$1, serializer);
     sse_encode_opt_box_autoadd_cloud_message(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_record_string_shared_push_state(
+      (String, SharedPushState) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.$1, serializer);
+    sse_encode_shared_push_state(self.$2, serializer);
   }
 
   @protected

@@ -18,6 +18,7 @@ import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/utils/crypto_utils.dart';
+import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -100,9 +101,10 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
         setState(() { });
         controller.phoneValidating.value = false;
         return;
-      } catch (e) {
+      } catch (e, s) {
         if (e is AnyhowException) {
           var msg = e.message;
+          Logger.info("IccData", error: e, trace: s);
           if (!msg.contains("No ICC auth permission!") && !msg.contains("Carrier does not support ICC auth!")) {
             controller.updateConnectError(msg);
             controller.phoneValidating.value = false;
@@ -110,6 +112,7 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
           }
         } else if (e is PlatformException) {
           var msg = e.code;
+          Logger.info("IccData", error: e, trace: s);
           if (!msg.contains("No ICC auth permission!") && !msg.contains("Carrier does not support ICC auth!")) {
             controller.updateConnectError(msg);
             controller.phoneValidating.value = false;
@@ -138,7 +141,7 @@ class PhoneNumberState extends OptimizedState<PhoneNumber> {
         controller.anisette?.dispose();
         controller.anisette = await api.makeAnisette(path: pushService.statePath, config: controller.config!, conn: controller.connection!);
       }
-      var token = await api.getToken(state: pushService.state!.conn);
+      var token = await api.getToken(state: controller.connection!);
 
       String resp = await mcs.invokeMethod("sms-auth-gateway", {'token': hex.encode(token).toUpperCase(), 'subscription': subscription});
       controller.currentPhoneUsers[subscription] = await api.authPhone(conn: controller.connection!, config: controller.config!, number: resp.split("|").first, sig: hex.decode(resp.split("|").last));

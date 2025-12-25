@@ -253,7 +253,7 @@ class HwInpState extends OptimizedState<HwInp> {
         if (Platform.isAndroid) {
           var (daemon, pushState) = api.sendDaemon(state: data.$1, watcher: data.$2);
           pushService.state = pushState;
-          mcs.invokeMethod("provision-native", {"native": "$daemon"});
+          mcs.invokeMethod("provision-native", {"native": daemon});
         } else {
           var (pollState, deskState) = api.dupDaemonDesk(state: data.$1);
           pushService.state = deskState;

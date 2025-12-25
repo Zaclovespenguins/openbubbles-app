@@ -95,15 +95,17 @@ Future<void> backgroundSyncIsolate() async {
   chats.restoring = true;
 
   await pushService.initFuture;
+  String? emsg;
 
   try {
     await pushService.doCloudKitSyncPrivate();
   } catch (e) {
-    notif.createSyncFailed(e.toString());
+    emsg = e.toString();
     rethrow;
   } finally {
     pushService.isSyncing.value = null;
     chats.restoring = false;
+    if (emsg != null) notif.createSyncFailed(emsg);
     ui.IsolateNameServer.removePortNameMapping("bg_sync");
     mcs.invokeMethod("exit");
   }
@@ -2141,6 +2143,9 @@ class RustPushService extends GetxService {
     
     var port = ReceivePort();
     port.listen((data) {
+      if (data == null) {
+        ss.prefs.reload(); // to get the new final sync time
+      }
       isSyncing.value = data;
     });
     syncing = ui.IsolateNameServer.lookupPortByName("bg_sync");
@@ -4719,9 +4724,11 @@ class RustPushService extends GetxService {
 
     if (thisState == null) return;
 
-    ss.settings.cloudSyncingEnabled.value = false;
-    ss.settings.keychainDefaultPassword.value = null;
-    ss.saveSettings();
+    if (logout) {
+      ss.settings.cloudSyncingEnabled.value = false;
+      ss.settings.keychainDefaultPassword.value = null;
+      ss.saveSettings();
+    }
     await api.resetState(
       cancel: thisState.cancelPoll,
       path: statePath,

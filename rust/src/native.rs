@@ -64,6 +64,7 @@ pub fn init_native(dir: String, handle: Option<String>, handler: Arc<dyn MsgRece
 
         let result = if let Some(handle) = handle {
             let parsed: u64 = handle.parse().expect("bad handle??");
+            info!("consuming pointer {handle} {parsed}");
             let daemondata: DaemonData = *unsafe { Box::from_raw(parsed as *mut DaemonData) };
             Some(Arc::new(NativePushState {
                 state: Arc::new(daemondata.state),

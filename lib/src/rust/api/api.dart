@@ -119,7 +119,7 @@ Future<ArcImClient> makeImclient(
 ReceiverApsMessage subscribeConn({required ApsConnection conn}) =>
     RustLib.instance.api.crateApiApiSubscribeConn(conn: conn);
 
-(int, SharedPushState) sendDaemon(
+(String, SharedPushState) sendDaemon(
         {required SharedPushState state, required ApsWatcher watcher}) =>
     RustLib.instance.api.crateApiApiSendDaemon(state: state, watcher: watcher);
 

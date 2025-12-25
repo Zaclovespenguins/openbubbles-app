@@ -509,7 +509,7 @@ class SetupViewController extends StatefulController {
       if (Platform.isAndroid) {
         var (daemon, pushState) = api.sendDaemon(state: stagingPushState, watcher: watcher.$3);
         pushService.state = pushState;
-        mcs.invokeMethod("provision-native", {"native": "$daemon"});
+        mcs.invokeMethod("provision-native", {"native": daemon});
       } else {
         var (pollState, deskState) = api.dupDaemonDesk(state: stagingPushState);
         pushService.state = deskState;

@@ -429,14 +429,18 @@ pub struct DaemonData {
     pub state: SharedPushState,
 }
 
-#[frb(sync, type_64bit_int)]
-pub fn send_daemon(state: SharedPushState, watcher: APSWatcher) -> (u64, SharedPushState) {
+#[frb(sync)]
+pub fn send_daemon(state: SharedPushState, watcher: APSWatcher) -> (String, SharedPushState) {
     let data = DaemonData {
         watcher,
         state: state.clone()
     };
 
-    (Box::into_raw(Box::new(data)) as u64, state)
+    let num = Box::into_raw(Box::new(data)) as u64;
+
+    info!("emitting pointer {num}");
+
+    (num.to_string(), state)
 }
 
 #[frb(sync)]
@@ -828,7 +832,6 @@ pub async fn configure_app_review(path: String) -> anyhow::Result<()> {
 
     std::fs::write(path.join("id.plist"), include_str!("id_testing.plist"))?;
     std::fs::write(path.join("hw_info.plist"), include_str!("hw_testing.plist"))?;
-    std::fs::write(path.join("sharedstreams.plist"), include_str!("sharedstreams_testing.plist"))?;
 
 
     // let state = SharedPushState::restore(path)

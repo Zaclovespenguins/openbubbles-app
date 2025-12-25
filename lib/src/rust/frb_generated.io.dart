@@ -2267,10 +2267,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
-  (int, SharedPushState)
-      dco_decode_record_casted_primitive_u_64_shared_push_state(dynamic raw);
-
-  @protected
   (
     Uint8List,
     Map<String, CloudAttachment?>,
@@ -2392,6 +2388,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   (String, CloudMessage?)
       dco_decode_record_string_opt_box_autoadd_cloud_message(dynamic raw);
+
+  @protected
+  (String, SharedPushState) dco_decode_record_string_shared_push_state(
+      dynamic raw);
 
   @protected
   (String, StatusKitPersonalConfig)
@@ -4713,11 +4713,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
-  (int, SharedPushState)
-      sse_decode_record_casted_primitive_u_64_shared_push_state(
-          SseDeserializer deserializer);
-
-  @protected
   (
     Uint8List,
     Map<String, CloudAttachment?>,
@@ -4846,6 +4841,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, CloudMessage?)
       sse_decode_record_string_opt_box_autoadd_cloud_message(
           SseDeserializer deserializer);
+
+  @protected
+  (String, SharedPushState) sse_decode_record_string_shared_push_state(
+      SseDeserializer deserializer);
 
   @protected
   (String, StatusKitPersonalConfig)
@@ -7269,10 +7268,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseSerializer serializer);
 
   @protected
-  void sse_encode_record_casted_primitive_u_64_shared_push_state(
-      (int, SharedPushState) self, SseSerializer serializer);
-
-  @protected
   void
       sse_encode_record_list_prim_u_8_strict_map_string_opt_box_autoadd_cloud_attachment_i_32(
           (Uint8List, Map<String, CloudAttachment?>, int) self,
@@ -7380,6 +7375,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_record_string_opt_box_autoadd_cloud_message(
       (String, CloudMessage?) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_shared_push_state(
+      (String, SharedPushState) self, SseSerializer serializer);
 
   @protected
   void sse_encode_record_string_status_kit_personal_config(
