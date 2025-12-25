@@ -681,12 +681,12 @@ class RustPushBackend implements BackendService {
 
   @override
   Future<Map<String, dynamic>> getAccountInfo() async {
-    var detail = await pushService.getPurchaseDetails();
+    var detail = await pushService.checkPurchaseState();
     var handles = await api.getHandles(state: pushService.state!.client);
     var state = await api.getRegstate(state: pushService.state!.client);
     var deviceState = await api.getDeviceInfo(config: pushService.state!.osConfig);
     var stateStr = "";
-    if (detail == null && ss.settings.deviceIsHosted.value) {
+    if (!detail && ss.settings.deviceIsHosted.value) {
       stateStr = "Subscription not active!";
     } else if (state is api.RegisterState_Registered) {
       stateStr = "Connected (renew in ${formatDuration(state.nextS)})";
@@ -2595,6 +2595,15 @@ class RustPushService extends GetxService {
       Logger.error("Failed to get purchase details", error: e, trace: s);
       return null;
     }
+  }
+
+  // true if active purchase is valid.
+  Future<bool> checkPurchaseState() async {
+    if (ss.settings.hostedToken.value == null) return false;
+    final status = await http.dio.post("https://hw.openbubbles.app/restore", data: {"purchase_token": ss.settings.hostedToken.value!}, options: Options(responseType: ResponseType.plain),);
+    var elapsed = status.data.toString().contains("Invalid subscription!");
+
+    return !elapsed;
   }
 
   Future<void> handleRegistered() async {
@@ -4579,8 +4588,8 @@ class RustPushService extends GetxService {
       return;
     }
     if (!ss.settings.deviceIsHosted.value) return;
-    var detail = await getPurchaseDetails();
-    if (detail == null) {
+    var detail = await checkPurchaseState();
+    if (!detail) {
       if (!notifiedSubFailed) {
         notif.createSubscriptionFailed();
         notifiedSubFailed = true;

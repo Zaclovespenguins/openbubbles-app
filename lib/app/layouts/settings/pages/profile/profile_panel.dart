@@ -220,8 +220,8 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
       opacity.value = 1.0;
       final result2 = await backend.getAccountContact();
       accountContact.addAll(result2);
-    } catch (_) {
-
+    } catch (e, s) {
+      Logger.info("err", error: e, trace: s);
     }
     var myHandles = (await api.getMyPhoneHandles(state: pushService.state!.client));
     if (myHandles.isNotEmpty) {
