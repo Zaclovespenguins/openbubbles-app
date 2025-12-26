@@ -723,7 +723,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                                       ));
 
                                       if (status.statusCode != 200) {
-                                        if (status.data.contains("No device available!")) {
+                                        if (status.data.toString().contains("No device available!")) {
                                           Timer(const Duration(milliseconds: 100), () => pushService.offerHostedRefund(false));
                                         }
                                         throw Exception("Failed to swap ${status.data}");

@@ -686,7 +686,7 @@ class RustPushBackend implements BackendService {
     var state = await api.getRegstate(state: pushService.state!.client);
     var deviceState = await api.getDeviceInfo(config: pushService.state!.osConfig);
     var stateStr = "";
-    if (!detail && ss.settings.deviceIsHosted.value) {
+    if (!detail && ss.settings.deviceIsHosted.value && ss.settings.hostedToken.value != null) {
       stateStr = "Subscription not active!";
     } else if (state is api.RegisterState_Registered) {
       stateStr = "Connected (renew in ${formatDuration(state.nextS)})";
@@ -2590,6 +2590,11 @@ class RustPushService extends GetxService {
   Future<PurchaseWrapper?> getPurchaseDetails() async {
     try {
       var purchases = await pushService.client.runWithClient((client) => client.queryPurchases(ProductType.subs));
+      var token = purchases.purchasesList.firstOrNull?.purchaseToken;
+      if (token != null && ss.settings.deviceIsHosted.value) {
+        ss.settings.hostedToken.value = token;
+        ss.saveSettings();
+      }
       return purchases.purchasesList.firstOrNull;
     } catch (e, s) {
       Logger.error("Failed to get purchase details", error: e, trace: s);
@@ -4587,7 +4592,7 @@ class RustPushService extends GetxService {
     if (state == null) {
       return;
     }
-    if (!ss.settings.deviceIsHosted.value) return;
+    if (!ss.settings.deviceIsHosted.value || ss.settings.hostedToken.value == null) return;
     var detail = await checkPurchaseState();
     if (!detail) {
       if (!notifiedSubFailed) {
