@@ -20,6 +20,7 @@ import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -333,7 +334,7 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
             if (placemark != null) {
               cachedAddresses[(cached.lastReport!.lat, cached.lastReport!.long)] = Address(
                 subAdministrativeArea: placemark.subAdministrativeArea,
-                label: placemark.thoroughfare,
+                label: placemark.thoroughfare ?? placemark.name,
                 streetAddress: placemark.thoroughfare,
                 country: placemark.country,
                 countryCode: placemark.isoCountryCode,
@@ -390,10 +391,10 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
           audioChannels: [], 
           lostModeCapable: true, 
           snd: null, 
-          batteryLevel: e.batteryLevel.toDouble(), 
+          batteryLevel: e.batteryLevel?.toDouble(), 
           locationEnabled: true, 
           isConsideredAccessory: true, 
-          address: cachedAddresses[(e.lastReport!.lat, e.lastReport!.long)], 
+          address: e.lastReport == null ? null : cachedAddresses[(e.lastReport!.lat, e.lastReport!.long)], 
           location: location, 
           modelDisplayName: null, 
           deviceColor: null, 
@@ -429,6 +430,9 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
           crowdSourcedLocation: null, 
           role: {
             "emoji": e.naming.emoji,
+            "sharingId": e.shared?.shareId,
+            "sharingActive": e.shared?.acceptanceState,
+            "sharingName": e.shared?.ownerHandle != null ? RustPushBBUtils.rustHandleToBB(e.shared!.ownerHandle).displayName : null,
           },
           lostModeMetadata: null
         ));
@@ -572,6 +576,23 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
     );
   }
 
+  Future<void> deleteShared(FindMyDevice item) async {
+    await api.deleteBeaconShare(items: pushService.state!.icloudServices!.fmfd!, share: item.role!['sharingId']!);
+    setState(() {
+      devices.remove(item);
+    });
+    beaconCacheDate = null;
+  }
+
+  Future<void> addShared(FindMyDevice item) async {
+    await api.acceptBeaconShare(items: pushService.state!.icloudServices!.fmfd!, share: item.role!['sharingId']!);
+    setState(() {
+      devices.remove(item); // it'll go away anyways because it has no location
+    });
+    beaconCacheDate = null;
+    getLocations();
+  }
+
   @override
   void dispose() {
     locationSub?.cancel();
@@ -592,10 +613,10 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
         .toList();
     final itemsWithLocation = devices
         .where(
-            (item) => item.location?.latitude != null && item.isConsideredAccessory)
+            (item) => (item.location?.latitude != null || item.role?["sharingActive"] == 0) && item.isConsideredAccessory)
         .toList();
     final withoutLocation =
-        devices.where((item) => item.location?.latitude == null).toList();
+        devices.where((item) => item.location?.latitude == null && item.role?["sharingActive"] != 0).toList();
     final devicesBodySlivers = [
       SliverList(
         delegate: SliverChildListDelegate([
@@ -748,10 +769,47 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                     findChildIndexCallback: (key) => findChildIndexByKey(itemsWithLocation, key, (item) => item.id ?? randomString(6)),
                     itemBuilder: (context, i) {
                       final item = itemsWithLocation[i];
-                      return ListTile(
+                      var tile = ListTile(
                         key: ValueKey(item.id ?? randomString(6)),
                         title: Text(ss.settings.redactedMode.value ? "Item" : (item.name ?? "Unknown Item")),
-                        subtitle: Text(ss.settings.redactedMode.value ? "Location" : (item.address?.label ?? item.address?.mapItemFullAddress ?? "No location found")),
+                        subtitle: item.role?["sharingActive"] == 0 ? Column(
+                          children: [
+                            Text("${item.role?["sharingName"]} wants to share this item with you."),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: context.theme.colorScheme.outline.withAlpha(64),
+                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    elevation: 0.0,
+                                    minimumSize: Size.zero,
+                                  ),
+                                  onPressed: () async {
+                                    pushService.wrapPromise(deleteShared(item), "Removing...");
+                                  },
+                                  child: Text("Don't Add", style: context.theme.textTheme.titleMedium),
+                                ),
+                                const SizedBox(width: 10),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: context.theme.colorScheme.primary,
+                                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    elevation: 0.0,
+                                    minimumSize: Size.zero,
+                                  ),
+                                  onPressed: () async {
+                                    pushService.wrapPromise(addShared(item), "Adding...");
+                                  },
+                                  child: Text("Add", style: context.theme.textTheme.titleMedium?.apply(color: context.theme.colorScheme.onPrimary)),
+                                ),
+                              ],
+                            )
+                          ],
+                        )
+                          : Text(ss.settings.redactedMode.value ? "Location" : (item.address?.label ?? item.address?.mapItemFullAddress ?? "No location found")),
                         trailing: item.location?.latitude != null && item.location?.longitude != null ? ButtonTheme(
                           minWidth: 1,
                           child: TextButton(
@@ -820,6 +878,10 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                           );
                         },
                       );
+                      if (item.role?['sharingId'] != null) {
+                        return wrapDelete(tile, (context) => deleteShared(item));
+                      }
+                      return tile;
                     },
                     itemCount: itemsWithLocation.length,
                   ),
@@ -838,7 +900,8 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                       shape: const RoundedRectangleBorder(side: BorderSide(color: Colors.transparent)),
                       title: const Text("Devices without locations"),
                       children: withoutLocation
-                          .map((item) => ListTile(
+                          .map((item) {
+                            var tile = ListTile(
                                 title: Text(ss.settings.redactedMode.value ? "Device" : (item.name ?? "Unknown Device")),
                                 subtitle: Text(ss.settings.redactedMode.value ? "Location" : (item.address?.label ?? item.address?.mapItemFullAddress ?? "No location found")),
                                 onTap: item.location?.latitude != null && item.location?.longitude != null
@@ -893,7 +956,12 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                                     ),
                                   );
                                 },
-                              ))
+                              );
+                              if (item.role?['sharingId'] != null) {
+                                return wrapDelete(tile, (context) => deleteShared(item));
+                              }
+                              return tile;
+                            })
                           .toList()),
                 ),
               ],
@@ -1302,6 +1370,44 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
     );
   }
 
+  Widget wrapDelete(Widget child, Function(BuildContext) onPressed) {
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const StretchMotion(),
+        extentRatio: 0.30,
+        children: [
+          SlidableAction(
+            label: 'Remove',
+            backgroundColor: Colors.red,
+            icon: ss.settings.skin.value == Skins.iOS ? CupertinoIcons.trash : Icons.delete_outlined,
+            onPressed: (_) async {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: context.theme.colorScheme.properSurface,
+                    title: Text(
+                      "Deleting...",
+                      style: context.theme.textTheme.titleLarge,
+                    ),
+                    content: Container(
+                      height: 70,
+                      child: Center(child: buildProgressIndicator(context)),
+                    ),
+                  );
+                }
+              );
+              await onPressed(context);
+              Get.back();
+            },
+          ),
+        ],
+      ),
+      child: child,
+    );
+  }
+
   Widget buildNormal(BuildContext context, List<SliverList> devicesBodySlivers, List<SliverList> friendsBodySlivers) {
     return Obx(
       () => Scaffold(
@@ -1684,16 +1790,38 @@ class _FindMyPageState extends OptimizedState<FindMyPage> with SingleTickerProvi
                         borderRadius: BorderRadius.circular(10),
                         color: context.theme.colorScheme.properSurface.withOpacity(0.8),
                       ),
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(ss.settings.redactedMode.value ? "Device" : (item.name ?? "Unknown Device"), style: context.theme.textTheme.labelLarge),
-                          Text(ss.settings.redactedMode.value ? "Location" : (item.location?.latitude != null ? "${item.location?.latitude}, ${item.location?.longitude}" : ""),
-                              style: context.theme.textTheme.bodySmall),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(ss.settings.redactedMode.value ? "Device" : (item.name ?? "Unknown Device"), style: context.theme.textTheme.labelLarge),
+                              Text(ss.settings.redactedMode.value ? "Location" : (item.location?.latitude != null ? "${item.location?.latitude}, ${item.location?.longitude}" : ""),
+                                  style: context.theme.textTheme.bodySmall),
+                            ],
+                          ),
+                          if (item.location?.latitude != null && item.location?.longitude != null)
+                          ButtonTheme(
+                            minWidth: 1,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                shape: const CircleBorder(),
+                                backgroundColor: context.theme.colorScheme.primaryContainer,
+                              ),
+                              onPressed: () async {
+                                await MapsLauncher.launchCoordinates(item.location!.latitude!, item.location!.longitude!);
+                              },
+                              child: const Icon(
+                                  Icons.directions,
+                                  size: 20
+                              ),
+                            ),
+                          )
                         ],
-                      ),
+                      )
                     ),
                   );
                 } else {

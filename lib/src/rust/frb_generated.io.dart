@@ -1052,6 +1052,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BalloonLayout dco_decode_balloon_layout(dynamic raw);
 
   @protected
+  BeaconAttributes dco_decode_beacon_attributes(dynamic raw);
+
+  @protected
   BeaconNamingRecord dco_decode_beacon_naming_record(dynamic raw);
 
   @protected
@@ -1196,6 +1199,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BalloonLayout dco_decode_box_autoadd_balloon_layout(dynamic raw);
 
   @protected
+  BeaconAttributes dco_decode_box_autoadd_beacon_attributes(dynamic raw);
+
+  @protected
   BeaconNamingRecord dco_decode_box_autoadd_beacon_naming_record(dynamic raw);
 
   @protected
@@ -1225,6 +1231,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ConversationData dco_decode_box_autoadd_conversation_data(dynamic raw);
+
+  @protected
+  DartBeaconShareInfo dco_decode_box_autoadd_dart_beacon_share_info(
+      dynamic raw);
 
   @protected
   EditMessage dco_decode_box_autoadd_edit_message(dynamic raw);
@@ -1511,6 +1521,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DartBeacon dco_decode_dart_beacon(dynamic raw);
+
+  @protected
+  DartBeaconShareInfo dco_decode_dart_beacon_share_info(dynamic raw);
 
   @protected
   DeleteTarget dco_decode_delete_target(dynamic raw);
@@ -1859,6 +1872,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   OperatedChat dco_decode_operated_chat(dynamic raw);
 
   @protected
+  int? dco_decode_opt_CastedPrimitive_i_64(dynamic raw);
+
+  @protected
   int? dco_decode_opt_CastedPrimitive_u_64(dynamic raw);
 
   @protected
@@ -2023,6 +2039,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ConversationData? dco_decode_opt_box_autoadd_conversation_data(dynamic raw);
+
+  @protected
+  DartBeaconShareInfo? dco_decode_opt_box_autoadd_dart_beacon_share_info(
+      dynamic raw);
 
   @protected
   ExtensionApp? dco_decode_opt_box_autoadd_extension_app(dynamic raw);
@@ -3382,6 +3402,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BalloonLayout sse_decode_balloon_layout(SseDeserializer deserializer);
 
   @protected
+  BeaconAttributes sse_decode_beacon_attributes(SseDeserializer deserializer);
+
+  @protected
   BeaconNamingRecord sse_decode_beacon_naming_record(
       SseDeserializer deserializer);
 
@@ -3530,6 +3553,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  BeaconAttributes sse_decode_box_autoadd_beacon_attributes(
+      SseDeserializer deserializer);
+
+  @protected
   BeaconNamingRecord sse_decode_box_autoadd_beacon_naming_record(
       SseDeserializer deserializer);
 
@@ -3563,6 +3590,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ConversationData sse_decode_box_autoadd_conversation_data(
+      SseDeserializer deserializer);
+
+  @protected
+  DartBeaconShareInfo sse_decode_box_autoadd_dart_beacon_share_info(
       SseDeserializer deserializer);
 
   @protected
@@ -3892,6 +3923,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DartBeacon sse_decode_dart_beacon(SseDeserializer deserializer);
+
+  @protected
+  DartBeaconShareInfo sse_decode_dart_beacon_share_info(
+      SseDeserializer deserializer);
 
   @protected
   DeleteTarget sse_decode_delete_target(SseDeserializer deserializer);
@@ -4271,6 +4306,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   OperatedChat sse_decode_operated_chat(SseDeserializer deserializer);
 
   @protected
+  int? sse_decode_opt_CastedPrimitive_i_64(SseDeserializer deserializer);
+
+  @protected
   int? sse_decode_opt_CastedPrimitive_u_64(SseDeserializer deserializer);
 
   @protected
@@ -4442,6 +4480,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   ConversationData? sse_decode_opt_box_autoadd_conversation_data(
+      SseDeserializer deserializer);
+
+  @protected
+  DartBeaconShareInfo? sse_decode_opt_box_autoadd_dart_beacon_share_info(
       SseDeserializer deserializer);
 
   @protected
@@ -5892,6 +5934,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_balloon_layout(BalloonLayout self, SseSerializer serializer);
 
   @protected
+  void sse_encode_beacon_attributes(
+      BeaconAttributes self, SseSerializer serializer);
+
+  @protected
   void sse_encode_beacon_naming_record(
       BeaconNamingRecord self, SseSerializer serializer);
 
@@ -6048,6 +6094,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       BalloonLayout self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_beacon_attributes(
+      BeaconAttributes self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_beacon_naming_record(
       BeaconNamingRecord self, SseSerializer serializer);
 
@@ -6085,6 +6135,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_box_autoadd_conversation_data(
       ConversationData self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_dart_beacon_share_info(
+      DartBeaconShareInfo self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_edit_message(
@@ -6426,6 +6480,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_dart_beacon(DartBeacon self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_dart_beacon_share_info(
+      DartBeaconShareInfo self, SseSerializer serializer);
 
   @protected
   void sse_encode_delete_target(DeleteTarget self, SseSerializer serializer);
@@ -6815,6 +6873,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_operated_chat(OperatedChat self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_CastedPrimitive_i_64(int? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_CastedPrimitive_u_64(int? self, SseSerializer serializer);
 
   @protected
@@ -6997,6 +7058,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_opt_box_autoadd_conversation_data(
       ConversationData? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_dart_beacon_share_info(
+      DartBeaconShareInfo? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_extension_app(

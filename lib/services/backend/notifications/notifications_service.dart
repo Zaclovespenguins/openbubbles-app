@@ -30,6 +30,7 @@ import 'package:universal_html/html.dart' hide File, Platform, Navigator, Text;
 import 'package:universal_io/io.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:bluebubbles/app/layouts/findmy/findmy_page.dart';
 
 NotificationsService notif = Get.isRegistered<NotificationsService>() ? Get.find<NotificationsService>() : Get.put(NotificationsService());
 
@@ -37,6 +38,7 @@ class NotificationsService extends GetxService {
   static const String NEW_MESSAGE_CHANNEL = "com.bluebubbles.new_messages";
   static const String ERROR_CHANNEL = "com.bluebubbles.errors";
   static const String SHARED_STREAMS_CHANNEL = "com.bluebubbles.sharedstreams";
+  static const String SHARED_BEACONS_CHANNEL = "com.bluebubbles.sharedbeacons";
   static const String REMINDER_CHANNEL = "com.bluebubbles.reminders";
   static const String FACETIME_CHANNEL = "com.bluebubbles.incoming_facetimes";
   static const String FOREGROUND_SERVICE_CHANNEL = "com.bluebubbles.foreground_service";
@@ -119,6 +121,11 @@ class NotificationsService extends GetxService {
         SYNC_STATUS_CHANNEL, 
         "Sync Status", 
         "View the status of iCloud syncing."
+      );
+      createNotificationChannel(
+        SHARED_BEACONS_CHANNEL, 
+        "Shared Items", 
+        "Displays invitations and updates for shared items."
       );
     }
 
@@ -1101,6 +1108,48 @@ class NotificationsService extends GetxService {
         ),
       ),
       payload: "-51"
+    );
+  }
+
+  Future<void> createBeaconInvitation(Handle sender, api.BeaconAttributes attributes) async {
+    const title = "A new item has been shared with you!";
+    
+    final subtitle =
+        "${sender.displayName} has shared the location of ${attributes.name} with you!";
+    if (kIsDesktop) {
+      failedToast = LocalNotification(
+        title: title,
+        body: subtitle,
+        actions: [],
+      );
+
+      failedToast!.onClick = () async {
+        failedToast = null;
+        await windowManager.show();
+        if (ss.settings.finishedSetup.value) {
+          ns.pushLeft(Get.context!, FindMyPage());
+        }
+      };
+
+      await failedToast!.show();
+      return;
+    }
+    await flnp.show(
+      -4 - 50 /* OB */,
+      title,
+      subtitle,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          SHARED_BEACONS_CHANNEL,
+          'Shared Items',
+          channelDescription:
+              'Displays invitations and updates for shared items.',
+          priority: Priority.max,
+          importance: Importance.max,
+          color: HexColor("4990de"),
+        ),
+      ),
+      payload: "-54"
     );
   }
 

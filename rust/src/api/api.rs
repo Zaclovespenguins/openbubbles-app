@@ -17,7 +17,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::AnisetteProvider;
+use rustpush::{AnisetteProvider, findmy::SharedBeaconClient};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -1102,6 +1102,11 @@ pub enum PushMessage {
     Idms(IdmsMessage),
     TwoFaAuthEvent(bool),
     CircleFinishEvent,
+    BeaconShared {
+        sender: String,
+        beacon: String,
+        attributes: BeaconAttributes,
+    }
 }
 
 async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>, changes: Vec<String>, local: &Arc<mpsc::Sender<PushMessage>>) {
@@ -1468,8 +1473,20 @@ pub async fn recv_wait(watcher: &mut APSWatcher, state: &Arc<SharedPushState>) -
             let msg = msg.unwrap();
             if let Some(icloud) = &state.icloud_services {
                 if let Some(fmfd) = &icloud.fmfd {
-                    if let Err(e) = fmfd.handle(msg.clone()).await {
-                        warn!("FMF import error {e}");
+                    match fmfd.handle(msg.clone()).await {
+                        Ok(mut items) => {
+                            if !items.is_empty() {
+                                let item = items.remove(0);
+                                return PollResult::Cont(Some(PushMessage::BeaconShared {
+                                    sender: item.0,
+                                    beacon: item.1,
+                                    attributes: item.2,
+                                }))
+                            }
+                        },
+                        Err(e) => {
+                            warn!("FMF import error {e}");
+                        }
                     }
                 }
                 if let Some(photostream) = &icloud.sharedstreams {
@@ -1723,15 +1740,31 @@ pub async fn make_find_my_friends(path: String, config: &JoinedOSConfig, aps: &A
 }
 
 #[frb(type_64bit_int)]
+pub struct DartBeaconShareInfo {
+    pub share_id: String,
+    pub acceptance_state: i64,
+    pub owner_handle: String,
+}
+
+#[frb(type_64bit_int)]
 pub struct DartBeacon {
     pub naming: BeaconNamingRecord,
     pub last_report: Option<LocationReport>,
     pub product_id: i64,
-    pub battery_level: i64,
+    pub battery_level: Option<i64>,
     pub vendor_id: i64,
     pub model: String,
     pub system_version: String,
     pub id: String,
+    pub shared: Option<DartBeaconShareInfo>,
+}
+
+pub async fn accept_beacon_share(items: &Arc<FindMyClient<DefaultAnisetteProvider>>, share: String) -> anyhow::Result<()> {
+    Ok(items.accept_item_share(&share).await?)
+}
+
+pub async fn delete_beacon_share(items: &Arc<FindMyClient<DefaultAnisetteProvider>>, share: String) -> anyhow::Result<()> {
+    Ok(items.delete_shared_item(&share, true).await?)
 }
 
 pub async fn get_beacon_items(items: &Arc<FindMyClient<DefaultAnisetteProvider>>) -> anyhow::Result<Vec<DartBeacon>> {
@@ -1743,12 +1776,37 @@ pub async fn get_beacon_items(items: &Arc<FindMyClient<DefaultAnisetteProvider>>
         naming: a.naming.clone(),
         last_report: a.last_report.clone(),
         product_id: a.master_record.product_id,
-        battery_level: a.master_record.battery_level,
+        battery_level: Some(a.master_record.battery_level),
         vendor_id: a.master_record.vendor_id,
         model: a.master_record.model.clone(),
         system_version: a.master_record.system_version.clone(),
         id: id.clone(),
-    }).collect())
+        shared: None,
+    }).chain(records.share_state.circles_member.iter().filter_map(|(id, circle)| {
+        let a = records.share_state.shared_beacons.get(&circle.beacon_identifier)?;
+        let def_state = SharedBeaconClient::default();
+        let client_state = records.share_state.shared_beacons_client.get(&circle.beacon_identifier).unwrap_or(&def_state);
+        Some(DartBeacon {
+            naming: BeaconNamingRecord {
+                emoji: client_state.attributes.emoji.clone(),
+                name: client_state.attributes.name.clone(),
+                role_id: client_state.attributes.role_id,
+                associated_beacon: id.clone(),
+            },
+            last_report: client_state.last_report.clone(),
+            product_id: a.product_id,
+            battery_level: None,
+            vendor_id: a.vendor_id,
+            model: a.model.clone(),
+            system_version: a.system_version.clone(),
+            id: circle.beacon_identifier.clone(),
+            shared: Some(DartBeaconShareInfo {
+                share_id: id.clone(),
+                acceptance_state: circle.acceptance_state,
+                owner_handle: a.owner_handle.clone(),
+            }),
+        })
+    })).collect())
 }
 
 pub async fn update_beacon_name(items: &Arc<FindMyClient<DefaultAnisetteProvider>>, naming_record: &BeaconNamingRecord) -> anyhow::Result<()> {

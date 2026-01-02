@@ -11,7 +11,7 @@ pub use rustpush::facetime::{FTSession, FTMode, FTParticipant, FTMember, LetMeIn
 pub use rustpush::facetime::facetimep::{ConversationParticipant, ConversationLink};
 pub use rustpush::statuskit::{StatusKitPersonalConfig, StatusKitMessage};
 pub use rustpush::posterkit::{TranscriptDynamicUserData, WatchBackground, SimplifiedTranscriptPoster, SimplifiedIncomingCallPoster, PosterRole, UIColor, PRPosterContentMaterialStyle, PosterAsset, PRPosterSystemTimeFontConfiguration, PRPosterColor, PRPosterTitleStyleConfiguration, WallpaperMetadata, PosterColor, PhotoPosterContentsFrame, PhotoPosterContentsSize, PhotoPosterLayer, PhotoPosterLayout, PhotoPosterProperties, PhotoPosterContents, MonogramData, MemojiData, PosterType, SimplifiedPoster};
-
+pub use rustpush::findmy::BeaconAttributes;
 
 #[frb(non_opaque, mirror(PRPosterContentMaterialStyle))]
 pub enum DartPRPosterContentMaterialStyle {
@@ -74,6 +74,15 @@ pub enum DartUIColor { // no uid items
         color_space: u32, // 4
         class: String,
     }
+}
+
+#[frb(mirror(BeaconAttributes))]
+pub struct DartBeaconAttributes {
+    pub name: String,
+    pub role_id: i64,
+    pub emoji: String,
+    pub system_version: String,
+    pub serial_number: String,
 }
 
 #[frb(mirror(PRPosterColor))]

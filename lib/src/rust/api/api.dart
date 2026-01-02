@@ -647,6 +647,18 @@ Future<FindMyFriendsClientDefaultAnisetteProvider> makeFindMyFriends(
         anisette: anisette,
         provider: provider);
 
+Future<void> acceptBeaconShare(
+        {required ArcFindMyClientDefaultAnisetteProvider items,
+        required String share}) =>
+    RustLib.instance.api
+        .crateApiApiAcceptBeaconShare(items: items, share: share);
+
+Future<void> deleteBeaconShare(
+        {required ArcFindMyClientDefaultAnisetteProvider items,
+        required String share}) =>
+    RustLib.instance.api
+        .crateApiApiDeleteBeaconShare(items: items, share: share);
+
 Future<List<DartBeacon>> getBeaconItems(
         {required ArcFindMyClientDefaultAnisetteProvider items}) =>
     RustLib.instance.api.crateApiApiGetBeaconItems(items: items);
@@ -1494,6 +1506,41 @@ sealed class BalloonLayout with _$BalloonLayout {
   }) = BalloonLayout_TemplateLayout;
 }
 
+class BeaconAttributes {
+  final String name;
+  final PlatformInt64 roleId;
+  final String emoji;
+  final String systemVersion;
+  final String serialNumber;
+
+  const BeaconAttributes({
+    required this.name,
+    required this.roleId,
+    required this.emoji,
+    required this.systemVersion,
+    required this.serialNumber,
+  });
+
+  @override
+  int get hashCode =>
+      name.hashCode ^
+      roleId.hashCode ^
+      emoji.hashCode ^
+      systemVersion.hashCode ^
+      serialNumber.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is BeaconAttributes &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          roleId == other.roleId &&
+          emoji == other.emoji &&
+          systemVersion == other.systemVersion &&
+          serialNumber == other.serialNumber;
+}
+
 class BeaconNamingRecord {
   final String emoji;
   final String name;
@@ -1932,21 +1979,23 @@ class DartBeacon {
   final BeaconNamingRecord naming;
   final LocationReport? lastReport;
   final int productId;
-  final int batteryLevel;
+  final int? batteryLevel;
   final int vendorId;
   final String model;
   final String systemVersion;
   final String id;
+  final DartBeaconShareInfo? shared;
 
   const DartBeacon({
     required this.naming,
     this.lastReport,
     required this.productId,
-    required this.batteryLevel,
+    this.batteryLevel,
     required this.vendorId,
     required this.model,
     required this.systemVersion,
     required this.id,
+    this.shared,
   });
 
   @override
@@ -1958,7 +2007,8 @@ class DartBeacon {
       vendorId.hashCode ^
       model.hashCode ^
       systemVersion.hashCode ^
-      id.hashCode;
+      id.hashCode ^
+      shared.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -1972,7 +2022,33 @@ class DartBeacon {
           vendorId == other.vendorId &&
           model == other.model &&
           systemVersion == other.systemVersion &&
-          id == other.id;
+          id == other.id &&
+          shared == other.shared;
+}
+
+class DartBeaconShareInfo {
+  final String shareId;
+  final int acceptanceState;
+  final String ownerHandle;
+
+  const DartBeaconShareInfo({
+    required this.shareId,
+    required this.acceptanceState,
+    required this.ownerHandle,
+  });
+
+  @override
+  int get hashCode =>
+      shareId.hashCode ^ acceptanceState.hashCode ^ ownerHandle.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is DartBeaconShareInfo &&
+          runtimeType == other.runtimeType &&
+          shareId == other.shareId &&
+          acceptanceState == other.acceptanceState &&
+          ownerHandle == other.ownerHandle;
 }
 
 @freezed
@@ -4475,6 +4551,11 @@ sealed class PushMessage with _$PushMessage {
     bool field0,
   ) = PushMessage_TwoFaAuthEvent;
   const factory PushMessage.circleFinishEvent() = PushMessage_CircleFinishEvent;
+  const factory PushMessage.beaconShared({
+    required String sender,
+    required String beacon,
+    required BeaconAttributes attributes,
+  }) = PushMessage_BeaconShared;
 }
 
 class QuotaInfo {

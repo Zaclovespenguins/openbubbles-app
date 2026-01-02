@@ -3297,6 +3297,11 @@ class RustPushService extends GetxService {
       return;
     }
 
+    if (push is api.PushMessage_BeaconShared) {
+      notif.createBeaconInvitation(RustPushBBUtils.rustHandleToBB(push.sender), push.attributes);
+      return;
+    }
+
     if (push is api.PushMessage_NewPhotostream) {
       var state = push.field0;
       notif.createInvitation(state);
@@ -3751,6 +3756,7 @@ class RustPushService extends GetxService {
           "User-Agent": "OpenBubbles"
         }
       ));
+      // Logger.info("Got location $request");
       return Placemark(
         name: request.data["name"],
         isoCountryCode: request.data["address"]?["country_code"],
