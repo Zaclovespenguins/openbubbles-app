@@ -1137,20 +1137,7 @@ class _SettingsPageState extends OptimizedState<SettingsPage> {
                                                                     .primary)),
                                                     onPressed: () async {
                                                       Navigator.of(context).pop();
-                                                      if (ss.settings.deviceIsHosted.value) {
-                                                        String? ticket = await api.validateRelay(configRef: pushService.state!.osConfig);
-                                                        if (ticket != null) {
-                                                          var activated = await http.dio.post("https://hw.openbubbles.app/ticket/$ticket/release");
-                                                          if (activated.statusCode == 200) {
-                                                            pushService.markFailedToLogin(hw: true, ui: true);
-                                                            return;
-                                                          }
-                                                        }
-                                                        pushService.markFailedToLogin();
-                                                        return;
-                                                      } else {
-                                                        pushService.markFailedToLogin(hw: true, ui: true);
-                                                      }
+                                                      pushService.markFailedToLogin(hw: true, ui: true);
                                                     }
                                                   ),
                                                 ],

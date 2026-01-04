@@ -4784,6 +4784,7 @@ class RustPushService extends GetxService {
     initAppLinks();
     initMixPanel();
     await initFuture;
+    Timer(const Duration(seconds: 2), checkIncident);
     // pre-cache next FT link
     if (pushService.state != null) api.getFtLink(facetime: pushService.state!.ftClient, usage: "next");
     Logger.info("initDone");
@@ -4797,6 +4798,41 @@ class RustPushService extends GetxService {
     }
     if (ls.isUiThread) await cs.refreshContacts();
     Logger.info("finishInit");
+  }
+
+  void checkIncident() {
+    if (!File("$statePath/incident_affected").existsSync()) return;
+    showDialog(
+      context: Get.context!,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Action requried",
+          style: context.theme.textTheme.titleLarge,
+        ),
+        backgroundColor: context.theme.colorScheme.properSurface,
+        content: Text("There's an issue with a recent update. A software bug corrupted part of the app's internal state and needs to be fixed before messaging can continue. You won't be able to send messages until you take action.\n\nYour data was not compromised, and this was not a security issue.\nWe recommend backing up any important messages before proceeding. Have your apple device and account authentication credentials ready.", style: context.theme.textTheme.bodyLarge),
+        actions: [
+          TextButton(
+            child: Text(
+                "Dismiss for now",
+                style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+            ),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          TextButton(
+            child: Text(
+                "Fix",
+                style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary)
+            ),
+            onPressed: () async {
+              Navigator.of(context).pop();
+              pushService.markFailedToLogin(hw: true, logout: true, ui: true);
+              File("$statePath/incident_affected").deleteSync();
+            }
+          ),
+        ],
+      ),
+    );
   }
 
   void initMixPanel() async {
@@ -4899,6 +4935,7 @@ class RustPushService extends GetxService {
 
   Future configured() async {
     await handleRegistered();
+    Timer(const Duration(seconds: 2), checkIncident);
     if (Platform.isAndroid) {
       await mcs.invokeMethod("notify-native-configured");
     }

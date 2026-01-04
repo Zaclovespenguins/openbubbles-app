@@ -25,6 +25,7 @@ pub use icloud_auth::DefaultAnisetteProvider;
 use uniffi::HandleAlloc;
 use rand::Rng;
 use uuid::Uuid;
+use rustpush::KeyCache;
 use std::io::Seek;
 use async_recursion::async_recursion;
 use base64::prelude::*;
@@ -384,6 +385,14 @@ pub fn save_users(users: &Vec<IDSUser>, path: String) {
 pub async fn make_imclient(path: String, conn: &APSConnection, users: &Vec<IDSUser>, identity: &IDSNGMIdentity) -> Arc<IMClient> {
     let dir = PathBuf::from_str(&path).unwrap();
     let id_path = dir.join("id.plist");
+
+    let incident_path = dir.join("incident");
+    if !incident_path.exists() {
+        if plist::from_file::<_, KeyCache>(dir.join("id_cache.plist")).is_ok() {
+            let _ = fs::File::create(dir.join("incident_affected"));
+        }
+        let _ = fs::File::create(incident_path);
+    }
 
     Arc::new(IMClient::new(conn.clone(), users.clone(), identity.clone(),
     &[&MADRID_SERVICE, &MULTIPLEX_SERVICE, &FACETIME_SERVICE, &VIDEO_SERVICE], dir.join("id_cache.plist"), conn.os_config.clone(), Box::new(move |updated_keys| {
