@@ -44,9 +44,11 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
         handles = result;
       });
     });
-    pushService.googleSignIn.signInOffline().then((state) {
-      googleCreds.value = state;
-    });
+    if (kIsDesktop) {
+      pushService.googleSignIn.signInOffline().then((state) {
+        googleCreds.value = state;
+      });
+    }
   }
 
   @override

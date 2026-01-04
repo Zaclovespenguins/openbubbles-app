@@ -130,9 +130,11 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
       handlePurchases(details);
     });
     if (pushService.state!.icloudServices != null) api.getQuotaInfo(info: pushService.state!.icloudServices!.tokenProvider).then((quota) => quotaInfo.value = quota);
-    pushService.googleSignIn.signInOffline().then((state) {
-      googleCreds.value = state;
-    });
+    if (kIsDesktop) {
+      pushService.googleSignIn.signInOffline().then((state) {
+        googleCreds.value = state;
+      });
+    }
     // api.countRecords(state: pushService.state).then((summary) => cloudMessageSummary.value = summary);
   }
 
