@@ -17,7 +17,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::{AnisetteProvider, findmy::SharedBeaconClient};
+use rustpush::{AnisetteProvider, cloudkit_proto::base64_encode, findmy::SharedBeaconClient};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -1128,6 +1128,23 @@ pub async fn update_account_headers(account: &Arc<Mutex<AppleAccount<DefaultAnis
 pub async fn get_anisette_headers(state: &ArcAnisetteClient<DefaultAnisetteProvider>, config: &JoinedOSConfig) -> anyhow::Result<HashMap<String, String>> {
     let mut headers = state.lock().await.get_headers().await?.clone();
     headers.insert("X-Mme-Client-Info".to_string(), config.get_adi_mme_info("com.apple.AuthKit/1 (com.apple.findmy/375.20)", !headers["X-Mme-Client-Info"].contains("iPhone OS")));
+    Ok(headers)
+}
+
+pub async fn get_contacts_headers(path: String, state: &ArcAnisetteClient<DefaultAnisetteProvider>, token_provider: &Arc<TokenProvider<DefaultAnisetteProvider>>, config: &JoinedOSConfig) -> anyhow::Result<HashMap<String, String>> {
+    let dir = PathBuf::from_str(&path).unwrap();
+
+    // I know it's the wrong answer. Stop looking at me!
+    let id_path = dir.join("findmy.plist");
+    let findmy_state: FindMyState = plist::from_file(id_path)?;
+    
+    let mut headers = state.lock().await.get_headers().await?.clone();
+    headers.insert("X-Mme-Client-Info".to_string(), config.get_adi_mme_info("com.apple.AuthKit/1 (com.apple.AddressBookSourceSync/2695.500.71)", !headers["X-Mme-Client-Info"].contains("iPhone OS")));
+    
+    headers.insert("X-APPLE-FAMILY-AUTH-TOKEN".to_string(), token_provider.get_gsa_token("com.apple.gs.icloud.family.auth").await.expect("no Family auth token?"));
+    let mme_token = token_provider.get_mme_token("mmeAuthToken").await?;
+    headers.insert("Authorization".to_string(), format!("X-MobileMe-AuthToken {}", base64_encode(format!("{}:{}", &findmy_state.dsid, mme_token).as_bytes())));
+
     Ok(headers)
 }
 

@@ -22,6 +22,7 @@ import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
 import 'package:in_app_purchase_android/billing_client_wrappers.dart';
 import 'package:get/get.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
@@ -52,7 +53,7 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
   RxList<api.PrivateDeviceInfo> forwardingTargets = RxList([]);
 
   Rxn<api.QuotaInfo> quotaInfo = Rxn(null);
-  // Rxn<api.CloudMessageSummary> cloudMessageSummary = Rxn(null);
+  Rxn<GoogleSignInCredentials> googleCreds = Rxn(null);
 
   Future<void> handleSubscriptionToken(String subscription) async {
     var activated = await http.dio.post("https://hw.openbubbles.app/ticket/${ticket!}/activate", data: {"purchase_token": subscription});
@@ -129,6 +130,9 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
       handlePurchases(details);
     });
     if (pushService.state!.icloudServices != null) api.getQuotaInfo(info: pushService.state!.icloudServices!.tokenProvider).then((quota) => quotaInfo.value = quota);
+    pushService.googleSignIn.signInOffline().then((state) {
+      googleCreds.value = state;
+    });
     // api.countRecords(state: pushService.state).then((summary) => cloudMessageSummary.value = summary);
   }
 
@@ -513,6 +517,66 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                               ((ss.prefs.getInt("lastSynced") ?? 0) == 0 ? "Not Synced" : "Synced ${buildChatListDateMaterial(DateTime.fromMillisecondsSinceEpoch(ss.prefs.getInt("lastSynced")!))}")
                             )
                           ),
+                      ),
+                    ]
+                )),
+                if (kIsDesktop)
+                SettingsHeader(
+                    iosSubtitle: iosSubtitle,
+                    materialSubtitle: materialSubtitle,
+                    text: "Contacts Syncing"),
+                if (kIsDesktop)
+                Obx(() => SettingsSection(
+                    backgroundColor: tileColor,
+                    children: [
+                      SettingsOptions<String>(
+                        title: "Sync contacts with",
+                        initial: ss.settings.contactSyncProvider.value,
+                        clampWidth: false,
+                        options: ["iCloud", "Google", "CardDav"],
+                        secondaryColor: headerColor,
+                        useCupertino: false,
+                        textProcessing: (str) => str,
+                        capitalize: false,
+                        onChanged: (value) async {
+                          ss.settings.ctags.clear();
+                          ss.settings.tokens.clear();
+                          ss.settings.contactSyncProvider.value = value ?? "iCloud";
+                          ss.saveSettings();
+                          cs.refreshContacts();
+                        },
+                      ),
+                      if (ss.settings.contactSyncProvider.value == "Google" && googleCreds.value == null)
+                      SettingsTile(
+                        title: "Sign In",
+                        onTap: () async {
+                          final credentials = await pushService.googleSignIn.signIn();
+                          if (credentials != null) {
+                            print('Signed in successfully: ${credentials.accessToken}');
+                            googleCreds.value = credentials;
+                            cs.refreshContacts();
+                          } else {
+                            print('Sign in failed');
+                          }
+                        },
+                        trailing: const NextButton(),
+                      ),
+                      if (ss.settings.contactSyncProvider.value == "Google" && googleCreds.value != null)
+                      SettingsTile(
+                        title: "Sign Out",
+                        onTap: () async {
+                          await pushService.googleSignIn.signOut();
+                          googleCreds.value = null;
+                        },
+                        trailing: const NextButton(),
+                      ),
+                      if (ss.settings.contactSyncProvider.value == "CardDav")
+                      SettingsTile(
+                        title: "Set CardDav Server Details",
+                        onTap: () async {
+                          pushService.updateCardDav();
+                        },
+                        trailing: const NextButton(),
                       ),
                     ]
                 )),

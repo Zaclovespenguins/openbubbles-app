@@ -214,6 +214,8 @@ dependencies:
   palette_generator: ^0.3.3+6
   mixpanel_flutter: ^2.4.4
   geocoding: ^4.0.0
+  flutter_contacts: ^1.1.8
+  google_sign_in_all_platforms: ^1.0.0
 
 
 dependency_overrides:

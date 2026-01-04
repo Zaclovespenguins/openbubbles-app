@@ -50,6 +50,7 @@ import 'dart:ui' as ui;
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 import 'package:bluebubbles/helpers/backend/startup_tasks.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
+import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
 
 var uuid = const Uuid();
 RustPushService pushService =
@@ -57,6 +58,9 @@ RustPushService pushService =
 
 
 const rpApiRoot = "https://hw.openbubbles.app/code";
+
+const clientId = '1041242226917-ik21n86fp43e82iu1e5soh6bu6gvuste.apps.googleusercontent.com';
+const clientSecret = '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';
 
 
 class SyncIsolate {
@@ -2030,14 +2034,16 @@ class RustPushService extends GetxService {
   }
 
   Future<void> markFailed(Message mistakeFor, String error) async {
+    if (mistakeFor.guid != null && !mistakeFor.guid!.contains("temp") && !mistakeFor.guid!.contains("error")) {
       mistakeFor.stagingGuid = mistakeFor.guid;
-      mistakeFor.generateTempGuid();
-      mistakeFor.guid = mistakeFor.guid!.replaceAll("temp", "error-protocol: $error");
-      var chat = mistakeFor.chat.target!;
-      if (!ls.isAlive || !(cm.getChatController(chat.guid)?.isAlive ?? false)) {
-        await notif.createFailedToSend(chat);
-      }
-      await Message.replaceMessage(mistakeFor.stagingGuid, mistakeFor);
+    }
+    mistakeFor.generateTempGuid();
+    mistakeFor.guid = mistakeFor.guid!.replaceAll("temp", "error-protocol: $error");
+    var chat = mistakeFor.chat.target!;
+    if (!ls.isAlive || !(cm.getChatController(chat.guid)?.isAlive ?? false)) {
+      await notif.createFailedToSend(chat);
+    }
+    await Message.replaceMessage(mistakeFor.stagingGuid, mistakeFor);
   }
 
   Future<Chat?> findOperatedChat(api.OperatedChat chat) async {
@@ -3871,7 +3877,76 @@ class RustPushService extends GetxService {
     markBackgroundChange(myhandle, DateTime.now().millisecondsSinceEpoch, chat);
   }
 
-  
+  Future<void> updateCardDav() async {
+    final server = TextEditingController(text: ss.settings.cardDavServer.value);
+    final user = TextEditingController(text: ss.settings.cardDavUser.value);
+    final pass = TextEditingController(text: ss.settings.cardDavPass.value);
+    done() async {
+      if (server.text.isEmpty) {
+        showSnackbar("Error", "Enter a server!");
+        return;
+      }
+      Get.back();
+      ss.settings.cardDavServer.value = server.text;
+      ss.settings.cardDavUser.value = user.text;
+      ss.settings.cardDavPass.value = pass.text;
+      await ss.saveSettings();
+      cs.refreshContacts();
+    }
+    await showDialog(
+        context: Get.context!,
+        builder: (_) {
+          return AlertDialog(
+            actions: [
+              TextButton(
+                child: Text("Cancel", style: Get.context!.theme.textTheme.bodyLarge!.copyWith(color: Get.context!.theme.colorScheme.primary)),
+                onPressed: () => Get.back(),
+              ),
+              TextButton(
+                child: Text("OK", style: Get.context!.theme.textTheme.bodyLarge!.copyWith(color: Get.context!.theme.colorScheme.primary)),
+                onPressed: () async {
+                  done.call();
+                },
+              ),
+            ],
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: server,
+                  autofocus: true,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: "Server URL",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16,),
+                TextField(
+                  controller: user,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 16,),
+                TextField(
+                  controller: pass,
+                  onSubmitted: (_) => done.call(),
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                  ),
+                )
+              ],
+            ),
+            title: Text("Set CardDav details", style: Get.context!.theme.textTheme.titleLarge),
+            backgroundColor: Get.context!.theme.colorScheme.properSurface,
+          );
+        }
+    );
+  }
 
   Future<(bool, String?)> promptPassword(api.ViableBottle bottle, String desc) async {
     var context = Get.context!;
@@ -3980,6 +4055,15 @@ class RustPushService extends GetxService {
     );
     return (change, text);
   }
+
+  final googleSignIn = GoogleSignIn(
+    // See 'How to Get Google OAuth Credentials' section below
+    params: const GoogleSignInParams(
+      clientId: clientId,
+      clientSecret: clientSecret, // Don't worry - not truly a secret! See 'Client Secret Requirements'
+      scopes: ['https://www.googleapis.com/auth/carddav'],
+    ),
+  );
 
   Future<api.ViableBottle?> promptChange(List<api.ViableBottle> bottles) async {
     var context = Get.context!;

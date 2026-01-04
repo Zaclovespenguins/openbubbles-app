@@ -214,6 +214,14 @@ class Settings {
   final RxBool attachmentSyncEnabled = false.obs;
   final RxnString keychainDefaultPassword = RxnString();
 
+  final RxMap<String, String?> ctags = <String, String?>{}.obs;
+  final RxMap<String, String?> tokens = <String, String?>{}.obs;
+  final RxString contactSyncProvider = "iCloud".obs;
+
+  final RxString cardDavServer = "".obs;
+  final RxString cardDavUser = "".obs;
+  final RxString cardDavPass = "".obs;
+
 
   Future<DisplayMode> getDisplayMode() async {
     List<DisplayMode> modes = await FlutterDisplayMode.supported;
@@ -412,6 +420,9 @@ class Settings {
       'replaceEmoticonsWithEmoji': replaceEmoticonsWithEmoji.value,
       'lastReviewRequestTimestamp': lastReviewRequestTimestamp.value,
       'defaultHandle': defaultHandle.value,
+      'cardDavServer': cardDavServer.value,
+      'cardDavUser': cardDavUser.value,
+      'cardDavPass': cardDavPass.value,
       'macIsMine': macIsMine.value,
       'deviceIsHosted': deviceIsHosted.value,
       'hostedToken': hostedToken.value,
@@ -428,6 +439,7 @@ class Settings {
       'isTester': isTester.value,
       'cloudSyncingEnabled': cloudSyncingEnabled.value,
       'attachmentSyncEnabled': attachmentSyncEnabled.value,
+      'contactSyncProvider': contactSyncProvider.value,
     };
     if (includeAll) {
       map.addAll({
@@ -446,6 +458,8 @@ class Settings {
         'receiveSoundPath': receiveSoundPath.value,
         'cachedCodes': cachedCodes,
         'smsIncomingTargets': smsForwardingTargets,
+        'ctags': ctags,
+        'tokens': tokens,
       });
     }
     return map;
@@ -582,6 +596,10 @@ class Settings {
     ss.settings.hideNamesForReactions.value = map['hideNamesForReactions'] ?? false;
     ss.settings.replaceEmoticonsWithEmoji.value = map['replaceEmoticonsWithEmoji'] ?? false;
     ss.settings.defaultHandle.value = map['defaultHandle'] ?? "";
+    ss.settings.cardDavServer.value = map['cardDavServer'] ?? "";
+    ss.settings.cardDavUser.value = map['cardDavUser'] ?? "";
+    ss.settings.cardDavPass.value = map['cardDavPass'] ?? "";
+    ss.settings.contactSyncProvider.value = map['contactSyncProvider'] ?? "iCloud";
     // ss.settings.macIsMine.value = map['macIsMine'] ?? true;
     // ss.settings.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
     ss.settings.hostedToken.value = map['hostedToken'];
@@ -600,6 +618,8 @@ class Settings {
     ss.settings.isTester.value = map['isTester'] ?? false;
     ss.settings.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
     ss.settings.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? false;
+    ss.settings.ctags.value = map['ctags'] ?? {};
+    ss.settings.tokens.value = map['tokens'] ?? {};
     ss.settings.save();
 
     eventDispatcher.emit("theme-update", null);
@@ -750,6 +770,10 @@ class Settings {
     s.replaceEmoticonsWithEmoji.value = map['replaceEmoticonsWithEmoji'] ?? false;
     s.lastReviewRequestTimestamp.value = map['lastReviewRequestTimestamp'] ?? 0;
     s.defaultHandle.value = map['defaultHandle'] ?? "";
+    s.cardDavServer.value = map['cardDavServer'] ?? "";
+    s.cardDavUser.value = map['cardDavUser'] ?? "";
+    s.cardDavPass.value = map['cardDavPass'] ?? "";
+    s.contactSyncProvider.value = map['contactSyncProvider'] ?? "iCloud";
     s.macIsMine.value = map['macIsMine'] ?? true;
     s.deviceIsHosted.value = map['deviceIsHosted'] ?? false;
     s.hostedToken.value = map['hostedToken'];
@@ -768,6 +792,9 @@ class Settings {
     s.isTester.value = map['isTester'] ?? false;
     s.cloudSyncingEnabled.value = map['cloudSyncingEnabled'] ?? false;
     s.attachmentSyncEnabled.value = map['attachmentSyncEnabled'] ?? false;
+
+    s.ctags.value =  map['ctags'] is String ? jsonDecode(map['ctags']).cast<String, String?>() : <String, String?>{};
+    s.tokens.value =  map['tokens'] is String ? jsonDecode(map['tokens']).cast<String, String?>() : <String, String?>{};
     return s;
   }
 

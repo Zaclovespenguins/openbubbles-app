@@ -3,13 +3,18 @@ import 'dart:convert';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/database/database.dart';
 import 'package:bluebubbles/database/models.dart';
+import 'package:bluebubbles/helpers/types/helpers/carddav_sync.dart';
+import 'package:bluebubbles/main.dart';
+import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:bluebubbles/utils/string_utils.dart';
+import 'package:dio/dio.dart';
 import 'package:fast_contacts/fast_contacts.dart' hide Contact, StructuredName;
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:bluebubbles/src/rust/api/api.dart' as api;
 
 ContactsService cs = Get.isRegistered<ContactsService>() ? Get.find<ContactsService>() : Get.put(ContactsService());
 
@@ -41,7 +46,7 @@ class ContactsService extends GetxService {
   Future<bool> canAccessContacts() async {
     if (kIsWeb || kIsDesktop) {
       int versionCode = (await ss.getServerDetails()).item4;
-      return versionCode >= 42;
+      return versionCode >= 42 || usingRustPush;
     } else {
       return (await Permission.contacts.status).isGranted;
     }
@@ -291,6 +296,90 @@ class ContactsService extends GetxService {
 
   Future<List<Contact>> fetchNetworkContacts({Function(String)? logger}) async {
     final networkContacts = <Contact>[];
+
+    if (usingRustPush) {
+      final CardDavClient client;
+
+      if (ss.settings.contactSyncProvider.value == "Google") {
+        var account = await pushService.googleSignIn.signInOffline();
+        if (account == null) {
+          Logger.warn("No google auth!");
+          return [];
+        }
+
+        final response = await http.dio.post(
+          'https://oauth2.googleapis.com/token',
+          data: {
+            'client_id': clientId,
+            'client_secret': clientSecret,
+            'refresh_token': account.refreshToken,
+            'grant_type': 'refresh_token',
+          },
+          options: Options(
+            contentType: Headers.formUrlEncodedContentType,
+            responseType: ResponseType.json,
+          ),
+        );
+
+        if (response.statusCode != 200) {
+          throw DioException(
+            requestOptions: response.requestOptions,
+            response: response,
+            message: 'Failed to refresh Google access token',
+            type: DioExceptionType.badResponse,
+          );
+        }
+
+        client = CardDavClient(
+          principalUrl: Uri.parse('https://www.googleapis.com/.well-known/carddav'),
+          authHeadersProvider: () async {
+            return {
+              "Authorization": "Bearer ${response.data['access_token'] as String}"
+            };
+          },
+          state: MemoryStateStore(),
+        );
+      } else if (ss.settings.contactSyncProvider.value == "CardDav") {
+        if (ss.settings.cardDavServer.value == "") return [];
+        client = CardDavClient(
+          principalUrl: Uri.parse(ss.settings.cardDavServer.value),
+          username: ss.settings.cardDavUser.value,
+          password: ss.settings.cardDavPass.value,
+          state: MemoryStateStore(),
+        );
+      } else {
+        if (pushService.state?.icloudServices == null) return [];
+        client = CardDavClient(
+          principalUrl: Uri.parse('https://contacts.icloud.com/'),
+          authHeadersProvider: () async {
+            return await api.getContactsHeaders(path: pushService.statePath, state: pushService.state!.anisette, tokenProvider: pushService.state!.icloudServices!.tokenProvider, config: pushService.state!.osConfig);
+          },
+          state: MemoryStateStore(),
+        );
+      }
+
+      final synced = await client.syncAllAddressBooks();
+
+      for (final entry in synced.entries) {
+        final book = entry.key;
+        final changes = entry.value;
+
+        print('AddressBook: ${book.displayName ?? book.url}');
+        print('Changes: ${changes.length}');
+        for (final ch in changes) {
+          if (ch.type == ChangeType.upsert) {
+            if (ch.contact != null) networkContacts.add(ch.contact!);
+            // Parse/store vCard as you like
+            print(
+                '  UPSERT ${ch.href} etag=${ch.etag} vcardLen=${ch.vcard?.length} contact=${ch.contact?.toMap()}');
+          } else {
+            print('  DELETE ${ch.href}');
+          }
+        }
+      }
+      return networkContacts;
+    }
+
     // refresh UI on web without waiting for avatars
     if (kIsWeb) {
       logger?.call("Fetching contacts (no avatars)...");

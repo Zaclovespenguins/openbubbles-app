@@ -2,13 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bluebubbles/app/layouts/conversation_list/pages/conversation_list.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/content/settings_dropdown.dart';
 import 'package:bluebubbles/app/layouts/settings/widgets/content/settings_switch.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/content/settings_tile.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/layout/settings_header.dart';
+import 'package:bluebubbles/app/layouts/settings/widgets/layout/settings_section.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/page_template.dart';
 import 'package:bluebubbles/app/layouts/setup/setup_view.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/services/backend/settings/settings_service.dart';
 import 'package:bluebubbles/services/network/backend_service.dart';
+import 'package:bluebubbles/services/ui/contact_service.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
@@ -17,6 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
 import 'package:telephony_plus/telephony_plus.dart';
 
 class FinalizePage extends StatefulWidget {
@@ -28,6 +34,7 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
   final controller = Get.find<SetupViewController>();
 
   List<String> handles = [];
+  Rxn<GoogleSignInCredentials> googleCreds = Rxn(null);
 
   @override
   void initState() {
@@ -36,6 +43,9 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
       setState(() {
         handles = result;
       });
+    });
+    pushService.googleSignIn.signInOffline().then((state) {
+      googleCreds.value = state;
     });
   }
 
@@ -100,6 +110,56 @@ class _FinalizePageState extends OptimizedState<FinalizePage> {
                 setState(() {});
                 await backend.setDefaultHandle(value);
               },
+            ),
+            if (kIsDesktop)
+            SettingsOptions<String>(
+              title: "Sync contacts with",
+              initial: ss.settings.contactSyncProvider.value,
+              clampWidth: false,
+              options: ["iCloud", "Google", "CardDav"],
+              secondaryColor: headerColor,
+              useCupertino: false,
+              textProcessing: (str) => str,
+              capitalize: false,
+              onChanged: (value) async {
+                ss.settings.ctags.clear();
+                ss.settings.tokens.clear();
+                ss.settings.contactSyncProvider.value = value ?? "iCloud";
+                ss.saveSettings();
+                cs.refreshContacts();
+              },
+            ),
+            if (kIsDesktop && ss.settings.contactSyncProvider.value == "Google" && googleCreds.value == null)
+            SettingsTile(
+              title: "Sign In",
+              onTap: () async {
+                final credentials = await pushService.googleSignIn.signIn();
+                if (credentials != null) {
+                  print('Signed in successfully: ${credentials.accessToken}');
+                  googleCreds.value = credentials;
+                  cs.refreshContacts();
+                } else {
+                  print('Sign in failed');
+                }
+              },
+              trailing: const NextButton(),
+            ),
+            if (kIsDesktop && ss.settings.contactSyncProvider.value == "Google" && googleCreds.value != null)
+            SettingsTile(
+              title: "Sign Out",
+              onTap: () async {
+                await pushService.googleSignIn.signOut();
+                googleCreds.value = null;
+              },
+              trailing: const NextButton(),
+            ),
+            if (kIsDesktop && ss.settings.contactSyncProvider.value == "CardDav")
+            SettingsTile(
+              title: "Set CardDav Server Details",
+              onTap: () async {
+                pushService.updateCardDav();
+              },
+              trailing: const NextButton(),
             ),
           ],
         ),

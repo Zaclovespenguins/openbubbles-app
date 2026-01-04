@@ -362,6 +362,14 @@ Future<Map<String, String>> getAnisetteHeaders(
     RustLib.instance.api
         .crateApiApiGetAnisetteHeaders(state: state, config: config);
 
+Future<Map<String, String>> getContactsHeaders(
+        {required String path,
+        required ArcAnisetteClientDefaultAnisetteProvider state,
+        required ArcTokenProviderDefaultAnisetteProvider tokenProvider,
+        required JoinedOsConfig config}) =>
+    RustLib.instance.api.crateApiApiGetContactsHeaders(
+        path: path, state: state, tokenProvider: tokenProvider, config: config);
+
 Future<IdsUser> getEntitlements(
         {required JoinedOsConfig config,
         required ApsConnection conn,
