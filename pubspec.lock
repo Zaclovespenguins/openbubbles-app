@@ -3188,8 +3188,8 @@ packages:
   telephony_plus:
     dependency: "direct main"
     description:
-      path: "/home/tae/Downloads/telephony_plus"
-      relative: false
+      path: telephony_plus
+      relative: true
     source: path
     version: "0.0.1"
   term_glyph:
