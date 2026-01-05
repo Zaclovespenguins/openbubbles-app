@@ -1,0 +1,3 @@
+[submodule "rustpush"]
+	path = rustpush
+	url = git@github.com:OpenBubbles/rustpush.git
