@@ -68,3 +68,8 @@ jobs:
       - name: Run Build Script
         run: |
           flutter build apk --flavor alpha --debug --target-platform android-arm64
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Alpha Debug APK
+          path: build/app/outputs/flutter-apk/app-alpha-debug.apk
