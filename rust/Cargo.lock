@@ -3231,7 +3231,6 @@ dependencies = [
  "flexi_logger",
  "flutter_rust_bridge",
  "futures",
- "icloud_auth",
  "log",
  "multi_log",
  "plist",

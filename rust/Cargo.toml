@@ -8,14 +8,13 @@ crate-type = ["cdylib", "staticlib"]
 
 [dependencies]
 flutter_rust_bridge = "=2.3.0"
-rustpush = { path = "../rustpush", features = ["macos-validation-data"] }
+rustpush = { path = "../rustpush", features = ["macos-validation-data", "remote-clearadi"] }
 plist = "1.5.0"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive", "rc"] }
 anyhow = "1.0.75"
 uniffi = { git = "https://github.com/mozilla/uniffi-rs", features = [ "cli", "tokio" ] }
 async-recursion = "1.0.5"
-icloud_auth = { path = "../rustpush/apple-private-apis/icloud-auth", default-features = false, features = ["remote-clearadi"] }
 prost = "0.12"
 # Only necessary if using Protobuf well-known types:
 prost-types = "0.12"

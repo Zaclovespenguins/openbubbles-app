@@ -4,7 +4,7 @@ use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, f
 pub use std::time::SystemTime;
 use anyhow::anyhow;
 use flutter_rust_bridge::{DartFnFuture, IntoDart, JoinHandle, frb};
-pub use icloud_auth::{default_provider, ArcAnisetteClient, LoginClientInfo};
+pub use rustpush::{default_provider, ArcAnisetteClient, LoginClientInfo, DefaultAnisetteProvider};
 use log::{debug, error, info, warn};
 use plist::{Data, Dictionary};
 pub use plist::Value;
@@ -21,7 +21,6 @@ use rustpush::{AnisetteProvider, cloudkit_proto::base64_encode, findmy::SharedBe
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
-pub use icloud_auth::DefaultAnisetteProvider;
 use uniffi::HandleAlloc;
 use rand::Rng;
 use uuid::Uuid;
