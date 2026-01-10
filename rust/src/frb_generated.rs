@@ -13612,7 +13612,7 @@ const _: fn() = || {
             remove,
         } => {
             let _: u32 = aid;
-            let _: u32 = bid;
+            let _: u64 = bid;
             let _: Option<String> = chat_id;
             let _: bool = remove;
         }
@@ -13629,7 +13629,7 @@ const _: fn() = || {
             file_size,
         } => {
             let _: u32 = aid;
-            let _: u32 = bid;
+            let _: u64 = bid;
             let _: Option<String> = chat_id;
             let _: String = object_id;
             let _: u32 = payload_version;
@@ -19653,7 +19653,7 @@ impl SseDecode for crate::api::api::SetTranscriptBackgroundMessage {
         match tag_ {
             0 => {
                 let mut var_aid = <u32>::sse_decode(deserializer);
-                let mut var_bid = <u32>::sse_decode(deserializer);
+                let mut var_bid = <u64>::sse_decode(deserializer);
                 let mut var_chatId = <Option<String>>::sse_decode(deserializer);
                 let mut var_remove = <bool>::sse_decode(deserializer);
                 return crate::api::api::SetTranscriptBackgroundMessage::Remove {
@@ -19665,7 +19665,7 @@ impl SseDecode for crate::api::api::SetTranscriptBackgroundMessage {
             }
             1 => {
                 let mut var_aid = <u32>::sse_decode(deserializer);
-                let mut var_bid = <u32>::sse_decode(deserializer);
+                let mut var_bid = <u64>::sse_decode(deserializer);
                 let mut var_chatId = <Option<String>>::sse_decode(deserializer);
                 let mut var_objectId = <String>::sse_decode(deserializer);
                 let mut var_payloadVersion = <u32>::sse_decode(deserializer);
@@ -30092,7 +30092,7 @@ impl SseEncode for crate::api::api::SetTranscriptBackgroundMessage {
             } => {
                 <i32>::sse_encode(0, serializer);
                 <u32>::sse_encode(aid, serializer);
-                <u32>::sse_encode(bid, serializer);
+                <u64>::sse_encode(bid, serializer);
                 <Option<String>>::sse_encode(chat_id, serializer);
                 <bool>::sse_encode(remove, serializer);
             }
@@ -30110,7 +30110,7 @@ impl SseEncode for crate::api::api::SetTranscriptBackgroundMessage {
             } => {
                 <i32>::sse_encode(1, serializer);
                 <u32>::sse_encode(aid, serializer);
-                <u32>::sse_encode(bid, serializer);
+                <u64>::sse_encode(bid, serializer);
                 <Option<String>>::sse_encode(chat_id, serializer);
                 <String>::sse_encode(object_id, serializer);
                 <u32>::sse_encode(payload_version, serializer);

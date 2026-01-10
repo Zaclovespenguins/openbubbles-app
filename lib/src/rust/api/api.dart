@@ -4778,13 +4778,13 @@ sealed class SetTranscriptBackgroundMessage
 
   const factory SetTranscriptBackgroundMessage.remove({
     required int aid,
-    required int bid,
+    required BigInt bid,
     String? chatId,
     required bool remove,
   }) = SetTranscriptBackgroundMessage_Remove;
   const factory SetTranscriptBackgroundMessage.set_({
     required int aid,
-    required int bid,
+    required BigInt bid,
     String? chatId,
     required String objectId,
     required int payloadVersion,

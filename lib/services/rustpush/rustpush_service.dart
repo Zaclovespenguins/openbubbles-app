@@ -3392,7 +3392,7 @@ class RustPushService extends GetxService {
           if (chat.transcriptPosterPath != null) {
             await deletePoster(chat.transcriptPosterPath!);
             chat.transcriptPosterPath = null;
-            chat.transcriptBackgroundVersion = innerMsg.field0.bid;
+            chat.transcriptBackgroundVersion = innerMsg.field0.bid.toInt();
             chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
           }
         } else {
@@ -3403,7 +3403,7 @@ class RustPushService extends GetxService {
             await deletePoster(chat.transcriptPosterPath!);
           }
 
-          chat.transcriptBackgroundVersion = value.bid;
+          chat.transcriptBackgroundVersion = value.bid.toInt();
           chat.transcriptPosterPath = saved;
           chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
         }
@@ -3411,7 +3411,7 @@ class RustPushService extends GetxService {
         if (chat.transcriptPosterPath != null) {
           await deletePoster(chat.transcriptPosterPath!);
           chat.transcriptPosterPath = null;
-          chat.transcriptBackgroundVersion = innerMsg.field0.bid;
+          chat.transcriptBackgroundVersion = innerMsg.field0.bid.toInt();
           chat.save(updateTranscriptPosterPath: true, updateTranscriptBackgroundVersion: true);
         }
       }
@@ -3821,12 +3821,13 @@ class RustPushService extends GetxService {
 
       File(path).deleteSync();
 
-      chat.transcriptBackgroundVersion++;
+      // ns since core data epoch
+      chat.transcriptBackgroundVersion = (DateTime.now().microsecondsSinceEpoch - 978307200000000) * 1000;
       chat.save(updateTranscriptBackgroundVersion: true);
 
       message = (c) => api.SetTranscriptBackgroundMessage.set_(
         aid: 1, 
-        bid: chat.transcriptBackgroundVersion, 
+        bid: BigInt.from(chat.transcriptBackgroundVersion), 
         objectId: mmcs!.object, 
         payloadVersion: 1, 
         backgroundId: uuid.v4().toUpperCase(), 
@@ -3842,7 +3843,7 @@ class RustPushService extends GetxService {
 
       message = (c) => api.SetTranscriptBackgroundMessage.remove(
         aid: 1, 
-        bid: chat.transcriptBackgroundVersion, 
+        bid: BigInt.from(chat.transcriptBackgroundVersion), 
         remove: true,
         chatId: c,
       );

@@ -143,14 +143,14 @@ class CardDavClient {
                 requestEncoder: gzipEncoder
               ),
             ) {
-    // final adapter = _dio.httpClientAdapter;
-    // if (adapter is DefaultHttpClientAdapter) {
-    //   adapter.onHttpClientCreate = (client) {
-    //     client.findProxy = (uri) => 'PROXY 192.168.99.71:8080';
-    //     client.badCertificateCallback = (cert, host, port) => true;
-    //     return client;
-    //   };
-    // }
+    final adapter = _dio.httpClientAdapter;
+    if (adapter is DefaultHttpClientAdapter) {
+      adapter.onHttpClientCreate = (client) {
+        client.findProxy = (uri) => 'PROXY 192.168.99.71:8080';
+        client.badCertificateCallback = (cert, host, port) => true;
+        return client;
+      };
+    }
   }
 
   Future<Map<String, String>> _authHeaders() async {

@@ -445,16 +445,28 @@ class PosterPainter extends CustomPainter {
       var asset = (poster.type as api.PosterType_Photo).assets[0];
     
       final layout = asset.contents.properties.portraitLayout;
-      // Calculate scale factor to fit viewport into canvas size
+      
+      // Scale to cover
       final scaleX = size.width / layout.visibleFrame.width;
+      final scaleY = size.height / layout.visibleFrame.height;
+      double scale;
+      double translateX = 0;
+      double translateY = 0;
+      if (scaleY > scaleX) {
+        scale = scaleY;
+        translateX = (layout.visibleFrame.width - size.width / scale) / 2;
+      } else {
+        scale = scaleX;
+        translateY = (layout.visibleFrame.height - size.height / scale) / 3; // not / 2 to bias up, because faces are normally up
+      }
+
       final y = layout.imageSize.height - layout.visibleFrame.y - layout.visibleFrame.height; // starts counting from bottom
       // Translate and scale to focus only on the viewport part of the image
 
       canvas.save();
-      canvas.scale(scaleX, scaleX);
+      canvas.scale(scale, scale);
       canvas.translate(-layout.visibleFrame.x, -y);
-      final topPadding = (layout.visibleFrame.height - size.height / scaleX) / 3; // not / 2 to bias up, because faces are normally up
-      canvas.translate(0, -topPadding); // center vertically
+      canvas.translate(-translateX, -translateY); // center vertically
       drawAsset(images, canvas, asset, {},
         predicate: (layer) => (poster.type as api.PosterType_Photo).assets[0].contents.properties.portraitLayout.clockLayerOrder != "ClockAboveBackground" || !layer.identifier.startsWith("foreground"));
       canvas.restore();
@@ -464,9 +476,9 @@ class PosterPainter extends CustomPainter {
       }
 
       if ((poster.type as api.PosterType_Photo).assets[0].contents.properties.portraitLayout.clockLayerOrder == "ClockAboveBackground") {
-        canvas.scale(scaleX, scaleX);
+        canvas.scale(scale, scale);
         canvas.translate(-layout.visibleFrame.x, -y);
-        canvas.translate(0, -topPadding); // center vertically
+        canvas.translate(-translateX, -translateY); // center vertically
         drawAsset(images, canvas, asset, {},
           predicate: (layer) => layer.identifier.startsWith("foreground"));
       }

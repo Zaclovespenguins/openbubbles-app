@@ -27,5 +27,5 @@ plugins {
 }
 
 include ":android-smsmms"
-project(":android-smsmms").projectDir = file("/home/tae/Downloads/telephony_plus/android-smsmms/library")
+project(":android-smsmms").projectDir = file("../telephony_plus/android-smsmms/library")
 include ":app"

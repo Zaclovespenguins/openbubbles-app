@@ -307,34 +307,42 @@ class ContactsService extends GetxService {
           return [];
         }
 
-        final response = await http.dio.post(
-          'https://oauth2.googleapis.com/token',
-          data: {
-            'client_id': clientId,
-            'client_secret': clientSecret,
-            'refresh_token': account.refreshToken,
-            'grant_type': 'refresh_token',
-          },
-          options: Options(
-            contentType: Headers.formUrlEncodedContentType,
-            responseType: ResponseType.json,
-          ),
-        );
+        
+        String accessToken;
 
-        if (response.statusCode != 200) {
-          throw DioException(
-            requestOptions: response.requestOptions,
-            response: response,
-            message: 'Failed to refresh Google access token',
-            type: DioExceptionType.badResponse,
+        if (account.refreshToken != null) {
+          final response = await http.dio.post(
+            'https://oauth2.googleapis.com/token',
+            data: {
+              'client_id': clientId,
+              'client_secret': clientSecret,
+              'refresh_token': account.refreshToken,
+              'grant_type': 'refresh_token',
+            },
+            options: Options(
+              contentType: Headers.formUrlEncodedContentType,
+              responseType: ResponseType.json,
+            ),
           );
+
+          if (response.statusCode != 200) {
+            throw DioException(
+              requestOptions: response.requestOptions,
+              response: response,
+              message: 'Failed to refresh Google access token',
+              type: DioExceptionType.badResponse,
+            );
+          }
+          accessToken = response.data['access_token'] as String;
+        } else {
+          accessToken = account.accessToken;
         }
 
         client = CardDavClient(
           principalUrl: Uri.parse('https://www.googleapis.com/.well-known/carddav'),
           authHeadersProvider: () async {
             return {
-              "Authorization": "Bearer ${response.data['access_token'] as String}"
+              "Authorization": "Bearer $accessToken"
             };
           },
           state: MemoryStateStore(),

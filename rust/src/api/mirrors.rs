@@ -264,7 +264,7 @@ pub struct DartTranscriptDynamicUserData {
 pub enum DartSetTranscriptBackgroundMessage {
     Remove {
         aid: u32,
-        bid: u32, // sequence number
+        bid: u64, // sequence number
         #[frb(non_final)]
         chat_id: Option<String>,
 
@@ -272,7 +272,7 @@ pub enum DartSetTranscriptBackgroundMessage {
     },
     Set {
         aid: u32,
-        bid: u32, // sequence number
+        bid: u64, // sequence number
         #[frb(non_final)]
         chat_id: Option<String>,
         

@@ -21727,15 +21727,15 @@ abstract class RegisterState_Failed extends RegisterState {
 /// @nodoc
 mixin _$SetTranscriptBackgroundMessage {
   int get aid => throw _privateConstructorUsedError;
-  int get bid => throw _privateConstructorUsedError;
+  BigInt get bid => throw _privateConstructorUsedError;
   String? get chatId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String? chatId, bool remove)
+    required TResult Function(int aid, BigInt bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -21749,10 +21749,10 @@ mixin _$SetTranscriptBackgroundMessage {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult? Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -21766,10 +21766,10 @@ mixin _$SetTranscriptBackgroundMessage {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -21818,7 +21818,7 @@ abstract class $SetTranscriptBackgroundMessageCopyWith<$Res> {
       _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
           SetTranscriptBackgroundMessage>;
   @useResult
-  $Res call({int aid, int bid, String? chatId});
+  $Res call({int aid, BigInt bid, String? chatId});
 }
 
 /// @nodoc
@@ -21849,7 +21849,7 @@ class _$SetTranscriptBackgroundMessageCopyWithImpl<$Res,
       bid: null == bid
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
@@ -21867,7 +21867,7 @@ abstract class _$$SetTranscriptBackgroundMessage_RemoveImplCopyWith<$Res>
       __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int aid, int bid, String? chatId, bool remove});
+  $Res call({int aid, BigInt bid, String? chatId, bool remove});
 }
 
 /// @nodoc
@@ -21898,7 +21898,7 @@ class __$$SetTranscriptBackgroundMessage_RemoveImplCopyWithImpl<$Res>
       bid: null == bid
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
@@ -21922,7 +21922,7 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   final int aid;
   @override
-  final int bid;
+  final BigInt bid;
   @override
   final String? chatId;
   @override
@@ -21960,11 +21960,11 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String? chatId, bool remove)
+    required TResult Function(int aid, BigInt bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -21981,10 +21981,10 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult? Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -22001,10 +22001,10 @@ class _$SetTranscriptBackgroundMessage_RemoveImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -22059,7 +22059,7 @@ abstract class SetTranscriptBackgroundMessage_Remove
     extends SetTranscriptBackgroundMessage {
   const factory SetTranscriptBackgroundMessage_Remove(
           {required final int aid,
-          required final int bid,
+          required final BigInt bid,
           final String? chatId,
           required final bool remove}) =
       _$SetTranscriptBackgroundMessage_RemoveImpl;
@@ -22068,7 +22068,7 @@ abstract class SetTranscriptBackgroundMessage_Remove
   @override
   int get aid;
   @override
-  int get bid;
+  BigInt get bid;
   @override
   String? get chatId;
   bool get remove;
@@ -22093,7 +22093,7 @@ abstract class _$$SetTranscriptBackgroundMessage_SetImplCopyWith<$Res>
   @useResult
   $Res call(
       {int aid,
-      int bid,
+      BigInt bid,
       String? chatId,
       String objectId,
       int payloadVersion,
@@ -22138,7 +22138,7 @@ class __$$SetTranscriptBackgroundMessage_SetImplCopyWithImpl<$Res>
       bid: null == bid
           ? _value.bid
           : bid // ignore: cast_nullable_to_non_nullable
-              as int,
+              as BigInt,
       chatId: freezed == chatId
           ? _value.chatId
           : chatId // ignore: cast_nullable_to_non_nullable
@@ -22195,7 +22195,7 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   final int aid;
   @override
-  final int bid;
+  final BigInt bid;
   @override
   final String? chatId;
   @override
@@ -22257,11 +22257,11 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(int aid, int bid, String? chatId, bool remove)
+    required TResult Function(int aid, BigInt bid, String? chatId, bool remove)
         remove,
     required TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -22279,10 +22279,10 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult? Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult? Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -22300,10 +22300,10 @@ class _$SetTranscriptBackgroundMessage_SetImpl
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int aid, int bid, String? chatId, bool remove)? remove,
+    TResult Function(int aid, BigInt bid, String? chatId, bool remove)? remove,
     TResult Function(
             int aid,
-            int bid,
+            BigInt bid,
             String? chatId,
             String objectId,
             int payloadVersion,
@@ -22359,7 +22359,7 @@ abstract class SetTranscriptBackgroundMessage_Set
     extends SetTranscriptBackgroundMessage {
   const factory SetTranscriptBackgroundMessage_Set(
           {required final int aid,
-          required final int bid,
+          required final BigInt bid,
           final String? chatId,
           required final String objectId,
           required final int payloadVersion,
@@ -22374,7 +22374,7 @@ abstract class SetTranscriptBackgroundMessage_Set
   @override
   int get aid;
   @override
-  int get bid;
+  BigInt get bid;
   @override
   String? get chatId;
   String get objectId;
