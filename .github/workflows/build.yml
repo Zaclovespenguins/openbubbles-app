@@ -5,19 +5,19 @@ jobs:
     name: OpenBubbles APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
         with:
           tool-cache: true
-          android: false
+          android: true
           dotnet: true
           haskell: true
           large-packages: true
           swap-storage: true
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Set up Rust
         uses: actions-rs/toolchain@v1
