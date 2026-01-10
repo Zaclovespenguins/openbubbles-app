@@ -47,6 +47,7 @@ class AppleAccountLoginHandler: MethodCallHandlerImpl() {
                     Constants.appleAccountLoginAttemptTag
                 )
             }
+            result.success(null)
             return
         }
 

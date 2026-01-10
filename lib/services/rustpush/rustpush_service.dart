@@ -3075,7 +3075,7 @@ class RustPushService extends GetxService {
 
   Future handleMsg(api.PushMessage push, bool finalAttempt) async {
     try {
-      await handleMsgInner(push);
+      await handleMsgInner(push).timeout(const Duration(minutes: 3));
     } catch (e, s) {
       if (finalAttempt) markCertified(push);
       rethrow;
@@ -4414,14 +4414,15 @@ class RustPushService extends GetxService {
     }
     Logger.info("waitingForInit $pointer $retry");
     await initFuture;
+    var isFinal = (int.tryParse(retry) ?? 3) >= 3;
     try {
       Logger.info("Handling $pointer $retry");
-      await handleMsg(message, retry == "3");
+      await handleMsg(message, isFinal);
       Logger.info("Marking as handled $pointer");
       await markAsHandledAfter(pointer);
     } catch (e, s) {
       Logger.error("Handle failed", error: e, trace: s);
-      if (retry == "3") {
+      if (isFinal) {
         Logger.info("Failed; Marking as handled anyways $pointer");
         await markAsHandledAfter(pointer);
       }
