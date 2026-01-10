@@ -118,6 +118,7 @@ class HwInpState extends OptimizedState<HwInp> {
   }
 
   String lastCheckedCode = "";
+  String relayHost = "https://registration-relay.beeper.com";
 
   Future<void> handleBeeper(String code) async {
     if (code == lastCheckedCode) return;
@@ -128,7 +129,7 @@ class HwInpState extends OptimizedState<HwInp> {
       }
       showSnackbar("Fetching validation data", "This might take a minute");
       final response2 = await http.dio.post(
-        "https://registration-relay.beeper.com/api/v1/bridge/get-version-info",
+        "$relayHost/api/v1/bridge/get-version-info",
         data: {},
         options: Options(
           headers: {
@@ -142,11 +143,11 @@ class HwInpState extends OptimizedState<HwInp> {
       api.JoinedOsConfig parsed;
       if (response2.data["versions"]["software_name"] == "iPhone OS") {
         Logger.debug("Using as iOS");
-        parsed = await api.configFromRelay(code: code, host: "https://registration-relay.beeper.com", token: "5c175851953ecaf5209185d897591badb6c3e712");
+        parsed = await api.configFromRelay(code: code, host: relayHost, token: "5c175851953ecaf5209185d897591badb6c3e712");
         usingBeeper = false;
       } else {
         final response = await http.dio.post(
-          "https://registration-relay.beeper.com/api/v1/bridge/get-validation-data",
+          "$relayHost/api/v1/bridge/get-validation-data",
           data: {},
           options: Options(
             headers: {
@@ -754,15 +755,70 @@ class HwInpState extends OptimizedState<HwInp> {
                         Container(
                           width: double.infinity,
                           padding: const EdgeInsets.fromLTRB(3, 12, 3, 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              launchUrl(Uri.parse("https://openbubbles.app/macos"), mode: LaunchMode.externalApplication);
-                            },
-                            child: Text(
-                              'Learn how to get a code',
-                              style: context.theme.textTheme.bodySmall!.apply(color: Colors.blue),
-                            ),
-                          ),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  launchUrl(Uri.parse("https://openbubbles.app/macos"), mode: LaunchMode.externalApplication);
+                                },
+                                child: Text(
+                                  'Learn how to get a code',
+                                  style: context.theme.textTheme.bodySmall!.apply(color: Colors.blue),
+                                ),
+                              ),
+                              Text(
+                                '  •  ',
+                                style: context.theme.textTheme.bodySmall,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  final server = TextEditingController(text: relayHost);
+                                  showDialog(
+                                    context: Get.context!,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        actions: [
+                                          TextButton(
+                                            child: Text("Cancel", style: Get.context!.theme.textTheme.bodyLarge!.copyWith(color: Get.context!.theme.colorScheme.primary)),
+                                            onPressed: () => Get.back(),
+                                          ),
+                                          TextButton(
+                                            child: Text("OK", style: Get.context!.theme.textTheme.bodyLarge!.copyWith(color: Get.context!.theme.colorScheme.primary)),
+                                            onPressed: () async {
+                                              relayHost = server.text;
+                                              lastCheckedCode = "";
+                                              Get.back();
+                                              checkCode(codeController.text);
+                                            },
+                                          ),
+                                        ],
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextField(
+                                              controller: server,
+                                              autofocus: true,
+                                              textInputAction: TextInputAction.next,
+                                              decoration: const InputDecoration(
+                                                labelText: "Server URL",
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        title: Text("Set relay URL", style: Get.context!.theme.textTheme.titleLarge),
+                                        backgroundColor: Get.context!.theme.colorScheme.properSurface,
+                                      );
+                                    }
+                                );
+                                },
+                                child: Text(
+                                  'Change Relay URL',
+                                  style: context.theme.textTheme.bodySmall!.apply(color: Colors.blue),
+                                ),
+                              ),
+                            ],
+                          )
                         ),
                         if (!stagingNonInp && stagingInfo == null)
                         Padding(
