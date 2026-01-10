@@ -35,6 +35,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      
+      - name: Setup Android SDK
+        uses: amyu/setup-android@v5
 
       - name: Install Protobuf compiler
         run: sudo apt-get install -y protobuf-compiler
