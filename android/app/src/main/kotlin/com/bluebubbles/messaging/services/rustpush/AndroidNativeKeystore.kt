@@ -27,6 +27,7 @@ import uniffi.rust_lib_bluebubbles.finishUnlock
 import uniffi.rust_lib_bluebubbles.isLocked
 import uniffi.rust_lib_bluebubbles.recoverKeychain
 import java.math.BigInteger
+import java.security.InvalidKeyException
 import java.security.KeyFactory
 import java.security.KeyPairGenerator
 import java.security.KeyStore
@@ -378,13 +379,15 @@ class AndroidNativeKeystore(val context: Context) : NativeKeystore {
         val spec = OAEPParameterSpec(
             KeyProperties.DIGEST_SHA256,
             "MGF1",
-            MGF1ParameterSpec(KeyProperties.DIGEST_SHA256),
+            MGF1ParameterSpec(KeyProperties.DIGEST_SHA1),
             PSource.PSpecified.DEFAULT
         )
 
         try {
             cipher.init(Cipher.DECRYPT_MODE, key, spec)
         } catch (e: KeyPermanentlyInvalidatedException) {
+            recoverKeychain()
+        } catch (e: InvalidKeyException) {
             recoverKeychain()
         }
     }
@@ -410,7 +413,7 @@ class AndroidNativeKeystore(val context: Context) : NativeKeystore {
         val spec = OAEPParameterSpec(
             KeyProperties.DIGEST_SHA256,
             "MGF1",
-            MGF1ParameterSpec(KeyProperties.DIGEST_SHA256),
+            MGF1ParameterSpec(KeyProperties.DIGEST_SHA1),
             PSource.PSpecified.DEFAULT
         )
 
