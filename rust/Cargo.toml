@@ -9,6 +9,7 @@ crate-type = ["cdylib", "staticlib"]
 [dependencies]
 flutter_rust_bridge = "=2.3.0"
 rustpush = { path = "../rustpush", features = ["macos-validation-data", "remote-anisette-v3"] }
+keystore = { path = "../rustpush/keystore" }
 plist = "1.5.0"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive", "rc"] }
@@ -27,6 +28,9 @@ uuid = { version = "1.4.1", features = ["v4"] }
 futures = "0.3.30"
 base64 = "0.22.1"
 sha2 = "0.10.8"
+rasn = "0.16.0"
+openssl = { version = "0.10.56", features = ["vendored"] }
+aes-gcm = "0.10.3"
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.14.1"

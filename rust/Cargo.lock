@@ -1992,6 +1992,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "keystore"
+version = "0.1.0"
+dependencies = [
+ "aes-gcm",
+ "openssl",
+ "plist",
+ "rand 0.8.5",
+ "serde",
+ "sha2",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "konst"
 version = "0.3.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3224,6 +3237,7 @@ dependencies = [
 name = "rust_lib_bluebubbles"
 version = "0.1.0"
 dependencies = [
+ "aes-gcm",
  "android_logger 0.14.1",
  "anyhow",
  "async-recursion",
@@ -3231,14 +3245,17 @@ dependencies = [
  "flexi_logger",
  "flutter_rust_bridge",
  "futures",
+ "keystore",
  "log",
  "multi_log",
+ "openssl",
  "plist",
  "pretty_env_logger",
  "prost",
  "prost-build",
  "prost-types",
  "rand 0.8.5",
+ "rasn",
  "rustpush",
  "serde",
  "sha2",
@@ -3337,6 +3354,7 @@ dependencies = [
  "hkdf",
  "html-escape",
  "icloud_auth",
+ "keystore",
  "libflate",
  "log",
  "notify",
@@ -3362,6 +3380,7 @@ dependencies = [
  "tokio",
  "tokio-rustls",
  "uuid",
+ "x509-cert",
  "xml-rs",
  "zip",
 ]

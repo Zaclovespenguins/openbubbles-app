@@ -35,12 +35,128 @@ import kotlin.concurrent.schedule
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.guava.future
+import java.util.TimerTask
+import java.util.concurrent.atomic.AtomicInteger
 
 class DartWorker(context: Context, workerParams: WorkerParameters): ListenableWorker(context, workerParams) {
 
     companion object {
         var workerEngine: FlutterEngine? = null
         var engineReady = Mutex()
+
+
+
+        /// Code idea taken from https://github.com/flutter/flutter/wiki/Experimental:-Reuse-FlutterEngine-across-screens
+        private suspend fun initNewEngine(applicationContext: Context) {
+            Log.d(Constants.logTag, "Ensuring Flutter is initialized before creating engine")
+            // We use the deprecated class here anyways, the new one doesn't work correctly using the same code
+            FlutterMain.startInitialization(applicationContext)
+            FlutterMain.ensureInitializationComplete(applicationContext, null)
+
+            Log.d(Constants.logTag, "Loading callback info")
+            val info = ApplicationInfoLoader.load(applicationContext)
+            workerEngine = FlutterEngine(applicationContext)
+
+            currentJobs.set(0)
+
+            workerEngine!!.addEngineLifecycleListener ( object : FlutterEngine.EngineLifecycleListener {
+                override fun onPreEngineRestart() {
+                    Log.d(Constants.logTag, "Engine is restarting")
+                }
+
+                override fun onEngineWillDestroy() {
+                    Log.d(Constants.logTag, "Engine is being destroyed")
+                }
+            })
+            suspendCoroutine { cont ->
+                // set up the method channel to receive events from Dart
+                MethodChannel(workerEngine!!.dartExecutor.binaryMessenger, Constants.methodChannel).setMethodCallHandler {
+                        call, result -> run {
+                    if (call.method == "ready") {
+                        Log.d(Constants.logTag, "Dart engine is ready!")
+                        cont.resume(Unit)
+                    } else {
+                        MethodCallHandler().methodCallHandler(call, result, applicationContext)
+                    }
+                }
+                }
+                val callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(applicationContext.getSharedPreferences("FlutterSharedPreferences", 0).getLong("flutter.backgroundCallbackHandle", -1))
+                val callback = DartExecutor.DartCallback(applicationContext.assets, info.flutterAssetsDir, callbackInfo)
+
+                Log.d(Constants.logTag, "Executing Dart callback")
+                workerEngine!!.dartExecutor.executeDartCallback(callback)
+            }
+        }
+
+        var currentCancelTask: TimerTask? = null
+        private fun closeEngineIfNeeded(applicationContext: Context) {
+            currentJobs.getAndDecrement()
+            // Delay 30 seconds so Dart has a chance to complete everything and in case new work comes in shortly after
+            currentCancelTask?.cancel()
+            currentCancelTask = Timer().schedule(30000) {
+                currentCancelTask = null
+                Log.d(Constants.logTag, "$currentJobs worker(s) still queued")
+                if (currentJobs.get() == 0 && workerEngine != null) {
+                    Log.d(Constants.logTag, "Closing ${Constants.dartWorkerTag} engine")
+                    // This must be run on main thread
+                    CoroutineScope(Dispatchers.Main).launch {
+                        workerEngine?.destroy()
+                        workerEngine = null
+                    }
+                }
+            }
+        }
+
+        var currentJobs = AtomicInteger(0)
+
+        suspend fun callMethod(applicationContext: Context, method: String, arguments: Map<String, Any>) {
+            engineReady.withLock {
+                if (engine == null && workerEngine == null) {
+                    Log.d(Constants.logTag, "Initializing engine for worker with method $method")
+                    initNewEngine(applicationContext)
+                }
+            }
+            Log.d(Constants.logTag, "Sending event, '$method' to Dart")
+
+            try {
+                var engineToUse: FlutterEngine? = engine ?: workerEngine
+                if (engineToUse == null) {
+                    Log.d(Constants.logTag, "Engine is null, cannot send method $method to Dart")
+                    throw Exception("No engine")
+                }
+
+                Log.d(Constants.logTag, "Registering engine lifecycle listener")
+
+                Log.d(Constants.logTag, "Invoking method channel...")
+                suspendCoroutine { cont ->
+                    currentJobs.getAndIncrement()
+                    MethodChannel(engineToUse!!.dartExecutor.binaryMessenger, Constants.methodChannel).invokeMethod(method, arguments, object : MethodChannel.Result {
+                        override fun success(result: Any?) {
+                            Log.d(Constants.logTag, "Worker with method $method completed successfully")
+                            cont.resume(Result.success())
+                            closeEngineIfNeeded(applicationContext)
+                        }
+
+                        override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                            Log.e(Constants.logTag, "Worker with method $method failed!")
+                            cont.resume(Result.failure())
+                            closeEngineIfNeeded(applicationContext)
+                        }
+
+                        override fun notImplemented() {
+                            Log.e(Constants.logTag, "Worker with method $method not implemented on Dart side")
+                            cont.resume(Result.failure())
+                            closeEngineIfNeeded(applicationContext)
+                        }
+                    })
+                }
+
+                Log.d(Constants.logTag, "Worker with method $method completed successfully")
+            } catch (e: Exception) {
+                Log.d(Constants.logTag, "Error sending method $method to Dart: ${e.message}")
+                throw e
+            }
+        }
     }
 
     override fun startWork(): ListenableFuture<Result> {
@@ -66,107 +182,13 @@ class DartWorker(context: Context, workerParams: WorkerParameters): ListenableWo
             Log.d(Constants.logTag, "Using DartWorker engine to send to Dart")
         }
         return CoroutineScope(Dispatchers.Main).future {
-            engineReady.withLock {
-                if (engine == null && workerEngine == null) {
-                    Log.d(Constants.logTag, "Initializing engine for worker with method $method")
-                    initNewEngine()
-                }
-            }
-            Log.d(Constants.logTag, "Sending event, '$method' to Dart")
-
+            val arguments: HashMap<String, Any> = gson.fromJson(data, TypeToken.getParameterized(HashMap::class.java, String::class.java, Any::class.java).type)
             try {
-                var engineToUse: FlutterEngine? = engine ?: workerEngine
-                if (engineToUse == null) {
-                    Log.d(Constants.logTag, "Engine is null, cannot send method $method to Dart")
-                    return@future Result.failure()
-                }
-
-                Log.d(Constants.logTag, "Registering engine lifecycle listener")
-
-                engineToUse!!.addEngineLifecycleListener ( object : FlutterEngine.EngineLifecycleListener {
-                    override fun onPreEngineRestart() {
-                        Log.d(Constants.logTag, "Engine is restarting")
-                    }
-
-                    override fun onEngineWillDestroy() {
-                        Log.d(Constants.logTag, "Engine is being destroyed")
-                    }
-                })
-
-                Log.d(Constants.logTag, "Invoking method channel...")
-                suspendCoroutine { cont ->
-                    MethodChannel(engineToUse!!.dartExecutor.binaryMessenger, Constants.methodChannel).invokeMethod(method, gson.fromJson(data, TypeToken.getParameterized(HashMap::class.java, String::class.java, Any::class.java).type), object : MethodChannel.Result {
-                        override fun success(result: Any?) {
-                            Log.d(Constants.logTag, "Worker with method $method completed successfully")
-                            cont.resume(Result.success())
-                            closeEngineIfNeeded()
-                        }
-    
-                        override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                            Log.e(Constants.logTag, "Worker with method $method failed!")
-                            cont.resume(Result.failure())
-                            closeEngineIfNeeded()
-                        }
-    
-                        override fun notImplemented() {
-                            Log.e(Constants.logTag, "Worker with method $method not implemented on Dart side")
-                            cont.resume(Result.failure())
-                            closeEngineIfNeeded()
-                        }
-                    })
-                }
-
-                Log.d(Constants.logTag, "Worker with method $method completed successfully")
-                return@future Result.success()
+                callMethod(applicationContext, method, arguments)
+                Result.success()
             } catch (e: Exception) {
                 Log.d(Constants.logTag, "Error sending method $method to Dart: ${e.message}")
-                return@future Result.failure()
-            }
-        }
-    }
-
-    /// Code idea taken from https://github.com/flutter/flutter/wiki/Experimental:-Reuse-FlutterEngine-across-screens
-    private suspend fun initNewEngine() {
-        Log.d(Constants.logTag, "Ensuring Flutter is initialized before creating engine")
-        // We use the deprecated class here anyways, the new one doesn't work correctly using the same code
-        FlutterMain.startInitialization(applicationContext)
-        FlutterMain.ensureInitializationComplete(applicationContext, null)
-
-        Log.d(Constants.logTag, "Loading callback info")
-        val info = ApplicationInfoLoader.load(applicationContext)
-        workerEngine = FlutterEngine(applicationContext)
-        suspendCoroutine { cont ->
-            // set up the method channel to receive events from Dart
-            MethodChannel(workerEngine!!.dartExecutor.binaryMessenger, Constants.methodChannel).setMethodCallHandler {
-                call, result -> run {
-                    if (call.method == "ready") {
-                        Log.d(Constants.logTag, "Dart engine is ready!")
-                        cont.resume(Unit)
-                    } else {
-                        MethodCallHandler().methodCallHandler(call, result, applicationContext)
-                    }
-                }
-            }
-            val callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(applicationContext.getSharedPreferences("FlutterSharedPreferences", 0).getLong("flutter.backgroundCallbackHandle", -1))
-            val callback = DartExecutor.DartCallback(applicationContext.assets, info.flutterAssetsDir, callbackInfo)
-
-            Log.d(Constants.logTag, "Executing Dart callback")
-            workerEngine!!.dartExecutor.executeDartCallback(callback)
-        }
-    }
-
-    private fun closeEngineIfNeeded() {
-        // Delay 5 seconds so Dart has a chance to complete everything and in case new work comes in shortly after
-        Timer().schedule(5000) {
-            val currentWork = WorkManager.getInstance(applicationContext).getWorkInfosByTag(Constants.dartWorkerTag).get().filter { element -> !element.state.isFinished }
-            Log.d(Constants.logTag, "${currentWork.size} worker(s) still queued")
-            if (currentWork.isEmpty() && workerEngine != null) {
-                Log.d(Constants.logTag, "Closing ${Constants.dartWorkerTag} engine")
-                // This must be run on main thread
-                CoroutineScope(Dispatchers.Main).launch {
-                    workerEngine?.destroy()
-                    workerEngine = null
-                }
+                Result.failure()
             }
         }
     }

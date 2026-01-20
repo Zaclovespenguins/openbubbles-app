@@ -675,6 +675,45 @@ internal interface UniffiCallbackInterfaceMsgReceiverMethod2 : com.sun.jna.Callb
 internal interface UniffiCallbackInterfaceMsgReceiverMethod3 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
 }
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod0 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: ByteByReference,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod1 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod2 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod3 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod4 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`wrappedKey`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod5 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod6 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod7 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod8 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,`sig`: RustBuffer.ByValue,`uniffiOutReturn`: ByteByReference,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod9 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod10 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`peer`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod11 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`plaintext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceNativeKeystoreMethod12 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`ciphertext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
+}
 @Structure.FieldOrder("gotGateway", "uniffiFree")
 internal open class UniffiVTableCallbackInterfaceCarrierHandler(
     @JvmField internal var `gotGateway`: UniffiCallbackInterfaceCarrierHandlerMethod0? = null,
@@ -735,6 +774,97 @@ internal open class UniffiVTableCallbackInterfaceMsgReceiver(
     }
 
 }
+@Structure.FieldOrder("supportsImport", "createKey", "destroyKey", "listKeys", "importKey", "getImportWrapKey", "getKeyType", "sign", "verify", "getPublicKey", "derive", "encrypt", "decrypt", "uniffiFree")
+internal open class UniffiVTableCallbackInterfaceNativeKeystore(
+    @JvmField internal var `supportsImport`: UniffiCallbackInterfaceNativeKeystoreMethod0? = null,
+    @JvmField internal var `createKey`: UniffiCallbackInterfaceNativeKeystoreMethod1? = null,
+    @JvmField internal var `destroyKey`: UniffiCallbackInterfaceNativeKeystoreMethod2? = null,
+    @JvmField internal var `listKeys`: UniffiCallbackInterfaceNativeKeystoreMethod3? = null,
+    @JvmField internal var `importKey`: UniffiCallbackInterfaceNativeKeystoreMethod4? = null,
+    @JvmField internal var `getImportWrapKey`: UniffiCallbackInterfaceNativeKeystoreMethod5? = null,
+    @JvmField internal var `getKeyType`: UniffiCallbackInterfaceNativeKeystoreMethod6? = null,
+    @JvmField internal var `sign`: UniffiCallbackInterfaceNativeKeystoreMethod7? = null,
+    @JvmField internal var `verify`: UniffiCallbackInterfaceNativeKeystoreMethod8? = null,
+    @JvmField internal var `getPublicKey`: UniffiCallbackInterfaceNativeKeystoreMethod9? = null,
+    @JvmField internal var `derive`: UniffiCallbackInterfaceNativeKeystoreMethod10? = null,
+    @JvmField internal var `encrypt`: UniffiCallbackInterfaceNativeKeystoreMethod11? = null,
+    @JvmField internal var `decrypt`: UniffiCallbackInterfaceNativeKeystoreMethod12? = null,
+    @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+) : Structure() {
+    class UniffiByValue(
+        `supportsImport`: UniffiCallbackInterfaceNativeKeystoreMethod0? = null,
+        `createKey`: UniffiCallbackInterfaceNativeKeystoreMethod1? = null,
+        `destroyKey`: UniffiCallbackInterfaceNativeKeystoreMethod2? = null,
+        `listKeys`: UniffiCallbackInterfaceNativeKeystoreMethod3? = null,
+        `importKey`: UniffiCallbackInterfaceNativeKeystoreMethod4? = null,
+        `getImportWrapKey`: UniffiCallbackInterfaceNativeKeystoreMethod5? = null,
+        `getKeyType`: UniffiCallbackInterfaceNativeKeystoreMethod6? = null,
+        `sign`: UniffiCallbackInterfaceNativeKeystoreMethod7? = null,
+        `verify`: UniffiCallbackInterfaceNativeKeystoreMethod8? = null,
+        `getPublicKey`: UniffiCallbackInterfaceNativeKeystoreMethod9? = null,
+        `derive`: UniffiCallbackInterfaceNativeKeystoreMethod10? = null,
+        `encrypt`: UniffiCallbackInterfaceNativeKeystoreMethod11? = null,
+        `decrypt`: UniffiCallbackInterfaceNativeKeystoreMethod12? = null,
+        `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+    ): UniffiVTableCallbackInterfaceNativeKeystore(`supportsImport`,`createKey`,`destroyKey`,`listKeys`,`importKey`,`getImportWrapKey`,`getKeyType`,`sign`,`verify`,`getPublicKey`,`derive`,`encrypt`,`decrypt`,`uniffiFree`,), Structure.ByValue
+
+   internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceNativeKeystore) {
+        `supportsImport` = other.`supportsImport`
+        `createKey` = other.`createKey`
+        `destroyKey` = other.`destroyKey`
+        `listKeys` = other.`listKeys`
+        `importKey` = other.`importKey`
+        `getImportWrapKey` = other.`getImportWrapKey`
+        `getKeyType` = other.`getKeyType`
+        `sign` = other.`sign`
+        `verify` = other.`verify`
+        `getPublicKey` = other.`getPublicKey`
+        `derive` = other.`derive`
+        `encrypt` = other.`encrypt`
+        `decrypt` = other.`decrypt`
+        `uniffiFree` = other.`uniffiFree`
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -851,9 +981,19 @@ internal open class UniffiVTableCallbackInterfaceMsgReceiver(
 // when the library is loaded.
 internal interface IntegrityCheckingUniffiLib : Library {
     // Integrity check functions only
-    fun uniffi_rust_lib_bluebubbles_checksum_func_get_carrier(
+    fun uniffi_rust_lib_bluebubbles_checksum_func_do_lock(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_func_finish_unlock(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_func_get_carrier(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_func_init_native(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_func_is_locked(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_func_recover_keychain(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_func_setup_keystore(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_func_start(
 ): Short
@@ -870,6 +1010,32 @@ fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_native_ready(
 fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_twofa_event(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_finish(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_supports_import(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_create_key(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_destroy_key(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_list_keys(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_import_key(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_import_wrap_key(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_key_type(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_sign(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_verify(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_public_key(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_derive(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_encrypt(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_decrypt(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime(
 ): Short
@@ -924,6 +1090,7 @@ internal interface UniffiLib : Library {
             uniffiCallbackInterfaceCarrierHandler.register(lib)
             uniffiCallbackInterfaceKotlinFilePackager.register(lib)
             uniffiCallbackInterfaceMsgReceiver.register(lib)
+            uniffiCallbackInterfaceNativeKeystore.register(lib)
             // Loading of library with integrity check done.
             lib
         }
@@ -967,6 +1134,38 @@ fun uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_twofa_event(`ptr`: Pointer
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_msgreceiver_finish(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
+fun uniffi_rust_lib_bluebubbles_fn_clone_nativekeystore(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Pointer
+fun uniffi_rust_lib_bluebubbles_fn_free_nativekeystore(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_nativekeystore(`vtable`: UniffiVTableCallbackInterfaceNativeKeystore,
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_supports_import(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Byte
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_create_key(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_destroy_key(`ptr`: Pointer,`alias`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_list_keys(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_import_key(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`wrappedKey`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_import_wrap_key(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_key_type(`ptr`: Pointer,`alias`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_sign(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_verify(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,`sig`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Byte
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_public_key(`ptr`: Pointer,`alias`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_derive(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`peer`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_encrypt(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`plaintext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
+fun uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_decrypt(`ptr`: Pointer,`alias`: RustBuffer.ByValue,`ciphertext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): RustBuffer.ByValue
 fun uniffi_rust_lib_bluebubbles_fn_clone_nativepushstate(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Pointer
 fun uniffi_rust_lib_bluebubbles_fn_free_nativepushstate(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
@@ -983,9 +1182,19 @@ fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_start_loop(`ptr`: Poin
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_teardown_2fa(`ptr`: Pointer,`action`: RustBuffer.ByValue,`txnid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
+fun uniffi_rust_lib_bluebubbles_fn_func_do_lock(uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_func_finish_unlock(uniffi_out_err: UniffiRustCallStatus, 
+): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_get_carrier(`handler`: Pointer,`mccmnc`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_init_native(`dir`: RustBuffer.ByValue,`handle`: RustBuffer.ByValue,`handler`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_func_is_locked(uniffi_out_err: UniffiRustCallStatus, 
+): Byte
+fun uniffi_rust_lib_bluebubbles_fn_func_recover_keychain(uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_func_setup_keystore(`dir`: RustBuffer.ByValue,`keystore`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_start(`dir`: RustBuffer.ByValue,`packager`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
@@ -1116,10 +1325,25 @@ private fun uniffiCheckContractApiVersion(lib: IntegrityCheckingUniffiLib) {
 
 @Suppress("UNUSED_PARAMETER")
 private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_do_lock() != 42972.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_finish_unlock() != 62784.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_func_get_carrier() != 30894.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_func_init_native() != 63423.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_is_locked() != 51144.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_recover_keychain() != 40899.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_setup_keystore() != 48449.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_func_start() != 41758.toShort()) {
@@ -1144,6 +1368,45 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_msgreceiver_finish() != 11980.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_supports_import() != 18551.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_create_key() != 21790.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_destroy_key() != 65307.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_list_keys() != 29093.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_import_key() != 61341.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_import_wrap_key() != 38293.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_key_type() != 10071.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_sign() != 62204.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_verify() != 49103.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_get_public_key() != 19949.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_derive() != 40818.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_encrypt() != 28284.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_decrypt() != 31689.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime() != 51777.toShort()) {
@@ -1217,6 +1480,29 @@ inline fun <T : Disposable?, R> T.use(block: (T) -> R) =
  * @suppress
  * */
 object NoPointer
+
+/**
+ * @suppress
+ */
+public object FfiConverterUShort: FfiConverter<UShort, Short> {
+    override fun lift(value: Short): UShort {
+        return value.toUShort()
+    }
+
+    override fun read(buf: ByteBuffer): UShort {
+        return lift(buf.getShort())
+    }
+
+    override fun lower(value: UShort): Short {
+        return value.toShort()
+    }
+
+    override fun allocationSize(value: UShort) = 2UL
+
+    override fun write(value: UShort, buf: ByteBuffer) {
+        buf.putShort(value.toShort())
+    }
+}
 
 /**
  * @suppress
@@ -2495,6 +2781,690 @@ public object FfiConverterTypeMsgReceiver: FfiConverter<MsgReceiver, Pointer> {
 //
 
 
+public interface NativeKeystore {
+    
+    fun `supportsImport`(): kotlin.Boolean
+    
+    fun `createKey`(`alias`: kotlin.String, `type`: KeyType, `accessRules`: KeystoreAccessRules)
+    
+    fun `destroyKey`(`alias`: kotlin.String)
+    
+    fun `listKeys`(): List<kotlin.String>
+    
+    fun `importKey`(`alias`: kotlin.String, `type`: KeyType, `wrappedKey`: kotlin.ByteArray, `accessRules`: KeystoreAccessRules)
+    
+    fun `getImportWrapKey`(): kotlin.ByteArray
+    
+    fun `getKeyType`(`alias`: kotlin.String): KeyType?
+    
+    fun `sign`(`alias`: kotlin.String, `digest`: KeystoreDigest, `padding`: KeystorePadding, `data`: kotlin.ByteArray): kotlin.ByteArray
+    
+    fun `verify`(`alias`: kotlin.String, `digest`: KeystoreDigest, `padding`: KeystorePadding, `data`: kotlin.ByteArray, `sig`: kotlin.ByteArray): kotlin.Boolean
+    
+    fun `getPublicKey`(`alias`: kotlin.String): kotlin.ByteArray
+    
+    fun `derive`(`alias`: kotlin.String, `peer`: kotlin.ByteArray): kotlin.ByteArray
+    
+    fun `encrypt`(`alias`: kotlin.String, `plaintext`: kotlin.ByteArray, `mode`: EncryptMode): kotlin.ByteArray
+    
+    fun `decrypt`(`alias`: kotlin.String, `ciphertext`: kotlin.ByteArray, `mode`: EncryptMode): kotlin.ByteArray
+    
+    companion object
+}
+
+open class NativeKeystoreImpl: Disposable, AutoCloseable, NativeKeystore
+{
+
+    constructor(pointer: Pointer) {
+        this.pointer = pointer
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    /**
+     * This constructor can be used to instantiate a fake object. Only used for tests. Any
+     * attempt to actually use an object constructed this way will fail as there is no
+     * connected Rust object.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    constructor(noPointer: NoPointer) {
+        this.pointer = null
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    protected val pointer: Pointer?
+    protected val cleanable: UniffiCleaner.Cleanable
+
+    private val wasDestroyed = AtomicBoolean(false)
+    private val callCounter = AtomicLong(1)
+
+    override fun destroy() {
+        // Only allow a single call to this method.
+        // TODO: maybe we should log a warning if called more than once?
+        if (this.wasDestroyed.compareAndSet(false, true)) {
+            // This decrement always matches the initial count of 1 given at creation time.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    @Synchronized
+    override fun close() {
+        this.destroy()
+    }
+
+    internal inline fun <R> callWithPointer(block: (ptr: Pointer) -> R): R {
+        // Check and increment the call counter, to keep the object alive.
+        // This needs a compare-and-set retry loop in case of concurrent updates.
+        do {
+            val c = this.callCounter.get()
+            if (c == 0L) {
+                throw IllegalStateException("${this.javaClass.simpleName} object has already been destroyed")
+            }
+            if (c == Long.MAX_VALUE) {
+                throw IllegalStateException("${this.javaClass.simpleName} call counter would overflow")
+            }
+        } while (! this.callCounter.compareAndSet(c, c + 1L))
+        // Now we can safely do the method call without the pointer being freed concurrently.
+        try {
+            return block(this.uniffiClonePointer())
+        } finally {
+            // This decrement always matches the increment we performed above.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    // Use a static inner class instead of a closure so as not to accidentally
+    // capture `this` as part of the cleanable's action.
+    private class UniffiCleanAction(private val pointer: Pointer?) : Runnable {
+        override fun run() {
+            pointer?.let { ptr ->
+                uniffiRustCall { status ->
+                    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_free_nativekeystore(ptr, status)
+                }
+            }
+        }
+    }
+
+    fun uniffiClonePointer(): Pointer {
+        return uniffiRustCall() { status ->
+            UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_clone_nativekeystore(pointer!!, status)
+        }
+    }
+
+    
+    @Throws(NativeKeystoreException::class)override fun `supportsImport`(): kotlin.Boolean {
+            return FfiConverterBoolean.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_supports_import(
+        it, _status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `createKey`(`alias`: kotlin.String, `type`: KeyType, `accessRules`: KeystoreAccessRules)
+        = 
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_create_key(
+        it, FfiConverterString.lower(`alias`),FfiConverterTypeKeyType.lower(`type`),FfiConverterTypeKeystoreAccessRules.lower(`accessRules`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `destroyKey`(`alias`: kotlin.String)
+        = 
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_destroy_key(
+        it, FfiConverterString.lower(`alias`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `listKeys`(): List<kotlin.String> {
+            return FfiConverterSequenceString.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_list_keys(
+        it, _status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `importKey`(`alias`: kotlin.String, `type`: KeyType, `wrappedKey`: kotlin.ByteArray, `accessRules`: KeystoreAccessRules)
+        = 
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_import_key(
+        it, FfiConverterString.lower(`alias`),FfiConverterTypeKeyType.lower(`type`),FfiConverterByteArray.lower(`wrappedKey`),FfiConverterTypeKeystoreAccessRules.lower(`accessRules`),_status)
+}
+    }
+    
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `getImportWrapKey`(): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_import_wrap_key(
+        it, _status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `getKeyType`(`alias`: kotlin.String): KeyType? {
+            return FfiConverterOptionalTypeKeyType.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_key_type(
+        it, FfiConverterString.lower(`alias`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `sign`(`alias`: kotlin.String, `digest`: KeystoreDigest, `padding`: KeystorePadding, `data`: kotlin.ByteArray): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_sign(
+        it, FfiConverterString.lower(`alias`),FfiConverterTypeKeystoreDigest.lower(`digest`),FfiConverterTypeKeystorePadding.lower(`padding`),FfiConverterByteArray.lower(`data`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `verify`(`alias`: kotlin.String, `digest`: KeystoreDigest, `padding`: KeystorePadding, `data`: kotlin.ByteArray, `sig`: kotlin.ByteArray): kotlin.Boolean {
+            return FfiConverterBoolean.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_verify(
+        it, FfiConverterString.lower(`alias`),FfiConverterTypeKeystoreDigest.lower(`digest`),FfiConverterTypeKeystorePadding.lower(`padding`),FfiConverterByteArray.lower(`data`),FfiConverterByteArray.lower(`sig`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `getPublicKey`(`alias`: kotlin.String): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_get_public_key(
+        it, FfiConverterString.lower(`alias`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `derive`(`alias`: kotlin.String, `peer`: kotlin.ByteArray): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_derive(
+        it, FfiConverterString.lower(`alias`),FfiConverterByteArray.lower(`peer`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `encrypt`(`alias`: kotlin.String, `plaintext`: kotlin.ByteArray, `mode`: EncryptMode): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_encrypt(
+        it, FfiConverterString.lower(`alias`),FfiConverterByteArray.lower(`plaintext`),FfiConverterTypeEncryptMode.lower(`mode`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+    @Throws(NativeKeystoreException::class)override fun `decrypt`(`alias`: kotlin.String, `ciphertext`: kotlin.ByteArray, `mode`: EncryptMode): kotlin.ByteArray {
+            return FfiConverterByteArray.lift(
+    callWithPointer {
+    uniffiRustCallWithError(NativeKeystoreException) { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativekeystore_decrypt(
+        it, FfiConverterString.lower(`alias`),FfiConverterByteArray.lower(`ciphertext`),FfiConverterTypeEncryptMode.lower(`mode`),_status)
+}
+    }
+    )
+    }
+    
+
+    
+
+    
+    
+    companion object
+    
+}
+
+
+// Put the implementation in an object so we don't pollute the top-level namespace
+internal object uniffiCallbackInterfaceNativeKeystore {
+    internal object `supportsImport`: UniffiCallbackInterfaceNativeKeystoreMethod0 {
+        override fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: ByteByReference,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`supportsImport`(
+                )
+            }
+            val writeReturn = { value: kotlin.Boolean -> uniffiOutReturn.setValue(FfiConverterBoolean.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `createKey`: UniffiCallbackInterfaceNativeKeystoreMethod1 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`createKey`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterTypeKeyType.lift(`type`),
+                    FfiConverterTypeKeystoreAccessRules.lift(`accessRules`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `destroyKey`: UniffiCallbackInterfaceNativeKeystoreMethod2 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`destroyKey`(
+                    FfiConverterString.lift(`alias`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `listKeys`: UniffiCallbackInterfaceNativeKeystoreMethod3 {
+        override fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`listKeys`(
+                )
+            }
+            val writeReturn = { value: List<kotlin.String> -> uniffiOutReturn.setValue(FfiConverterSequenceString.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `importKey`: UniffiCallbackInterfaceNativeKeystoreMethod4 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`type`: RustBuffer.ByValue,`wrappedKey`: RustBuffer.ByValue,`accessRules`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`importKey`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterTypeKeyType.lift(`type`),
+                    FfiConverterByteArray.lift(`wrappedKey`),
+                    FfiConverterTypeKeystoreAccessRules.lift(`accessRules`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `getImportWrapKey`: UniffiCallbackInterfaceNativeKeystoreMethod5 {
+        override fun callback(`uniffiHandle`: Long,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`getImportWrapKey`(
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `getKeyType`: UniffiCallbackInterfaceNativeKeystoreMethod6 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`getKeyType`(
+                    FfiConverterString.lift(`alias`),
+                )
+            }
+            val writeReturn = { value: KeyType? -> uniffiOutReturn.setValue(FfiConverterOptionalTypeKeyType.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `sign`: UniffiCallbackInterfaceNativeKeystoreMethod7 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`sign`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterTypeKeystoreDigest.lift(`digest`),
+                    FfiConverterTypeKeystorePadding.lift(`padding`),
+                    FfiConverterByteArray.lift(`data`),
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `verify`: UniffiCallbackInterfaceNativeKeystoreMethod8 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`digest`: RustBuffer.ByValue,`padding`: RustBuffer.ByValue,`data`: RustBuffer.ByValue,`sig`: RustBuffer.ByValue,`uniffiOutReturn`: ByteByReference,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`verify`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterTypeKeystoreDigest.lift(`digest`),
+                    FfiConverterTypeKeystorePadding.lift(`padding`),
+                    FfiConverterByteArray.lift(`data`),
+                    FfiConverterByteArray.lift(`sig`),
+                )
+            }
+            val writeReturn = { value: kotlin.Boolean -> uniffiOutReturn.setValue(FfiConverterBoolean.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `getPublicKey`: UniffiCallbackInterfaceNativeKeystoreMethod9 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`getPublicKey`(
+                    FfiConverterString.lift(`alias`),
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `derive`: UniffiCallbackInterfaceNativeKeystoreMethod10 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`peer`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`derive`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterByteArray.lift(`peer`),
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `encrypt`: UniffiCallbackInterfaceNativeKeystoreMethod11 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`plaintext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`encrypt`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterByteArray.lift(`plaintext`),
+                    FfiConverterTypeEncryptMode.lift(`mode`),
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+    internal object `decrypt`: UniffiCallbackInterfaceNativeKeystoreMethod12 {
+        override fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`ciphertext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeNativeKeystore.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`decrypt`(
+                    FfiConverterString.lift(`alias`),
+                    FfiConverterByteArray.lift(`ciphertext`),
+                    FfiConverterTypeEncryptMode.lift(`mode`),
+                )
+            }
+            val writeReturn = { value: kotlin.ByteArray -> uniffiOutReturn.setValue(FfiConverterByteArray.lower(value)) }
+            uniffiTraitInterfaceCallWithError(
+                uniffiCallStatus,
+                makeCall,
+                writeReturn,
+                { e: NativeKeystoreException -> FfiConverterTypeNativeKeystoreError.lower(e) }
+            )
+        }
+    }
+
+    internal object uniffiFree: UniffiCallbackInterfaceFree {
+        override fun callback(handle: Long) {
+            FfiConverterTypeNativeKeystore.handleMap.remove(handle)
+        }
+    }
+
+    internal var vtable = UniffiVTableCallbackInterfaceNativeKeystore.UniffiByValue(
+        `supportsImport`,
+        `createKey`,
+        `destroyKey`,
+        `listKeys`,
+        `importKey`,
+        `getImportWrapKey`,
+        `getKeyType`,
+        `sign`,
+        `verify`,
+        `getPublicKey`,
+        `derive`,
+        `encrypt`,
+        `decrypt`,
+        uniffiFree,
+    )
+
+    // Registers the foreign callback with the Rust side.
+    // This method is generated for each callback interface.
+    internal fun register(lib: UniffiLib) {
+        lib.uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_nativekeystore(vtable)
+    }
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeNativeKeystore: FfiConverter<NativeKeystore, Pointer> {
+    internal val handleMap = UniffiHandleMap<NativeKeystore>()
+
+    override fun lower(value: NativeKeystore): Pointer {
+        return Pointer(handleMap.insert(value))
+    }
+
+    override fun lift(value: Pointer): NativeKeystore {
+        return NativeKeystoreImpl(value)
+    }
+
+    override fun read(buf: ByteBuffer): NativeKeystore {
+        // The Rust code always writes pointers as 8 bytes, and will
+        // fail to compile if they don't fit.
+        return lift(Pointer(buf.getLong()))
+    }
+
+    override fun allocationSize(value: NativeKeystore) = 8UL
+
+    override fun write(value: NativeKeystore, buf: ByteBuffer) {
+        // The Rust code always expects pointers written as 8 bytes,
+        // and will fail to compile if they don't fit.
+        buf.putLong(Pointer.nativeValue(lower(value)))
+    }
+}
+
+
+// This template implements a class for working with a Rust struct via a Pointer/Arc<T>
+// to the live Rust struct on the other side of the FFI.
+//
+// Each instance implements core operations for working with the Rust `Arc<T>` and the
+// Kotlin Pointer to work with the live Rust struct on the other side of the FFI.
+//
+// There's some subtlety here, because we have to be careful not to operate on a Rust
+// struct after it has been dropped, and because we must expose a public API for freeing
+// theq Kotlin wrapper object in lieu of reliable finalizers. The core requirements are:
+//
+//   * Each instance holds an opaque pointer to the underlying Rust struct.
+//     Method calls need to read this pointer from the object's state and pass it in to
+//     the Rust FFI.
+//
+//   * When an instance is no longer needed, its pointer should be passed to a
+//     special destructor function provided by the Rust FFI, which will drop the
+//     underlying Rust struct.
+//
+//   * Given an instance, calling code is expected to call the special
+//     `destroy` method in order to free it after use, either by calling it explicitly
+//     or by using a higher-level helper like the `use` method. Failing to do so risks
+//     leaking the underlying Rust struct.
+//
+//   * We can't assume that calling code will do the right thing, and must be prepared
+//     to handle Kotlin method calls executing concurrently with or even after a call to
+//     `destroy`, and to handle multiple (possibly concurrent!) calls to `destroy`.
+//
+//   * We must never allow Rust code to operate on the underlying Rust struct after
+//     the destructor has been called, and must never call the destructor more than once.
+//     Doing so may trigger memory unsafety.
+//
+//   * To mitigate many of the risks of leaking memory and use-after-free unsafety, a `Cleaner`
+//     is implemented to call the destructor when the Kotlin object becomes unreachable.
+//     This is done in a background thread. This is not a panacea, and client code should be aware that
+//      1. the thread may starve if some there are objects that have poorly performing
+//     `drop` methods or do significant work in their `drop` methods.
+//      2. the thread is shared across the whole library. This can be tuned by using `android_cleaner = true`,
+//         or `android = true` in the [`kotlin` section of the `uniffi.toml` file](https://mozilla.github.io/uniffi-rs/kotlin/configuration.html).
+//
+// If we try to implement this with mutual exclusion on access to the pointer, there is the
+// possibility of a race between a method call and a concurrent call to `destroy`:
+//
+//    * Thread A starts a method call, reads the value of the pointer, but is interrupted
+//      before it can pass the pointer over the FFI to Rust.
+//    * Thread B calls `destroy` and frees the underlying Rust struct.
+//    * Thread A resumes, passing the already-read pointer value to Rust and triggering
+//      a use-after-free.
+//
+// One possible solution would be to use a `ReadWriteLock`, with each method call taking
+// a read lock (and thus allowed to run concurrently) and the special `destroy` method
+// taking a write lock (and thus blocking on live method calls). However, we aim not to
+// generate methods with any hidden blocking semantics, and a `destroy` method that might
+// block if called incorrectly seems to meet that bar.
+//
+// So, we achieve our goals by giving each instance an associated `AtomicLong` counter to track
+// the number of in-flight method calls, and an `AtomicBoolean` flag to indicate whether `destroy`
+// has been called. These are updated according to the following rules:
+//
+//    * The initial value of the counter is 1, indicating a live object with no in-flight calls.
+//      The initial value for the flag is false.
+//
+//    * At the start of each method call, we atomically check the counter.
+//      If it is 0 then the underlying Rust struct has already been destroyed and the call is aborted.
+//      If it is nonzero them we atomically increment it by 1 and proceed with the method call.
+//
+//    * At the end of each method call, we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+//    * When `destroy` is called, we atomically flip the flag from false to true.
+//      If the flag was already true we silently fail.
+//      Otherwise we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+// Astute readers may observe that this all sounds very similar to the way that Rust's `Arc<T>` works,
+// and indeed it is, with the addition of a flag to guard against multiple calls to `destroy`.
+//
+// The overall effect is that the underlying Rust struct is destroyed only when `destroy` has been
+// called *and* all in-flight method calls have completed, avoiding violating any of the expectations
+// of the underlying Rust code.
+//
+// This makes a cleaner a better alternative to _not_ calling `destroy()` as
+// and when the object is finished with, but the abstraction is not perfect: if the Rust object's `drop`
+// method is slow, and/or there are many objects to cleanup, and it's on a low end Android device, then the cleaner
+// thread may be starved, and the app will leak memory.
+//
+// In this case, `destroy`ing manually may be a better solution.
+//
+// The cleaner can live side by side with the manual calling of `destroy`. In the order of responsiveness, uniffi objects
+// with Rust peers are reclaimed:
+//
+// 1. By calling the `destroy` method of the object, which calls `rustObject.free()`. If that doesn't happen:
+// 2. When the object becomes unreachable, AND the Cleaner thread gets to call `rustObject.free()`. If the thread is starved then:
+// 3. The memory is reclaimed when the process terminates.
+//
+// [1] https://stackoverflow.com/questions/24376768/can-java-finalize-an-object-when-it-is-still-in-scope/24380219
+//
+
+
 public interface NativePushStateInterface {
     
     fun `declineFacetime`(`guid`: kotlin.String)
@@ -2740,6 +3710,426 @@ public object FfiConverterTypeFileInfo: FfiConverterRustBuffer<FileInfo> {
 
 
 
+data class KeystoreAccessRules (
+    var `blockModes`: List<EncryptMode>, 
+    var `digests`: List<KeystoreDigest>, 
+    var `encryptionPaddings`: List<KeystorePadding>, 
+    var `mgf1Digests`: List<KeystoreDigest>, 
+    var `signaturePadding`: List<KeystorePadding>, 
+    var `requireUser`: kotlin.Boolean, 
+    var `canAgree`: kotlin.Boolean, 
+    var `canSign`: kotlin.Boolean, 
+    var `canEncrypt`: kotlin.Boolean, 
+    var `canDecrypt`: kotlin.Boolean
+) {
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeKeystoreAccessRules: FfiConverterRustBuffer<KeystoreAccessRules> {
+    override fun read(buf: ByteBuffer): KeystoreAccessRules {
+        return KeystoreAccessRules(
+            FfiConverterSequenceTypeEncryptMode.read(buf),
+            FfiConverterSequenceTypeKeystoreDigest.read(buf),
+            FfiConverterSequenceTypeKeystorePadding.read(buf),
+            FfiConverterSequenceTypeKeystoreDigest.read(buf),
+            FfiConverterSequenceTypeKeystorePadding.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+            FfiConverterBoolean.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: KeystoreAccessRules) = (
+            FfiConverterSequenceTypeEncryptMode.allocationSize(value.`blockModes`) +
+            FfiConverterSequenceTypeKeystoreDigest.allocationSize(value.`digests`) +
+            FfiConverterSequenceTypeKeystorePadding.allocationSize(value.`encryptionPaddings`) +
+            FfiConverterSequenceTypeKeystoreDigest.allocationSize(value.`mgf1Digests`) +
+            FfiConverterSequenceTypeKeystorePadding.allocationSize(value.`signaturePadding`) +
+            FfiConverterBoolean.allocationSize(value.`requireUser`) +
+            FfiConverterBoolean.allocationSize(value.`canAgree`) +
+            FfiConverterBoolean.allocationSize(value.`canSign`) +
+            FfiConverterBoolean.allocationSize(value.`canEncrypt`) +
+            FfiConverterBoolean.allocationSize(value.`canDecrypt`)
+    )
+
+    override fun write(value: KeystoreAccessRules, buf: ByteBuffer) {
+            FfiConverterSequenceTypeEncryptMode.write(value.`blockModes`, buf)
+            FfiConverterSequenceTypeKeystoreDigest.write(value.`digests`, buf)
+            FfiConverterSequenceTypeKeystorePadding.write(value.`encryptionPaddings`, buf)
+            FfiConverterSequenceTypeKeystoreDigest.write(value.`mgf1Digests`, buf)
+            FfiConverterSequenceTypeKeystorePadding.write(value.`signaturePadding`, buf)
+            FfiConverterBoolean.write(value.`requireUser`, buf)
+            FfiConverterBoolean.write(value.`canAgree`, buf)
+            FfiConverterBoolean.write(value.`canSign`, buf)
+            FfiConverterBoolean.write(value.`canEncrypt`, buf)
+            FfiConverterBoolean.write(value.`canDecrypt`, buf)
+    }
+}
+
+
+
+
+enum class EcCurve {
+    
+    P256,
+    P384;
+    companion object
+}
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeEcCurve: FfiConverterRustBuffer<EcCurve> {
+    override fun read(buf: ByteBuffer) = try {
+        EcCurve.values()[buf.getInt() - 1]
+    } catch (e: IndexOutOfBoundsException) {
+        throw RuntimeException("invalid enum value, something is very wrong!!", e)
+    }
+
+    override fun allocationSize(value: EcCurve) = 4UL
+
+    override fun write(value: EcCurve, buf: ByteBuffer) {
+        buf.putInt(value.ordinal + 1)
+    }
+}
+
+
+
+
+
+sealed class EncryptMode {
+    
+    data class Rsa(
+        val v1: KeystorePadding) : EncryptMode() {
+        companion object
+    }
+    
+    object Gcm : EncryptMode()
+    
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeEncryptMode : FfiConverterRustBuffer<EncryptMode>{
+    override fun read(buf: ByteBuffer): EncryptMode {
+        return when(buf.getInt()) {
+            1 -> EncryptMode.Rsa(
+                FfiConverterTypeKeystorePadding.read(buf),
+                )
+            2 -> EncryptMode.Gcm
+            else -> throw RuntimeException("invalid enum value, something is very wrong!!")
+        }
+    }
+
+    override fun allocationSize(value: EncryptMode) = when(value) {
+        is EncryptMode.Rsa -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+                + FfiConverterTypeKeystorePadding.allocationSize(value.v1)
+            )
+        }
+        is EncryptMode.Gcm -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+            )
+        }
+    }
+
+    override fun write(value: EncryptMode, buf: ByteBuffer) {
+        when(value) {
+            is EncryptMode.Rsa -> {
+                buf.putInt(1)
+                FfiConverterTypeKeystorePadding.write(value.v1, buf)
+                Unit
+            }
+            is EncryptMode.Gcm -> {
+                buf.putInt(2)
+                Unit
+            }
+        }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }
+    }
+}
+
+
+
+
+
+sealed class KeyType {
+    
+    data class Rsa(
+        val v1: kotlin.UShort) : KeyType() {
+        companion object
+    }
+    
+    data class Ec(
+        val v1: EcCurve) : KeyType() {
+        companion object
+    }
+    
+    data class Aes(
+        val v1: kotlin.UShort) : KeyType() {
+        companion object
+    }
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeKeyType : FfiConverterRustBuffer<KeyType>{
+    override fun read(buf: ByteBuffer): KeyType {
+        return when(buf.getInt()) {
+            1 -> KeyType.Rsa(
+                FfiConverterUShort.read(buf),
+                )
+            2 -> KeyType.Ec(
+                FfiConverterTypeEcCurve.read(buf),
+                )
+            3 -> KeyType.Aes(
+                FfiConverterUShort.read(buf),
+                )
+            else -> throw RuntimeException("invalid enum value, something is very wrong!!")
+        }
+    }
+
+    override fun allocationSize(value: KeyType) = when(value) {
+        is KeyType.Rsa -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+                + FfiConverterUShort.allocationSize(value.v1)
+            )
+        }
+        is KeyType.Ec -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+                + FfiConverterTypeEcCurve.allocationSize(value.v1)
+            )
+        }
+        is KeyType.Aes -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+                + FfiConverterUShort.allocationSize(value.v1)
+            )
+        }
+    }
+
+    override fun write(value: KeyType, buf: ByteBuffer) {
+        when(value) {
+            is KeyType.Rsa -> {
+                buf.putInt(1)
+                FfiConverterUShort.write(value.v1, buf)
+                Unit
+            }
+            is KeyType.Ec -> {
+                buf.putInt(2)
+                FfiConverterTypeEcCurve.write(value.v1, buf)
+                Unit
+            }
+            is KeyType.Aes -> {
+                buf.putInt(3)
+                FfiConverterUShort.write(value.v1, buf)
+                Unit
+            }
+        }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }
+    }
+}
+
+
+
+
+
+
+enum class KeystoreDigest {
+    
+    SHA384,
+    SHA256,
+    SHA1;
+    companion object
+}
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeKeystoreDigest: FfiConverterRustBuffer<KeystoreDigest> {
+    override fun read(buf: ByteBuffer) = try {
+        KeystoreDigest.values()[buf.getInt() - 1]
+    } catch (e: IndexOutOfBoundsException) {
+        throw RuntimeException("invalid enum value, something is very wrong!!", e)
+    }
+
+    override fun allocationSize(value: KeystoreDigest) = 4UL
+
+    override fun write(value: KeystoreDigest, buf: ByteBuffer) {
+        buf.putInt(value.ordinal + 1)
+    }
+}
+
+
+
+
+
+sealed class KeystorePadding {
+    
+    object Pkcs1 : KeystorePadding()
+    
+    
+    data class Oaep(
+        val `md`: KeystoreDigest, 
+        val `mgf1`: KeystoreDigest) : KeystorePadding() {
+        companion object
+    }
+    
+    object None : KeystorePadding()
+    
+    
+
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeKeystorePadding : FfiConverterRustBuffer<KeystorePadding>{
+    override fun read(buf: ByteBuffer): KeystorePadding {
+        return when(buf.getInt()) {
+            1 -> KeystorePadding.Pkcs1
+            2 -> KeystorePadding.Oaep(
+                FfiConverterTypeKeystoreDigest.read(buf),
+                FfiConverterTypeKeystoreDigest.read(buf),
+                )
+            3 -> KeystorePadding.None
+            else -> throw RuntimeException("invalid enum value, something is very wrong!!")
+        }
+    }
+
+    override fun allocationSize(value: KeystorePadding) = when(value) {
+        is KeystorePadding.Pkcs1 -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+            )
+        }
+        is KeystorePadding.Oaep -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+                + FfiConverterTypeKeystoreDigest.allocationSize(value.`md`)
+                + FfiConverterTypeKeystoreDigest.allocationSize(value.`mgf1`)
+            )
+        }
+        is KeystorePadding.None -> {
+            // Add the size for the Int that specifies the variant plus the size needed for all fields
+            (
+                4UL
+            )
+        }
+    }
+
+    override fun write(value: KeystorePadding, buf: ByteBuffer) {
+        when(value) {
+            is KeystorePadding.Pkcs1 -> {
+                buf.putInt(1)
+                Unit
+            }
+            is KeystorePadding.Oaep -> {
+                buf.putInt(2)
+                FfiConverterTypeKeystoreDigest.write(value.`md`, buf)
+                FfiConverterTypeKeystoreDigest.write(value.`mgf1`, buf)
+                Unit
+            }
+            is KeystorePadding.None -> {
+                buf.putInt(3)
+                Unit
+            }
+        }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }
+    }
+}
+
+
+
+
+
+
+
+sealed class NativeKeystoreException: kotlin.Exception() {
+    
+    class NativeException(
+        
+        val v1: kotlin.String
+        ) : NativeKeystoreException() {
+        override val message
+            get() = "v1=${ v1 }"
+    }
+    
+
+    companion object ErrorHandler : UniffiRustCallStatusErrorHandler<NativeKeystoreException> {
+        override fun lift(error_buf: RustBuffer.ByValue): NativeKeystoreException = FfiConverterTypeNativeKeystoreError.lift(error_buf)
+    }
+
+    
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeNativeKeystoreError : FfiConverterRustBuffer<NativeKeystoreException> {
+    override fun read(buf: ByteBuffer): NativeKeystoreException {
+        
+
+        return when(buf.getInt()) {
+            1 -> NativeKeystoreException.NativeException(
+                FfiConverterString.read(buf),
+                )
+            else -> throw RuntimeException("invalid error enum value, something is very wrong!!")
+        }
+    }
+
+    override fun allocationSize(value: NativeKeystoreException): ULong {
+        return when(value) {
+            is NativeKeystoreException.NativeException -> (
+                // Add the size for the Int that specifies the variant plus the size needed for all fields
+                4UL
+                + FfiConverterString.allocationSize(value.v1)
+            )
+        }
+    }
+
+    override fun write(value: NativeKeystoreException, buf: ByteBuffer) {
+        when(value) {
+            is NativeKeystoreException.NativeException -> {
+                buf.putInt(1)
+                FfiConverterString.write(value.v1, buf)
+                Unit
+            }
+        }.let { /* this makes the `when` an expression, which ensures it is exhaustive */ }
+    }
+
+}
+
+
+
 sealed class PackagedFile {
     
     data class Info(
@@ -2942,6 +4332,38 @@ public object FfiConverterOptionalTypeNativePushState: FfiConverterRustBuffer<Na
 /**
  * @suppress
  */
+public object FfiConverterOptionalTypeKeyType: FfiConverterRustBuffer<KeyType?> {
+    override fun read(buf: ByteBuffer): KeyType? {
+        if (buf.get().toInt() == 0) {
+            return null
+        }
+        return FfiConverterTypeKeyType.read(buf)
+    }
+
+    override fun allocationSize(value: KeyType?): ULong {
+        if (value == null) {
+            return 1UL
+        } else {
+            return 1UL + FfiConverterTypeKeyType.allocationSize(value)
+        }
+    }
+
+    override fun write(value: KeyType?, buf: ByteBuffer) {
+        if (value == null) {
+            buf.put(0)
+        } else {
+            buf.put(1)
+            FfiConverterTypeKeyType.write(value, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterSequenceString: FfiConverterRustBuffer<List<kotlin.String>> {
     override fun read(buf: ByteBuffer): List<kotlin.String> {
         val len = buf.getInt()
@@ -2962,7 +4384,107 @@ public object FfiConverterSequenceString: FfiConverterRustBuffer<List<kotlin.Str
             FfiConverterString.write(it, buf)
         }
     }
-} fun `getCarrier`(`handler`: CarrierHandler, `mccmnc`: kotlin.String)
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeEncryptMode: FfiConverterRustBuffer<List<EncryptMode>> {
+    override fun read(buf: ByteBuffer): List<EncryptMode> {
+        val len = buf.getInt()
+        return List<EncryptMode>(len) {
+            FfiConverterTypeEncryptMode.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<EncryptMode>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeEncryptMode.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<EncryptMode>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeEncryptMode.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeKeystoreDigest: FfiConverterRustBuffer<List<KeystoreDigest>> {
+    override fun read(buf: ByteBuffer): List<KeystoreDigest> {
+        val len = buf.getInt()
+        return List<KeystoreDigest>(len) {
+            FfiConverterTypeKeystoreDigest.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<KeystoreDigest>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeKeystoreDigest.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<KeystoreDigest>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeKeystoreDigest.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeKeystorePadding: FfiConverterRustBuffer<List<KeystorePadding>> {
+    override fun read(buf: ByteBuffer): List<KeystorePadding> {
+        val len = buf.getInt()
+        return List<KeystorePadding>(len) {
+            FfiConverterTypeKeystorePadding.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<KeystorePadding>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeKeystorePadding.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<KeystorePadding>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeKeystorePadding.write(it, buf)
+        }
+    }
+} fun `doLock`()
+        = 
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_do_lock(
+        _status)
+}
+    
+    
+ fun `finishUnlock`()
+        = 
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_finish_unlock(
+        _status)
+}
+    
+    
+ fun `getCarrier`(`handler`: CarrierHandler, `mccmnc`: kotlin.String)
         = 
     uniffiRustCall() { _status ->
     UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_get_carrier(
@@ -2975,6 +4497,31 @@ public object FfiConverterSequenceString: FfiConverterRustBuffer<List<kotlin.Str
     uniffiRustCall() { _status ->
     UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_init_native(
         FfiConverterString.lower(`dir`),FfiConverterOptionalString.lower(`handle`),FfiConverterTypeMsgReceiver.lower(`handler`),_status)
+}
+    
+    
+ fun `isLocked`(): kotlin.Boolean {
+            return FfiConverterBoolean.lift(
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_is_locked(
+        _status)
+}
+    )
+    }
+    
+ fun `recoverKeychain`()
+        = 
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_recover_keychain(
+        _status)
+}
+    
+    
+ fun `setupKeystore`(`dir`: kotlin.String, `keystore`: NativeKeystore)
+        = 
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_setup_keystore(
+        FfiConverterString.lower(`dir`),FfiConverterTypeNativeKeystore.lower(`keystore`),_status)
 }
     
     

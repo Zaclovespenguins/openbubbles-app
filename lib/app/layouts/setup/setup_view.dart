@@ -77,7 +77,7 @@ class SetupViewController extends StatefulController {
 
   ApsConnection? connection;
   api.JoinedOsConfig? config;
-  IdsngmIdentity? identity;
+  api.IdsngmIdentity? identity;
   ApsState? cachedState;
   ArcAnisetteClientDefaultAnisetteProvider? anisette;
 
@@ -770,7 +770,7 @@ class SetupViewController extends StatefulController {
 }
 
 class SetupView extends StatefulWidget {
-  (ApsConnection, ApsState, api.JoinedOsConfig, IdsngmIdentity, ArcAnisetteClientDefaultAnisetteProvider)? prefix;
+  (ApsConnection, ApsState, api.JoinedOsConfig, api.IdsngmIdentity, ArcAnisetteClientDefaultAnisetteProvider)? prefix;
 
   SetupView({super.key, this.prefix});
 
@@ -805,7 +805,7 @@ class _SetupViewState extends OptimizedState<SetupView> {
       }
 
       if (restored != null && pushService.state == null && controller.connection == null) {
-        controller.identity = restored.identity;
+        controller.identity = api.decodeIdentity(identity: restored.identity);
         controller.config = restored.osConfig;
         controller.cachedState = restored.push;
         await controller.setupConnection();

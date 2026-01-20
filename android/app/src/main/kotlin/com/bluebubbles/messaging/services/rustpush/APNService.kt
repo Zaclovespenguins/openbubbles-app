@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import com.bluebubbles.messaging.MainActivity
 import com.bluebubbles.messaging.R
 import com.bluebubbles.messaging.services.backend_ui_interop.DartWorkManager
+import com.bluebubbles.messaging.services.backend_ui_interop.DartWorker
 import com.bluebubbles.messaging.services.backend_ui_interop.MethodCallHandler
 import com.bluebubbles.messaging.services.system.GetZenMode
 import com.bluebubbles.messaging.services.system.ZenModeUUIDHandler
@@ -31,9 +32,11 @@ import com.google.gson.ToNumberPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import uniffi.rust_lib_bluebubbles.NativePushState
 import uniffi.rust_lib_bluebubbles.initNative
 import uniffi.rust_lib_bluebubbles.MsgReceiver
+import uniffi.rust_lib_bluebubbles.setupKeystore
 import uniffi.rust_lib_bluebubbles.start
 
 class APNService : Service(), MsgReceiver {
@@ -71,7 +74,9 @@ class APNService : Service(), MsgReceiver {
                 return@post
             }
             Log.i("ugh running", "backend $ptr $retry")
-            DartWorkManager.createWorker(this@APNService, "APNMsg", hashMapOf("pointer" to ptr.toString(), "retry" to retry.toString())) {}
+            CoroutineScope(Dispatchers.Main).launch {
+                DartWorker.callMethod(this@APNService, "APNMsg", mapOf("pointer" to ptr.toString(), "retry" to retry.toString()))
+            }
         }
     }
 
@@ -114,6 +119,7 @@ class APNService : Service(), MsgReceiver {
         pushState?.publishStatus(uuid)
     }
 
+    val keystore = AndroidNativeKeystore(this)
 
     fun launchAgent() {
         Log.i("launching agent", "herer")
@@ -123,12 +129,9 @@ class APNService : Service(), MsgReceiver {
                 MethodCallHandler.invokeMethod("SMSMsg", map)
                 return@init
             }
-            MethodCallHandler.queueId += 1
-            val gson = GsonBuilder()
-                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
-                .create()
-            MethodCallHandler.queuedMessages[MethodCallHandler.queueId] = gson.toJson(map).toString()
-            DartWorkManager.createWorker(context, "SMSMsg", hashMapOf("id" to MethodCallHandler.queueId)) {}
+            CoroutineScope(Dispatchers.Main).launch {
+                DartWorker.callMethod(this@APNService, "SMSMsg", map)
+            }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -151,8 +154,14 @@ class APNService : Service(), MsgReceiver {
             )
         }
 
-        start(applicationContext.filesDir.path, AndroidFilePackager(this))
+        Log.i("here", "hjeal")
 
+        start(applicationContext.filesDir.path, AndroidFilePackager(this))
+        setupKeystore(applicationContext.filesDir.path, keystore)
+        keystore.checkMaster()
+        Log.i("here", "hjealme")
+
+        Log.i("here", "hwallow")
         initNative(applicationContext.filesDir.path, null, this)
     }
 

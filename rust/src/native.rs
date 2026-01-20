@@ -6,7 +6,7 @@ use rustpush::{EntitlementAuthState, PushError, get_gateways_for_mccmnc};
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
-use crate::{RUNTIME, api::api::{APSWatcher, DaemonData, PollResult, PushMessage, RegistrationPhase, SharedPushState, approve_circle, decline_facetime, do_first_time_init, get_2fa_code, get_entitlements, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
+use crate::{RUNTIME, api::api::{APSWatcher, DaemonData, PollResult, PushMessage, SharedPushState, approve_circle, decline_facetime, do_first_time_init, get_2fa_code, get_entitlements, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
 
 #[derive(uniffi::Record)] 
 pub struct FileInfo {
@@ -138,6 +138,11 @@ impl NativePushState {
                                     tokio::time::sleep(Duration::from_secs(30)).await;
                                     while QUEUED_MESSAGES.lock().await.1.contains_key(&key) {
                                         retry += 1;
+                                        if retry > 5 {
+                                            warn!("Excessive retries, dropping pointer {key}");
+                                            QUEUED_MESSAGES.lock().await.1.remove(&key);
+                                            break;
+                                        }
                                         info!("re-emitting pointer {key}, retry {retry}");
                                         // we still haven't been handled, attempt to handle again
                                         handler_ref.receieved_msg(key, retry);

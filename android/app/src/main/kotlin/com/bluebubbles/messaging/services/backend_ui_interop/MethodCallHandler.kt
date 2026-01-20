@@ -41,6 +41,7 @@ import com.bluebubbles.messaging.services.notifications.CreateMissedFaceTimeNoti
 import com.bluebubbles.messaging.services.rustpush.AppleAccountLoginHandler
 import com.bluebubbles.messaging.services.rustpush.EAPAKAGateway
 import com.bluebubbles.messaging.services.rustpush.GetNativeHandleHandler
+import com.bluebubbles.messaging.services.rustpush.KeystoreUnlockHandler
 import com.bluebubbles.messaging.services.rustpush.ProvisionNative
 import com.bluebubbles.messaging.services.rustpush.SMSLessAuthGateway
 import com.bluebubbles.messaging.services.system.EnableBTHandler
@@ -139,6 +140,7 @@ class MethodCallHandler {
             ShizukuGrantPermissionHandler.tag -> ShizukuGrantPermissionHandler().handleMethodCall(call, result, context)
             ProvisionNative.tag -> ProvisionNative().handleMethodCall(call, result, context)
             EAPAKAGateway.tag -> EAPAKAGateway().handleMethodCall(call, result, context)
+            KeystoreUnlockHandler.tag -> KeystoreUnlockHandler().handleMethodCall(call, result, context)
             "ready" -> { MainActivity.engine_ready = true }
             else -> {
                 val error = "Could not find method call handler for ${call.method}!"

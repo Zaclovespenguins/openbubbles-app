@@ -4910,7 +4910,7 @@ class RustPushService extends GetxService {
     state.client.dispose();
 
 
-    (lib.ApsConnection, lib.ApsState, api.JoinedOsConfig, lib.IdsngmIdentity, lib.ArcAnisetteClientDefaultAnisetteProvider)? prefix;    
+    (lib.ApsConnection, lib.ApsState, api.JoinedOsConfig, api.IdsngmIdentity, lib.ArcAnisetteClientDefaultAnisetteProvider)? prefix;    
     if (hw || !setup) {
       api.closeAps(aps: state.conn);
       state.conn.dispose();
@@ -4918,7 +4918,7 @@ class RustPushService extends GetxService {
       state.anisette.dispose();
     } else {
       var restored = api.readHardware(path: pushService.statePath)!;
-      prefix = (state.conn, restored.push, state.osConfig, restored.identity, state.anisette);
+      prefix = (state.conn, restored.push, state.osConfig, api.decodeIdentity(identity: restored.identity), state.anisette);
     }
 
     if (setup) {

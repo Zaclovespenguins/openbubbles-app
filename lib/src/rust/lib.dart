@@ -70,9 +70,6 @@ abstract class ArcStatusKitClientDefaultAnisetteProvider
 abstract class ArcTokenProviderDefaultAnisetteProvider
     implements RustOpaqueInterface {}
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IDSNGMIdentity>>
-abstract class IdsngmIdentity implements RustOpaqueInterface {}
-
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<NSArray < LPIconMetadata >>>
 abstract class NsArrayLpIconMetadata implements RustOpaqueInterface {}
 

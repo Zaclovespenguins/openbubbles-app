@@ -9,8 +9,9 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `config`, `get_login_config`, `handle_2fa`, `handle_circle`, `handle_photostream`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `reset_user`, `shared_items`, `subscribe_streams`, `wrap_sink`
-// These types are ignored because they are not used by any `pub` functions: `AnisetteState`, `DaemonData`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `ProvisionedAnisette`, `RegistrationPhase`
+// These functions are ignored because they are not marked as `pub`: `config`, `encrypt`, `get_login_config`, `get_password`, `handle_2fa`, `handle_circle`, `handle_photostream`, `migrate`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `reset_user`, `shared_items`, `subscribe_streams`, `wrap_sink`
+// These functions are ignored because they have generic arguments: `bin_deserialize`, `bin_serialize`
+// These types are ignored because they are not used by any `pub` functions: `AnisetteState`, `DaemonData`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `ProvisionedAnisette`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
 
 ChatProto decodeChatproto({required GZipWrapperChatProto wrapped}) =>
@@ -66,6 +67,9 @@ GZipWrapperAttachmentMeta encodeAttachmentmeta(
 Future<void> doFirstTimeInit({required String path}) =>
     RustLib.instance.api.crateApiApiDoFirstTimeInit(path: path);
 
+IdsngmIdentity decodeIdentity({required List<int> identity}) =>
+    RustLib.instance.api.crateApiApiDecodeIdentity(identity: identity);
+
 ExtensionApp decodeExtensionApp({required List<int> bp, required String bid}) =>
     RustLib.instance.api.crateApiApiDecodeExtensionApp(bp: bp, bid: bid);
 
@@ -74,9 +78,6 @@ ExtensionApp decodeExtensionApp({required List<int> bp, required String bid}) =>
 
 Future<SharedPushState?> serviceFromPtr({required String ptr}) =>
     RustLib.instance.api.crateApiApiServiceFromPtr(ptr: ptr);
-
-Future<bool> migrate({required String path}) =>
-    RustLib.instance.api.crateApiApiMigrate(path: path);
 
 IdsngmIdentity newNgmIdentity() =>
     RustLib.instance.api.crateApiApiNewNgmIdentity();
@@ -1089,6 +1090,9 @@ abstract class GZipWrapperMessageProto3 implements RustOpaqueInterface {}
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<GZipWrapper < MessageProto4 >>>
 abstract class GZipWrapperMessageProto4 implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IDSNGMIdentity>>
+abstract class IdsngmIdentity implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<IDSUser>>
 abstract class IdsUser implements RustOpaqueInterface {}
 
@@ -1142,13 +1146,13 @@ abstract class ReceiverApsMessage implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<SavedHardwareState>>
 abstract class SavedHardwareState implements RustOpaqueInterface {
-  IdsngmIdentity get identity;
+  Uint8List get identity;
 
   JoinedOsConfig get osConfig;
 
   ApsState get push;
 
-  set identity(IdsngmIdentity identity);
+  set identity(Uint8List identity);
 
   set osConfig(JoinedOsConfig osConfig);
 

@@ -1,9 +1,12 @@
 
 
-use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, future::Future, io::{Cursor, Read, Write}, ops::Deref, str::FromStr, sync::{Arc, OnceLock, Weak}, time::Duration, u64};
+use std::{borrow::{Borrow, BorrowMut}, collections::HashSet, fs::{self, File}, future::Future, io::{Cursor, Read, Write}, ops::Deref, panic, str::FromStr, sync::{Arc, OnceLock, Weak}, time::Duration, u64};
 pub use std::time::SystemTime;
 use anyhow::anyhow;
 use flutter_rust_bridge::{DartFnFuture, IntoDart, JoinHandle, frb};
+#[cfg(not(target_os = "android"))]
+use keystore::software::{SoftwareEncryptor, SoftwareKeystore};
+use keystore::{AesKeystoreKey, EcCurve, EcKeystoreKey, EncryptMode, KeystoreAccessRules, KeystoreDigest, KeystoreEncryptKey, KeystorePadding, RsaKey, init_keystore, keystore};
 pub use rustpush::{default_provider, ArcAnisetteClient, LoginClientInfo, DefaultAnisetteProvider};
 use log::{debug, error, info, warn};
 use plist::{Data, Dictionary};
@@ -17,7 +20,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::{AnisetteProvider, cloudkit_proto::base64_encode, findmy::SharedBeaconClient};
+use rustpush::{AnisetteProvider, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -101,14 +104,38 @@ impl<T: Seek + Read> SeekRead for T {}
 #[derive(Serialize, Deserialize, Clone)]
 pub struct SavedHardwareState {
     pub push: APSState,
-    pub identity: IDSNGMIdentity,
+    #[serde(serialize_with = "bin_serialize", deserialize_with = "bin_deserialize")]
+    pub identity: Vec<u8>,
     pub os_config: JoinedOSConfig,
 }
 
-pub enum RegistrationPhase {
-    WantsOSConfig,
-    WantsRegister,
-    Registered,
+#[frb(sync)]
+pub fn decode_identity(identity: &[u8]) -> anyhow::Result<IDSNGMIdentity> {
+    Ok(IDSNGMIdentity::restore(identity, "openbubbles")?)
+}
+
+pub fn bin_serialize<S>(x: &[u8], s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    s.serialize_bytes(x)
+}
+
+fn bin_deserialize_16<'de, D>(d: D) -> Result<[u8; 16], D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s: Data = Deserialize::deserialize(d)?;
+    let s: Vec<u8> = s.into();
+    Ok(s.try_into().unwrap())
+}
+
+pub fn bin_deserialize<'de, D>(d: D) -> Result<Vec<u8>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s: Data = Deserialize::deserialize(d)?;
+    Ok(s.into())
 }
 
 #[cfg(not(target_os = "android"))]
@@ -217,123 +244,155 @@ fn plist_to_bin<T: serde::Serialize>(value: &T) -> Result<Vec<u8>, plist::Error>
     Ok(buf)
 }
 
-pub fn migrate(path: String) -> bool {
+fn migrate(path: String) -> bool {
     let dir = PathBuf::from_str(&path).unwrap();
-
     let hw_config_path = dir.join("hw_info.plist");
-    let id_path = dir.join("id.plist");
 
-    info!("restoring now");
-
-    // migrate
-    if let Ok(config) = plist::from_file::<_, SavedHardwareState>(&dir.join("config.plist")) {
-        std::fs::write(&hw_config_path, plist_to_string(&config).unwrap()).unwrap();
-        let data: Value = plist::from_file(&dir.join("config.plist")).unwrap();
-        std::fs::write(&id_path, plist_to_string(&data.as_dictionary().unwrap().get("users").unwrap()).unwrap()).unwrap();
-        std::fs::remove_file(dir.join("config.plist")).unwrap();
-        info!("migrated!");
-    }
-
-    if let Ok(mut value) = plist::from_file::<_, Dictionary>(&hw_config_path) {
-        let os_config = value["os_config"].as_dictionary_mut().unwrap();
-        if !os_config.contains_key("type") {
-            os_config.insert("type".to_string(), Value::String("MacOS".to_string()));
-        }
-        std::fs::write(&hw_config_path, plist_to_string(&value).unwrap()).unwrap();
-        info!("migrated two!");
-    }
-
-    // second migrate
-    if let Ok(mut users) = plist::from_file::<_, Vec<Dictionary>>(&id_path) {
-        for user in &mut users {
-            if user.contains_key("handles") {
-                // migrate!
-                let handles = user.remove("handles").unwrap();
-                let identity = user.get_mut("identity").unwrap().as_dictionary_mut().unwrap();
-                let id_keypair = identity.remove("id_keypair").unwrap();
-
-                let registration = Dictionary::from_iter([
-                    ("id_keypair", id_keypair),
-                    ("handles", handles),
-                ].into_iter());
-                user.insert("registration".to_string(), Value::Dictionary(registration));
-
-                info!("migrated!")
-            }
-        }
-        std::fs::write(&id_path, plist_to_string(&users).unwrap()).unwrap();
-    }
-
-    if let Ok(mut value) = plist::from_file::<_, Dictionary>(&hw_config_path) {
-        if !value.contains_key("identity") {
-            if let Ok(users) = plist::from_file::<_, Vec<Dictionary>>(&id_path) {
-                // get first phone user or first user
-                if let Some(user) = users.iter()
-                    .find(|user| user["user_id"].as_string().unwrap().starts_with("P:")).or(users.first()) {
-
-                    value.insert("identity".to_string(), user["identity"].clone());
-                    std::fs::write(&hw_config_path, plist_to_string(&value).unwrap()).unwrap();
-
-                    info!("migrated identity!");
+    if let Ok(mut item) = plist::from_file::<_, Dictionary>(&hw_config_path) {
+        if let Some(v) = item.get("os_config") {
+            let config: JoinedOSConfig = plist::from_value(v).expect("got os ");
+            if let Some(Value::Dictionary(dict)) = item.get_mut("push") {
+                if let Some(Value::Dictionary(item)) = dict.get_mut("keypair") {
+                    if let Some(private) = item.get_mut("private") {
+                        if let Value::Data(cert) = private {
+                            let handle = format!("activation:{}", config.get_serial_number());
+                            RsaKey::import(&handle, 1024, cert, KeystoreAccessRules {
+                                signature_padding: vec![KeystorePadding::PKCS1],
+                                digests: vec![KeystoreDigest::Sha1],
+                                can_sign: true,
+                                ..Default::default()
+                            }).expect("failed to import RSA");
+                            *private = Value::String(handle);
+                            plist::to_file_xml(&hw_config_path, &item).expect("failed to save!");
+                        }
+                    }
                 }
             }
         }
+        if let Some(value) = item.get_mut("identity") {
+            if value.as_dictionary().is_some() {
+                let identity: IDSNGMIdentity = plist::from_value(&value).expect("NGM Identity parse");
+                *value = Value::Data(identity.save("openbubbles").expect("Failed to save"));
+                plist::to_file_xml(&hw_config_path, &item).expect("failed to save!");
+            }
+        }
     }
 
+    let id_path = dir.join("id.plist");
     if let Ok(mut users) = plist::from_file::<_, Vec<Dictionary>>(&id_path) {
+        let mut modified = false;
         for user in &mut users {
-            let registration = user.get_mut("registration").unwrap().as_dictionary_mut().unwrap();
-            if !registration.contains_key("com.apple.madrid") {
-                // migrate!
-                *registration = Dictionary::from_iter([
-                    ("com.apple.madrid", Value::Dictionary(registration.clone()))
-                ]);
+            let user_id = user.get("user_id").unwrap().as_string().unwrap().to_string();
+            if let Some(Value::Dictionary(item)) = user.get_mut("auth_keypair") {
+                if let Some(private) = item.get_mut("private") {
+                    if let Value::Data(cert) = private {
+                        let handle = format!("ids:{user_id}");
+                        RsaKey::import(&handle, 2048, cert, KeystoreAccessRules {
+                            signature_padding: vec![KeystorePadding::PKCS1],
+                            digests: vec![KeystoreDigest::Sha1],
+                            can_sign: true,
+                            ..Default::default()
+                        }).expect("failed to import RSA");
+                        *private = Value::String(handle);
+                        modified = true;
+                    }
+                }
+            }
+            if let Some(Value::Dictionary(item)) = user.get_mut("registration") {
+                for service in item.values_mut() {
+                    if let Some(Value::Dictionary(item)) = service.as_dictionary_mut().unwrap().get_mut("id_keypair") {
+                        if let Some(private) = item.get_mut("private") {
+                            if let Value::Data(cert) = private {
+                                let handle = format!("ids:{user_id}");
+                                *private = Value::String(handle);
+                            }
+                        }
+                    }
+                }
             }
         }
-        std::fs::write(&id_path, plist_to_string(&users).unwrap()).unwrap();
-    }
-
-    let mut needs_rereg = false;
-
-    #[derive(Serialize, Deserialize, Clone)]
-    struct LegacySavedHardwareState {
-        push: APSState,
-        identity: IDSUserIdentity,
-        os_config: JoinedOSConfig,
-    }
-
-    if let Ok(config) = plist::from_file::<_, LegacySavedHardwareState>(&hw_config_path) {
-        std::fs::write(&hw_config_path, plist_to_string(&SavedHardwareState {
-            push: config.push,
-            identity: IDSNGMIdentity::new_with_legacy(config.identity).expect("Failed to create new identity!"),
-            os_config: config.os_config
-        }).unwrap()).unwrap();
-        needs_rereg = true;
-    }
-
-
-    let Ok(mut state) = plist::from_file::<_, SavedHardwareState>(&hw_config_path) else { return false };
-
-    match &mut state.os_config {
-        JoinedOSConfig::MacOS(m) => {
-            if m.udid.is_none() {
-                let mut config = (&**m).clone();
-                config.udid = Some(generate_udid());
-                *m = Arc::new(config);
-                plist::to_file_xml(&hw_config_path, &state).unwrap();
-            }
-        },
-        JoinedOSConfig::Relay(m) => {
-            if m.udid.is_none() {
-                let mut config = (&**m).clone();
-                config.udid = Some(generate_udid());
-                *m = Arc::new(config);
-                plist::to_file_xml(&hw_config_path, &state).unwrap();
-            }
+        if modified {
+            plist::to_file_xml(&id_path, &users).expect("failed to save!");
         }
     }
 
-    needs_rereg
+    let cloudkit_path = dir.join("keychain.plist");
+    if let Ok(mut users) = plist::from_file::<_, Dictionary>(&cloudkit_path) {
+        let anisette_path = dir.join("anisette_test/state.plist");
+        if let Ok(AnisetteState { provisioned: Some(ProvisionedAnisette { mid, .. }), .. }) = plist::from_file::<_, AnisetteState>(&anisette_path) {
+            let mid = base64_encode(mid.as_ref());
+            let mut migrate = false;
+            let dsid = users.get("dsid").unwrap().as_string().unwrap().to_string();
+            if let Some(Value::Dictionary(item)) = users.get_mut("user_identity") {
+                if let Some(private) = item.get_mut("signing_key") {
+                    if let Value::Data(cert) = private {
+                        let handle = format!("keychain:signing:{mid}");
+                        EcKeystoreKey::import(&handle, EcCurve::P384, &cert, KeystoreAccessRules {
+                            can_sign: true,
+                            digests: vec![KeystoreDigest::Sha384, KeystoreDigest::Sha256],
+                            ..Default::default()
+                        }).expect("Failed to import EC");
+                        *private = Value::String(handle);
+                        migrate = true;
+                    }
+                }
+                if let Some(private) = item.get_mut("encryption_key") {
+                    if let Value::Data(cert) = private {
+                        let handle = format!("keychain:encryption:{mid}");
+                        EcKeystoreKey::import(&handle, EcCurve::P384, &cert, KeystoreAccessRules {
+                            can_agree: true,
+                            digests: vec![KeystoreDigest::Sha384, KeystoreDigest::Sha256],
+                            ..Default::default()
+                        }).expect("Failed to import EC");
+                        *private = Value::String(handle);
+                    }
+                }
+            }
+            if migrate {
+                if let Some(private) = users.get_mut("current_bottle") {
+                    // convert escrowed_signing_key to data from vec u8
+                    #[derive(Deserialize)]
+                    struct BadBottle {
+                        escrowed_signing_key: Vec<u8>,
+                    }
+                    let bad: BadBottle = plist::from_value(&private).expect("bottle Identity parse");
+                    let dict = private.as_dictionary_mut().unwrap();
+                    dict.insert("escrowed_signing_key".to_string(), Value::Data(bad.escrowed_signing_key));
+
+                    let identity: CurrentBottle = plist::from_value(&private).expect("bottle Identity parse");
+                    *private = Value::Data(identity.save(&dsid).expect("Failed to save"));
+                }
+                if let Some(Value::Array(items)) = users.get_mut("keystore") {
+                    let keystore = SivKey(keystore().ensure_secret(&format!("keychain:cloudkey-access-key:{}", dsid), 64).expect("wha"));
+                    for key in items {
+                        let Value::Data(data) = key else { continue };
+                        let serialized = CuttlefishSerializedKey::decode(&mut Cursor::new(data)).expect("failed to decode");
+                        let cloud = CloudKey::from_serialized_key(serialized, &keystore);
+                        *key = plist::to_value(&cloud).expect("Faield to serizsdf");
+                    }
+                }
+                if let Some(Value::Dictionary(dict)) = users.get_mut("items") {
+                    dict.clear();
+                }
+                plist::to_file_xml(&cloudkit_path, &users).expect("failed to save!");
+            }
+        }
+    }
+
+    let gsa_path = dir.join("gsa.plist");
+    if let Ok(mut account) = plist::from_file::<_, Dictionary>(&gsa_path) {
+        if let Some(Value::Data(password)) = account.remove("password") {
+            account.insert("encrypted_password".to_string(), Value::Data(GSAConfig::encrypt(&password).expect("Undo").into()));
+            plist::to_file_xml(&gsa_path, &account).expect("failed to save!");
+
+            let findmy = dir.join("findmy.plist");
+            if let Ok(users) = plist::from_file::<_, FindMyState>(&findmy) {
+                std::fs::write(findmy, users.encode().expect("what")).unwrap();
+            }
+        }
+    }
+
+    false
 }
 
 #[frb(sync)]
@@ -501,15 +560,45 @@ pub struct SharedICloudServices {
 
 impl SharedPushState {
     pub async fn restore(path: String) -> Option<(Self, APSWatcher)> {
+        info!("restroing");
         let dir = PathBuf::from_str(&path).unwrap();
+        let keystore = dir.join("keystore.plist");
+
+        #[cfg(not(target_os = "android"))]
+        init_keystore(SoftwareKeystore {
+            state: plist::from_file(&keystore).unwrap_or_default(),
+            update_state: Box::new(move |state| {
+                plist::to_file_xml(&keystore, state).unwrap();
+            }),
+            encryptor: SoftwareEncryptor(*b"desktopisinsecureyoushouldn'tber"),
+        });
+
+        if let Err(err) = panic::catch_unwind(|| {
+            migrate(path.clone());
+        }) {
+
+            if let Some(s) = err.downcast_ref::<&str>() {
+                info!("Panic message: {}", s);
+            } else if let Some(s) = err.downcast_ref::<String>() {
+                info!("Panic message: {}", s);
+            } else {
+                info!("Panic occurred, but message has unknown type");
+            }
+
+            panic!("panicked")
+        }
+
         let hardware = read_hardware(path.clone())?;
         let users = restore_users(path.clone())?;
         let config = &hardware.os_config;
-        let (conn, _) = setup_push(config, &hardware.identity, Some(hardware.push.clone()), path.clone()).await;
-        let client = make_imclient(path.clone(), &conn, &users, &hardware.identity).await;
+        let identity = IDSNGMIdentity::restore(hardware.identity.as_ref(), "openbubbles").ok()?;
+        let (conn, _) = setup_push(config, &identity, Some(hardware.push.clone()), path.clone()).await;
+        let client = make_imclient(path.clone(), &conn, &users, &identity).await;
         let anisette = make_anisette(path.clone(), config, &conn).await;
 
         let account = restore_account(path.clone(), &anisette, config, &conn).await;
+
+        info!("account {}", account.is_some());
         
 
         let (cancel_poll, local_broadcast, watcher) = build_watcher(&conn, &client);
@@ -576,7 +665,7 @@ pub async fn restore_account(path: String, anisette: &ArcAnisetteClient<DefaultA
             AppleAccount::new_with_anisette(get_login_config(&dir, config, conn).await, anisette.clone()).expect("aacbf?");
         
     apple_account.username = Some(state.username.clone());
-    apple_account.hashed_password = Some(state.password.clone().into());
+    apple_account.hashed_password = state.get_password().ok();
 
     if state.postdata_done.is_none() {
         info!("Updating postdata");
@@ -656,6 +745,10 @@ pub fn make_keychain(path: String, cloudkit: &Arc<CloudKitClient<DefaultAnisette
     let dir = PathBuf::from_str(&path).unwrap();
     let cloudkit_path = dir.join("keychain.plist");
 
+    if let Err(e) = plist::from_file::<_, KeychainClientState>(&cloudkit_path) {
+        info!("Failed to desrialized {e}");
+    }
+
     let state: KeychainClientState = plist::from_file(&cloudkit_path).ok()?;
 
     Some(Arc::new(KeychainClient {
@@ -680,12 +773,12 @@ pub fn make_cloud_messages_client(cloudkit: &Arc<CloudKitClient<DefaultAnisetteP
 pub async fn make_findmy(path: String, token_provider: &Arc<TokenProvider<DefaultAnisetteProvider>>, conn: &APSConnection, cloudkit: &Arc<CloudKitClient<DefaultAnisetteProvider>>, keychain: &Arc<KeychainClient<DefaultAnisetteProvider>>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, config: &JoinedOSConfig, client: &Arc<IMClient>) -> Option<Arc<FindMyClient<DefaultAnisetteProvider>>> {
     let dir = PathBuf::from_str(&path).unwrap();
     let id_path = dir.join("findmy.plist");
-    let state: FindMyState = plist::from_file(&id_path).ok()?;
+    let state = FindMyState::restore(&fs::read(&id_path).ok()?).ok()?;
 
     Some(Arc::new(FindMyClient::new(conn.clone(), cloudkit.clone(), keychain.clone(), config.config(), Arc::new(FindMyStateManager {
         state: Mutex::new(state),
         update: Box::new(move |state| {
-            plist::to_file_xml(&id_path, state).expect("Failed to serialize plist!");
+            fs::write(&id_path, state).expect("Failed to serialize plist!");
         }),
     }), token_provider.clone(), anisette.clone(), client.identity.clone()).await.unwrap()))
 }
@@ -755,7 +848,7 @@ pub async fn set_identity(state_path: String, config: &JoinedOSConfig, identity:
     let state = SavedHardwareState {
         push: Default::default(),
         os_config: config.clone(),
-        identity: identity.clone(),
+        identity: identity.save("openbubbles").expect("failed to save").into(),
     };
     std::fs::write(&state_path, plist_to_string(&state).unwrap()).unwrap();
 }
@@ -764,11 +857,12 @@ pub async fn setup_push(config: &JoinedOSConfig, identity: &IDSNGMIdentity, stat
     let state_path = PathBuf::from_str(&state_path).unwrap().join("hw_info.plist");
     let (conn, error) = APSConnectionResource::new(config.config(), state).await;
 
+    let saved_identity = identity.save("openbubbles").expect("failed to save");
     if error.is_none() {
         let state = SavedHardwareState {
             push: conn.state.read().await.clone(),
             os_config: config.clone(),
-            identity: identity.clone(),
+            identity: saved_identity.clone().into(),
         };
         std::fs::write(&state_path, plist_to_string(&state).unwrap()).unwrap();
     }
@@ -776,7 +870,6 @@ pub async fn setup_push(config: &JoinedOSConfig, identity: &IDSNGMIdentity, stat
     let mut to_refresh = conn.generated_signal.subscribe();
     let reconn_conn = Arc::downgrade(&conn);
     let config_ref = config.clone();
-    let ident_ref = identity.clone();
     tokio::spawn(async move {
         loop {
             match to_refresh.recv().await {
@@ -786,7 +879,7 @@ pub async fn setup_push(config: &JoinedOSConfig, identity: &IDSNGMIdentity, stat
                     let state = SavedHardwareState {
                         push: conn.state.read().await.clone(),
                         os_config: config_ref.clone(),
-                        identity: ident_ref.clone(),
+                        identity: saved_identity.clone().into(),
                     };
                     std::fs::write(&state_path, plist_to_string(&state).unwrap()).unwrap();
                 },
@@ -801,6 +894,7 @@ pub async fn setup_push(config: &JoinedOSConfig, identity: &IDSNGMIdentity, stat
 
 #[derive(Serialize, Deserialize)]
 pub struct AnisetteState {
+    #[serde(serialize_with = "bin_serialize", deserialize_with = "bin_deserialize_16")]
     keychain_identifier: [u8; 16],
     provisioned: Option<ProvisionedAnisette>,
 }
@@ -1143,8 +1237,8 @@ pub async fn get_contacts_headers(path: String, state: &ArcAnisetteClient<Defaul
     let dir = PathBuf::from_str(&path).unwrap();
 
     // I know it's the wrong answer. Stop looking at me!
-    let id_path = dir.join("findmy.plist");
-    let findmy_state: FindMyState = plist::from_file(id_path)?;
+    let id_path = dir.join("sharedstreams.plist");
+    let findmy_state: SharedStreamsState = plist::from_file(id_path)?;
     
     let mut headers = state.lock().await.get_headers().await?.clone();
     headers.insert("X-Mme-Client-Info".to_string(), config.get_adi_mme_info("com.apple.AuthKit/1 (com.apple.AddressBookSourceSync/2695.500.71)", !headers["X-Mme-Client-Info"].contains("iPhone OS")));
@@ -1739,8 +1833,8 @@ pub fn restore_user(user: String) -> anyhow::Result<IDSUser> {
 pub async fn make_find_my_phone(path: String, config: &JoinedOSConfig, aps: &APSConnection, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, provider: &Arc<TokenProvider<DefaultAnisetteProvider>>) -> anyhow::Result<FindMyPhoneClient<DefaultAnisetteProvider>> {
     let dir = PathBuf::from_str(&path).unwrap();
 
-    let id_path = dir.join("findmy.plist");
-    let state: FindMyState = plist::from_file(id_path)?;
+    let id_path = dir.join("sharedstreams.plist");
+    let state: SharedStreamsState = plist::from_file(id_path)?;
 
     Ok(FindMyPhoneClient::new(&*config.config(), state.dsid.clone(), aps.clone(), anisette.clone(), provider.clone()).await?)
 }
@@ -1757,8 +1851,8 @@ pub async fn refresh_devices(config: &JoinedOSConfig, client: &mut FindMyPhoneCl
 pub async fn make_find_my_friends(path: String, config: &JoinedOSConfig, aps: &APSConnection, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, provider: &Arc<TokenProvider<DefaultAnisetteProvider>>) -> anyhow::Result<FindMyFriendsClient<DefaultAnisetteProvider>> {
     let dir = PathBuf::from_str(&path).unwrap();
 
-    let id_path = dir.join("findmy.plist");
-    let state: FindMyState = plist::from_file(id_path)?;
+    let id_path = dir.join("sharedstreams.plist");
+    let state: SharedStreamsState = plist::from_file(id_path)?;
 
     let fmf_client = FindMyFriendsClient::new(&*config.config(), state.dsid.clone(), provider.clone(), aps.clone(), anisette.clone(), false).await?;
     Ok(fmf_client)
@@ -1891,8 +1985,32 @@ pub async fn get_quota_info(info: &Arc<TokenProvider<DefaultAnisetteProvider>>) 
 #[derive(Serialize, Deserialize)]
 struct GSAConfig {
     username: String,
-    password: Data,
+    encrypted_password: Data,
     postdata_done: Option<bool>,
+}
+
+impl GSAConfig {
+    fn get_password(&self) -> Result<Vec<u8>, PushError> {
+        let key = AesKeystoreKey::ensure(&format!("gsa:password"), 256, KeystoreAccessRules {
+            block_modes: vec![EncryptMode::Gcm],
+            can_encrypt: true,
+            can_decrypt: true,
+            ..Default::default()
+        })?;
+        let encoded = key.decrypt(self.encrypted_password.as_ref(), &mut EncryptMode::Gcm)?;
+        Ok(encoded)
+    }
+
+    fn encrypt(password: &[u8]) -> Result<Data, PushError> {
+        let key = AesKeystoreKey::ensure(&format!("gsa:password"), 256, KeystoreAccessRules {
+            block_modes: vec![EncryptMode::Gcm],
+            can_encrypt: true,
+            can_decrypt: true,
+            ..Default::default()
+        })?;
+        let encoded = key.encrypt(password, &mut EncryptMode::Gcm)?;
+        Ok(encoded.into())
+    }
 }
 
 pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, cookie: Option<String>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &JoinedOSConfig) -> anyhow::Result<IDSUser> {
@@ -1914,7 +2032,7 @@ pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnis
 
     plist::to_file_xml(conf_dir.join("gsa.plist"), &GSAConfig {
         username: account.username.clone().unwrap(),
-        password: account.hashed_password.clone().unwrap().into(),
+        encrypted_password: GSAConfig::encrypt(&account.hashed_password.clone().unwrap())?,
         postdata_done: Some(true),
     }).unwrap();
 
@@ -1929,7 +2047,7 @@ pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnis
 
     let id_path = conf_dir.join("findmy.plist");
     if !id_path.exists() {
-        std::fs::write(id_path, plist_to_string(&findmy).unwrap()).unwrap();
+        std::fs::write(id_path, findmy.encode()?).unwrap();
     }
 
     let shared_streams = SharedStreamsState::new(dsid.clone(), &mobileme);
@@ -1989,7 +2107,7 @@ pub async fn try_auth(path: String, conf: &JoinedOSConfig, conn: &APSConnection,
         (username, hashed_password.to_vec())
     } else {
         let state = plist::from_file::<_, GSAConfig>(&conf_dir.join("gsa.plist"))?;
-        (state.username, state.password.into())
+        (state.username.clone(), state.get_password()?)
     };
 
     let mut login_state = apple_account.login_email_pass(&result.0, &result.1).await?;
@@ -2420,7 +2538,9 @@ pub async fn reset_state(cancel: &mpsc::Sender<()>, path: String, config: &Joine
     if logout {
         if let Some(hardware) = read_hardware(path.clone()) {
             // try deregistering from iMessage, but if it fails we don't really care
-            let _ = register(&*config.config(), &*aps.state.read().await, &[], &mut [], &hardware.identity).await;
+            if let Ok(identity) = IDSNGMIdentity::restore(hardware.identity.as_ref(), "openbubbles") {
+                let _ = register(&*config.config(), &*aps.state.read().await, &[], &mut [], &identity).await;
+            }
         }
         if let Some(account) = &account {
             let _ = account.lock().await.logout_all("Apple Device").await;
