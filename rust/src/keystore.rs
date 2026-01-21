@@ -1,8 +1,8 @@
 use std::{collections::BTreeSet, fmt::{Debug, Display}, path::PathBuf, sync::{Arc, RwLock}};
 
 use aes_gcm::{AeadInPlace, Aes256Gcm, KeyInit, Nonce};
-use keystore::{EcCurve, EncryptMode, KeyType, Keystore, KeystoreAccessRules, KeystoreDigest, KeystoreError, KeystorePadding, backup::{BackupKeystore, BackupKeystoreState}, init_keystore, keystore, software::{SoftwareKeystore, SoftwareKeystoreState}};
-use openssl::{bn::BigNumContext, ec::{EcGroup, EcKey, EcPoint}, encrypt::Encrypter, hash::MessageDigest, nid::Nid, pkey::{PKey, Public}, rsa::{Padding, Rsa}};
+use keystore::{EcCurve, EcKeystoreKey, EncryptMode, KeyType, Keystore, KeystoreAccessRules, KeystoreDeriveKey, KeystoreDigest, KeystoreError, KeystorePadding, backup::{BackupKeystore, BackupKeystoreState}, init_keystore, keystore, software::{SoftwareKeystore, SoftwareKeystoreState}};
+use openssl::{bn::BigNumContext, ec::{EcGroup, EcKey, EcPoint, PointConversionForm}, encrypt::Encrypter, hash::MessageDigest, nid::Nid, pkey::{PKey, Public}, rsa::{Padding, Rsa}};
 use rustpush::cloudkit_proto::base64_encode;
 use uniffi::UnexpectedUniFFICallbackError;
 use std::str::FromStr;
@@ -130,6 +130,23 @@ pub fn supports_import(keystore: &NativeKeystoreHolder) -> Result<bool, Keystore
         can_sign: true,
         ..Default::default()
     })?;
+
+    // this was added in android 12, make sure our keymaster supports it
+    keystore.destroy_key("test:ec")?;
+    let curve = EcGroup::from_curve_name(Nid::SECP384R1)?;
+    let test_ec = EcKey::generate(&curve)?;
+    keystore.import_key("test:ec", KeyType::Ec(EcCurve::P384), &test_ec.private_key_to_der()?, KeystoreAccessRules {
+        can_agree: true,
+        digests: vec![KeystoreDigest::Sha384, KeystoreDigest::Sha256],
+        ..Default::default()
+    })?;
+    let other_key = EcKey::generate(&curve)?;
+    let mut context = BigNumContext::new()?;
+    let ephermeral_sender = other_key.public_key().to_bytes(&curve, PointConversionForm::UNCOMPRESSED, &mut context)?;
+    keystore.derive("test:ec", &ephermeral_sender)?;
+
+    keystore.destroy_key("test:ec")?;
+    keystore.destroy_key("test:import")?;
 
     Ok(true)
 }
