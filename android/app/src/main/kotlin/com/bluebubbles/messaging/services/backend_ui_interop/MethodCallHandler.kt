@@ -31,6 +31,7 @@ import com.bluebubbles.messaging.services.system.BrowserLaunchRequestHandler
 import com.bluebubbles.messaging.services.system.CheckChromeOsHandler
 import com.bluebubbles.messaging.services.system.NewContactFormRequestHandler
 import com.bluebubbles.messaging.services.system.OpenCalendarRequestHandler
+import com.bluebubbles.messaging.services.credentials.OpenAutofillProviderSettingsHandler
 import com.bluebubbles.messaging.services.system.OpenConversationNotificationSettingsHandler
 import com.bluebubbles.messaging.services.system.OpenExistingContactRequestHandler
 import com.bluebubbles.messaging.services.system.PushShareTargetsHandler
@@ -96,6 +97,7 @@ class MethodCallHandler {
             NewContactFormRequestHandler.tag -> NewContactFormRequestHandler().handleMethodCall(call, result, context)
             OpenExistingContactRequestHandler.tag -> OpenExistingContactRequestHandler().handleMethodCall(call, result, context)
             OpenCalendarRequestHandler.tag -> OpenCalendarRequestHandler().handleMethodCall(call, result, context)
+            OpenAutofillProviderSettingsHandler.tag -> OpenAutofillProviderSettingsHandler().handleMethodCall(call, result, context)
             StartGoogleDuoRequestHandler.tag -> StartGoogleDuoRequestHandler().handleMethodCall(call, result, context)
             CheckChromeOsHandler.tag -> CheckChromeOsHandler().handleMethodCall(call, result, context)
             NotificationListenerPermissionRequestHandler.tag -> {

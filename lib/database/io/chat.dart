@@ -1320,7 +1320,7 @@ class Chat {
           save(updateDateDeleted: true);
           await chats.addChat(this);
         }
-        if (isArchived! && !_latestMessage!.isFromMe! && ss.settings.unarchiveOnNewMessage.value) {
+        if (isArchived! && !_latestMessage!.isFromMe! && ss.settings.unarchiveOnNewMessage.value && !participants.first.isBlocked()) {
           toggleArchived(false);
         }
       }

@@ -506,6 +506,92 @@ impl NSAttributedString {
     pub fn encode(&self) -> StCollapsedValue {}
 }
 
+#[frb(mirror(PasswordManagerMeta), type_64bit_int)]
+pub struct DartPasswordManagerMeta {
+    pub cdat: u64,
+    pub mdat: u64,
+    pub srvr: String,
+    pub acct: String,
+    pub agrp: String,
+    pub data: Vec<u8>,
+}
+
+pub use rustpush::passwords::{PasswordManagerMeta, WifiPassword, PasswordManagerMetaData, PasswordManagerMetaChange, PasswordManagerAltDomain, PasswordManagerTotp, PasswordManagerMetaDataCtx, Passkey};
+
+#[frb(mirror(PasswordManagerMetaData))]
+pub struct DartPasswordManagerMetaData {
+    pub history: Vec<PasswordManagerMetaChange>,
+    pub alt_domains: Vec<PasswordManagerAltDomain>,
+    pub totp: Option<PasswordManagerTotp>,
+    pub ctxt: HashMap<String, PasswordManagerMetaDataCtx>,
+}
+
+#[frb(external)]
+impl PasswordManagerMeta {
+    #[frb(sync)]
+    pub fn get_password_data(&self) -> Result<PasswordManagerMetaData, PushError> { }
+    #[frb(sync)]
+    pub fn get_data(data: &PasswordManagerMetaData) -> Result<Vec<u8>, PushError> { }
+}
+
+#[frb(mirror(PasswordManagerMetaChange), type_64bit_int)]
+pub struct DartPasswordManagerMetaChange {
+    pub date: u64,
+    pub password: String,
+    pub old_password: Option<String>,
+    pub id: String,
+    pub typ: String,
+}
+
+#[frb(mirror(PasswordManagerAltDomain))]
+pub struct DartPasswordManagerAltDomain {
+    pub domain: String,
+}
+
+#[frb(mirror(PasswordManagerTotp), type_64bit_int)]
+pub struct DartPasswordManagerTotp {
+    pub secret: Vec<u8>,
+    pub digits: u32,
+    pub issuer: Option<String>,
+    pub period: u32,
+    pub initial_date: u64,
+    pub algorithm: u32,
+    pub account_name: Option<String>,
+    pub original_url: Option<String>,
+}
+
+#[frb(external)]
+impl PasswordManagerTotp {
+    #[frb(sync)]
+    pub fn generate_otp(&self) -> Result<(u32, u64), PushError> {}
+}
+
+#[frb(mirror(PasswordManagerMetaDataCtx))]
+pub struct DartPasswordManagerMetaDataCtx {
+    pub last_used: f64,
+}
+
+#[frb(mirror(Passkey), type_64bit_int)]
+pub struct DartPasskey {
+    pub cdat: u64,
+    pub mdat: u64,
+    pub agrp: String,
+    pub labl: String, // site
+    pub data: Vec<u8>, // key
+    pub atag: Vec<u8>, // tag
+    pub klbl: Vec<u8>, // credential ID
+}
+
+#[frb(mirror(WifiPassword), type_64bit_int)]
+pub struct DartWifiPassword {
+    pub cdat: u64,
+    pub mdat: u64,
+    pub acct: String,
+    pub svce: String,
+    pub data: Vec<u8>,
+}
+
+
 #[frb(mirror(NSNumber))]
 pub struct DartNSNumber(pub u32);
 

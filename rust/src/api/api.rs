@@ -24,6 +24,7 @@ use rustpush::{AnisetteProvider, cloudkit_proto::{CuttlefishSerializedKey, base6
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
+pub use rustpush::passwords::PasswordManager;
 use uniffi::HandleAlloc;
 use rand::Rng;
 use uuid::Uuid;
@@ -34,7 +35,7 @@ use base64::prelude::*;
 pub use rustpush::IdmsAuthListener;
 pub use broadcast::Receiver;
 
-use crate::{frb_generated::{SseEncode, StreamSink}, init_logger, native::{PackagedFile, PACKAGER_LOCK, QUEUED_MESSAGES}, RUNTIME};
+use crate::{RUNTIME, frb_generated::{SseEncode, StreamSink}, init_logger, native::{HANDLE_WIFI_NETWORKS, PACKAGER_LOCK, PackagedFile, QUEUED_MESSAGES}};
 
 use flutter_rust_bridge::for_generated::{SimpleHandler, SimpleExecutor, NoOpErrorListener, SimpleThreadPool, BaseAsyncRuntime, lazy_static};
 
@@ -1211,6 +1212,60 @@ pub enum PushMessage {
     }
 }
 
+#[frb(sync)]
+pub fn get_password_manager(keychain: &Arc<KeychainClient<DefaultAnisetteProvider>>) -> PasswordManager<DefaultAnisetteProvider> {
+    PasswordManager::new(keychain.clone())
+}
+
+pub async fn sync_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> anyhow::Result<()> {
+    passwords.sync_passwords().await?;
+
+    let wifi_networks: HashMap<String, String> = get_wifi_passwords(passwords).await.into_values()
+        .map(|p| (p.acct, String::from_utf8(p.data).expect("bad password!"))).collect();
+
+    if let Some(handle) = HANDLE_WIFI_NETWORKS.get() {
+        handle.handle_wifi_networks(wifi_networks);
+    }
+
+    Ok(())
+}
+
+pub async fn get_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, PasswordManagerMeta> {
+    passwords.get_password_entries().await
+}
+
+pub async fn get_passkeys(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, Passkey> {
+    passwords.get_password_entries().await
+}
+
+pub async fn get_wifi_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, WifiPassword> {
+    passwords.get_password_entries().await
+}
+
+pub async fn save_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &PasswordManagerMeta) -> anyhow::Result<()> {
+    Ok(passwords.insert_password(&id, entry).await?)
+}
+
+pub async fn save_passkey(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &Passkey) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry).await?)
+}
+
+pub async fn save_wifi_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &WifiPassword) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry).await?)
+}
+
+pub async fn delete_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
+    Ok(passwords.delete_password(&id).await?)
+}
+
+pub async fn delete_passkey(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<Passkey>(&id).await?)
+}
+
+pub async fn delete_wifi_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<WifiPassword>(&id).await?)
+}
+
 async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>, changes: Vec<String>, local: &Arc<mpsc::Sender<PushMessage>>) {
     let lock = &client.state.read().await.albums;
     for change in changes {
@@ -2348,6 +2403,18 @@ pub fn utm_now() -> SystemTime {
 #[frb(sync)]
 pub fn date_now() -> plist::Date {
     SystemTime::now().into()
+}
+
+#[frb(sync, type_64bit_int)]
+pub fn date_to_ms(date: &plist::Date) -> u64 {
+    let systemtime: SystemTime = date.clone().into();
+    systemtime.duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64
+}
+
+#[frb(sync, type_64bit_int)]
+pub fn ms_to_date(ms: u64) -> plist::Date {
+    let time = SystemTime::UNIX_EPOCH + Duration::from_millis(ms);
+    time.into()
 }
 
 pub async fn download_cloud_group_photos(cloud_messages_client: &Arc<CloudMessagesClient<DefaultAnisetteProvider>>, files: Vec<(String, String)>) -> anyhow::Result<()> {

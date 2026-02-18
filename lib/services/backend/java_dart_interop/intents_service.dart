@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bluebubbles/app/layouts/facetime/facetime.dart';
 import 'package:bluebubbles/app/layouts/findmy/findmy_page.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/misc/shared_streams_panel.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/passwords/passwords_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/profile/profile_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/scheduling/scheduled_messages_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/server/server_management_panel.dart';
@@ -222,6 +223,9 @@ class IntentsService extends GetxService {
     } else if (guid == "-54") {
       Logger.debug("Opening find my panel...", tag: "IntentsService");
       ns.pushLeft(Get.context!, FindMyPage());
+    } else if (guid == "-55") {
+      Logger.debug("Opening passwords panel...", tag: "IntentsService");
+      ns.pushLeft(Get.context!, const PasswordsPanel());
     } else if (guid.contains("scheduled")) {
       Logger.debug("Opening scheduled messages panel...", tag: "IntentsService");
       Navigator.of(Get.context!).push(

@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'api.freezed.dart';
 
-// These functions are ignored because they are not marked as `pub`: `config`, `encrypt`, `get_login_config`, `get_password`, `handle_2fa`, `handle_circle`, `handle_photostream`, `migrate`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `reset_user`, `shared_items`, `subscribe_streams`, `wrap_sink`
+// These functions are ignored because they are not marked as `pub`: `bin_deserialize_16`, `config`, `encrypt`, `get_login_config`, `get_password`, `handle_2fa`, `handle_circle`, `handle_photostream`, `migrate`, `plist_to_bin`, `plist_to_buf`, `plist_to_string`, `reset_user`, `shared_items`, `subscribe_streams`, `wrap_sink`
 // These functions are ignored because they have generic arguments: `bin_deserialize`, `bin_serialize`
 // These types are ignored because they are not used by any `pub` functions: `AnisetteState`, `DaemonData`, `FLUTTER_RUST_BRIDGE_HANDLER`, `GSAConfig`, `NSArrayClass`, `NSArrayIconArray`, `NSArrayImageArray`, `ProvisionedAnisette`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `deref`, `deref`, `eq`, `fmt`, `get_files`, `initialize`, `spawn`
@@ -352,6 +352,64 @@ Future<NsArrayLpIconMetadata> createIconArray({required LPIconMetadata img}) =>
     RustLib.instance.api.crateApiApiCreateIconArray(img: img);
 
 Uint8List nsNull() => RustLib.instance.api.crateApiApiNsNull();
+
+PasswordManagerDefaultAnisetteProvider getPasswordManager(
+        {required ArcKeychainClientDefaultAnisetteProvider keychain}) =>
+    RustLib.instance.api.crateApiApiGetPasswordManager(keychain: keychain);
+
+Future<void> syncPasswords(
+        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+    RustLib.instance.api.crateApiApiSyncPasswords(passwords: passwords);
+
+Future<Map<String, PasswordManagerMeta>> getPasswords(
+        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+    RustLib.instance.api.crateApiApiGetPasswords(passwords: passwords);
+
+Future<Map<String, Passkey>> getPasskeys(
+        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+    RustLib.instance.api.crateApiApiGetPasskeys(passwords: passwords);
+
+Future<Map<String, WifiPassword>> getWifiPasswords(
+        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+    RustLib.instance.api.crateApiApiGetWifiPasswords(passwords: passwords);
+
+Future<void> savePassword(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        required PasswordManagerMeta entry}) =>
+    RustLib.instance.api
+        .crateApiApiSavePassword(passwords: passwords, id: id, entry: entry);
+
+Future<void> savePasskey(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        required Passkey entry}) =>
+    RustLib.instance.api
+        .crateApiApiSavePasskey(passwords: passwords, id: id, entry: entry);
+
+Future<void> saveWifiPassword(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        required WifiPassword entry}) =>
+    RustLib.instance.api.crateApiApiSaveWifiPassword(
+        passwords: passwords, id: id, entry: entry);
+
+Future<void> deletePassword(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id}) =>
+    RustLib.instance.api
+        .crateApiApiDeletePassword(passwords: passwords, id: id);
+
+Future<void> deletePasskey(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id}) =>
+    RustLib.instance.api.crateApiApiDeletePasskey(passwords: passwords, id: id);
+
+Future<void> deleteWifiPassword(
+        {required PasswordManagerDefaultAnisetteProvider passwords,
+        required String id}) =>
+    RustLib.instance.api
+        .crateApiApiDeleteWifiPassword(passwords: passwords, id: id);
 
 Future<String> updateAccountHeaders(
         {required ArcMutexAppleAccountDefaultAnisetteProvider account}) =>
@@ -901,6 +959,12 @@ SystemTime utmNow() => RustLib.instance.api.crateApiApiUtmNow();
 
 Date dateNow() => RustLib.instance.api.crateApiApiDateNow();
 
+int dateToMs({required Date date}) =>
+    RustLib.instance.api.crateApiApiDateToMs(date: date);
+
+Date msToDate({required int ms}) =>
+    RustLib.instance.api.crateApiApiMsToDate(ms: ms);
+
 Future<void> downloadCloudGroupPhotos(
         {required ArcCloudMessagesClientDefaultAnisetteProvider
             cloudMessagesClient,
@@ -1137,6 +1201,10 @@ abstract class MessageFlags implements RustOpaqueInterface {
   static MessageFlags fromBitsTruncate({required PlatformInt64 val}) =>
       RustLib.instance.api.crateApiApiMessageFlagsFromBitsTruncate(val: val);
 }
+
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PasswordManager < DefaultAnisetteProvider >>>
+abstract class PasswordManagerDefaultAnisetteProvider
+    implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
 abstract class PushError implements RustOpaqueInterface {}
@@ -4046,6 +4114,247 @@ sealed class PartExtension with _$PartExtension {
   }) = PartExtension_Sticker;
 }
 
+class Passkey {
+  final int cdat;
+  final int mdat;
+  final String agrp;
+  final String labl;
+  final Uint8List data;
+  final Uint8List atag;
+  final Uint8List klbl;
+
+  const Passkey({
+    required this.cdat,
+    required this.mdat,
+    required this.agrp,
+    required this.labl,
+    required this.data,
+    required this.atag,
+    required this.klbl,
+  });
+
+  @override
+  int get hashCode =>
+      cdat.hashCode ^
+      mdat.hashCode ^
+      agrp.hashCode ^
+      labl.hashCode ^
+      data.hashCode ^
+      atag.hashCode ^
+      klbl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Passkey &&
+          runtimeType == other.runtimeType &&
+          cdat == other.cdat &&
+          mdat == other.mdat &&
+          agrp == other.agrp &&
+          labl == other.labl &&
+          data == other.data &&
+          atag == other.atag &&
+          klbl == other.klbl;
+}
+
+class PasswordManagerAltDomain {
+  final String domain;
+
+  const PasswordManagerAltDomain({
+    required this.domain,
+  });
+
+  @override
+  int get hashCode => domain.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerAltDomain &&
+          runtimeType == other.runtimeType &&
+          domain == other.domain;
+}
+
+class PasswordManagerMeta {
+  final int cdat;
+  final int mdat;
+  final String srvr;
+  final String acct;
+  final String agrp;
+  final Uint8List data;
+
+  const PasswordManagerMeta({
+    required this.cdat,
+    required this.mdat,
+    required this.srvr,
+    required this.acct,
+    required this.agrp,
+    required this.data,
+  });
+
+  static Uint8List getData({required PasswordManagerMetaData data}) =>
+      RustLib.instance.api.crateApiApiPasswordManagerMetaGetData(data: data);
+
+  PasswordManagerMetaData getPasswordData() =>
+      RustLib.instance.api.crateApiApiPasswordManagerMetaGetPasswordData(
+        that: this,
+      );
+
+  @override
+  int get hashCode =>
+      cdat.hashCode ^
+      mdat.hashCode ^
+      srvr.hashCode ^
+      acct.hashCode ^
+      agrp.hashCode ^
+      data.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerMeta &&
+          runtimeType == other.runtimeType &&
+          cdat == other.cdat &&
+          mdat == other.mdat &&
+          srvr == other.srvr &&
+          acct == other.acct &&
+          agrp == other.agrp &&
+          data == other.data;
+}
+
+class PasswordManagerMetaChange {
+  final int date;
+  final String password;
+  final String? oldPassword;
+  final String id;
+  final String typ;
+
+  const PasswordManagerMetaChange({
+    required this.date,
+    required this.password,
+    this.oldPassword,
+    required this.id,
+    required this.typ,
+  });
+
+  @override
+  int get hashCode =>
+      date.hashCode ^
+      password.hashCode ^
+      oldPassword.hashCode ^
+      id.hashCode ^
+      typ.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerMetaChange &&
+          runtimeType == other.runtimeType &&
+          date == other.date &&
+          password == other.password &&
+          oldPassword == other.oldPassword &&
+          id == other.id &&
+          typ == other.typ;
+}
+
+class PasswordManagerMetaData {
+  final List<PasswordManagerMetaChange> history;
+  final List<PasswordManagerAltDomain> altDomains;
+  final PasswordManagerTotp? totp;
+  final Map<String, PasswordManagerMetaDataCtx> ctxt;
+
+  const PasswordManagerMetaData({
+    required this.history,
+    required this.altDomains,
+    this.totp,
+    required this.ctxt,
+  });
+
+  @override
+  int get hashCode =>
+      history.hashCode ^ altDomains.hashCode ^ totp.hashCode ^ ctxt.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerMetaData &&
+          runtimeType == other.runtimeType &&
+          history == other.history &&
+          altDomains == other.altDomains &&
+          totp == other.totp &&
+          ctxt == other.ctxt;
+}
+
+class PasswordManagerMetaDataCtx {
+  final double lastUsed;
+
+  const PasswordManagerMetaDataCtx({
+    required this.lastUsed,
+  });
+
+  @override
+  int get hashCode => lastUsed.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerMetaDataCtx &&
+          runtimeType == other.runtimeType &&
+          lastUsed == other.lastUsed;
+}
+
+class PasswordManagerTotp {
+  final Uint8List secret;
+  final int digits;
+  final String? issuer;
+  final int period;
+  final int initialDate;
+  final int algorithm;
+  final String? accountName;
+  final String? originalUrl;
+
+  const PasswordManagerTotp({
+    required this.secret,
+    required this.digits,
+    this.issuer,
+    required this.period,
+    required this.initialDate,
+    required this.algorithm,
+    this.accountName,
+    this.originalUrl,
+  });
+
+  (int, BigInt) generateOtp() =>
+      RustLib.instance.api.crateApiApiPasswordManagerTotpGenerateOtp(
+        that: this,
+      );
+
+  @override
+  int get hashCode =>
+      secret.hashCode ^
+      digits.hashCode ^
+      issuer.hashCode ^
+      period.hashCode ^
+      initialDate.hashCode ^
+      algorithm.hashCode ^
+      accountName.hashCode ^
+      originalUrl.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerTotp &&
+          runtimeType == other.runtimeType &&
+          secret == other.secret &&
+          digits == other.digits &&
+          issuer == other.issuer &&
+          period == other.period &&
+          initialDate == other.initialDate &&
+          algorithm == other.algorithm &&
+          accountName == other.accountName &&
+          originalUrl == other.originalUrl;
+}
+
 class PermanentDeleteMessage {
   final DeleteTarget target;
   final bool isScheduled;
@@ -5536,4 +5845,39 @@ class WatchBackground {
           luminance == other.luminance &&
           backgroundImageData == other.backgroundImageData &&
           extensionIdentifier == other.extensionIdentifier;
+}
+
+class WifiPassword {
+  final int cdat;
+  final int mdat;
+  final String acct;
+  final String svce;
+  final Uint8List data;
+
+  const WifiPassword({
+    required this.cdat,
+    required this.mdat,
+    required this.acct,
+    required this.svce,
+    required this.data,
+  });
+
+  @override
+  int get hashCode =>
+      cdat.hashCode ^
+      mdat.hashCode ^
+      acct.hashCode ^
+      svce.hashCode ^
+      data.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WifiPassword &&
+          runtimeType == other.runtimeType &&
+          cdat == other.cdat &&
+          mdat == other.mdat &&
+          acct == other.acct &&
+          svce == other.svce &&
+          data == other.data;
 }

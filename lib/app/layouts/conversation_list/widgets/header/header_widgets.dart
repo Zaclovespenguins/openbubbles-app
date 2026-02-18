@@ -5,6 +5,7 @@ import 'package:bluebubbles/app/layouts/conversation_view/pages/conversation_vie
 import 'package:bluebubbles/app/layouts/findmy/findmy_page.dart';
 import 'package:bluebubbles/app/layouts/facetime/facetime.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/misc/shared_streams_panel.dart';
+import 'package:bluebubbles/app/layouts/settings/pages/passwords/passwords_panel.dart';
 import 'package:bluebubbles/app/layouts/settings/pages/profile/profile_panel.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/app/layouts/conversation_list/pages/conversation_list.dart';
@@ -129,6 +130,8 @@ class MaterialOverflowMenu extends StatelessWidget {
           goToSharedStreams(context);
         } else if (value == 10) {
           goToFaceTime(context);
+        } else if (value == 11) {
+          goToPasswords(context);
         }
       },
       itemBuilder: (context) {
@@ -185,6 +188,14 @@ class MaterialOverflowMenu extends StatelessWidget {
                 style: context.textTheme.bodyLarge!.apply(color: context.theme.colorScheme.properOnSurface),
               ),
             ),
+          if (pushService.state?.icloudServices?.keychain != null)
+          PopupMenuItem(
+            value: 11,
+            child: Text(
+              'Passwords',
+              style: context.textTheme.bodyLarge!.apply(color: context.theme.colorScheme.properOnSurface),
+            ),
+          ),
           PopupMenuItem(
             value: 2,
             child: Text(
@@ -323,6 +334,12 @@ class CupertinoOverflowMenu extends StatelessWidget {
           icon: CupertinoIcons.video_camera,
           onTap: () => goToFaceTime(context),
         ),
+        if (pushService.state?.icloudServices?.keychain != null)
+        PullDownMenuItem(
+          title: 'Passwords',
+          icon: Icons.key,
+          onTap: () => goToPasswords(context),
+        ),
         if (extraItems)
           PullDownMenuItem(
             title: 'Search',
@@ -399,6 +416,33 @@ final currentChat = cm.activeChat?.chat;
     ThemeSwitcher.buildPageRoute(
       builder: (BuildContext context) {
         return FaceTimePanel();
+      },
+    ),
+  );
+  if (currentChat != null) {
+    await cm.setActiveChat(currentChat);
+    if (ss.settings.tabletMode.value) {
+      ns.pushAndRemoveUntil(
+        context,
+        ConversationView(
+          chat: currentChat,
+        ),
+            (route) => route.isFirst,
+      );
+    } else {
+      cvc(currentChat).close();
+    }
+  }
+}
+
+Future<void> goToPasswords(BuildContext context) async {
+  final currentChat = cm.activeChat?.chat;
+  ns.closeAllConversationView(context);
+  await cm.setAllInactive();
+  await Navigator.of(Get.context!).push(
+    ThemeSwitcher.buildPageRoute(
+      builder: (BuildContext context) {
+        return const PasswordsPanel();
       },
     ),
   );

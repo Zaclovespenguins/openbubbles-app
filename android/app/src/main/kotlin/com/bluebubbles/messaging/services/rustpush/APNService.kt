@@ -10,6 +10,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.net.wifi.WifiManager
+import android.net.wifi.WifiNetworkSuggestion
 import android.os.Binder
 import android.os.Build
 import android.os.Handler
@@ -33,6 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import uniffi.rust_lib_bluebubbles.HandleWifiNetworksCallback
 import uniffi.rust_lib_bluebubbles.NativePushState
 import uniffi.rust_lib_bluebubbles.initNative
 import uniffi.rust_lib_bluebubbles.MsgReceiver
@@ -156,7 +159,34 @@ class APNService : Service(), MsgReceiver {
 
         Log.i("here", "hjeal")
 
-        start(applicationContext.filesDir.path, AndroidFilePackager(this))
+        start(applicationContext.filesDir.path, AndroidFilePackager(this), object : HandleWifiNetworksCallback {
+            override fun handleWifiNetworks(networks: Map<String, String>) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return
+                val suggestions = networks.entries.flatMap {
+                    if (it.value.length > 63 || it.key.length > 32 || it.value.length < 8) {
+                        Log.i("NETWORK", "Bad password or ssid ${it.key}")
+                        return@flatMap emptyList()
+                    }
+                    listOf(
+                        WifiNetworkSuggestion.Builder()
+                            .setSsid(it.key)
+                            .setWpa2Passphrase(it.value)
+                            .build(),
+                        WifiNetworkSuggestion.Builder()
+                            .setSsid(it.key)
+                            .setWpa3Passphrase(it.value)
+                            .build()
+                    )
+                }.toList()
+                val manager = getSystemService(WIFI_SERVICE) as WifiManager
+                val status = manager.addNetworkSuggestions(suggestions)
+                if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
+                    Log.e("NETWORK", "Adding suggestions failed! $status")
+                } else {
+                    Log.i("NETWORK", "Adding suggestions success!")
+                }
+            }
+        })
         setupKeystore(applicationContext.filesDir.path, keystore)
         keystore.checkMaster()
         Log.i("here", "hjealme")

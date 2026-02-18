@@ -657,6 +657,12 @@ internal interface UniffiForeignFutureCompleteVoid : com.sun.jna.Callback {
 internal interface UniffiCallbackInterfaceCarrierHandlerMethod0 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`gateway`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
 }
+internal interface UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceInsertKeychainCallbackMethod0 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
 internal interface UniffiCallbackInterfaceKotlinFilePackagerMethod0 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`path`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
 }
@@ -714,6 +720,12 @@ internal interface UniffiCallbackInterfaceNativeKeystoreMethod11 : com.sun.jna.C
 internal interface UniffiCallbackInterfaceNativeKeystoreMethod12 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`alias`: RustBuffer.ByValue,`ciphertext`: RustBuffer.ByValue,`mode`: RustBuffer.ByValue,`uniffiOutReturn`: RustBuffer,uniffiCallStatus: UniffiRustCallStatus,)
 }
+internal interface UniffiCallbackInterfaceRetrieveKeysCallbackMethod0 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`passwords`: RustBuffer.ByValue,`passkeys`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
+internal interface UniffiCallbackInterfaceSpecialAppleAuthCallbackMethod0 : com.sun.jna.Callback {
+    fun callback(`uniffiHandle`: Long,`token`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+}
 @Structure.FieldOrder("gotGateway", "uniffiFree")
 internal open class UniffiVTableCallbackInterfaceCarrierHandler(
     @JvmField internal var `gotGateway`: UniffiCallbackInterfaceCarrierHandlerMethod0? = null,
@@ -726,6 +738,38 @@ internal open class UniffiVTableCallbackInterfaceCarrierHandler(
 
    internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceCarrierHandler) {
         `gotGateway` = other.`gotGateway`
+        `uniffiFree` = other.`uniffiFree`
+    }
+
+}
+@Structure.FieldOrder("handleWifiNetworks", "uniffiFree")
+internal open class UniffiVTableCallbackInterfaceHandleWifiNetworksCallback(
+    @JvmField internal var `handleWifiNetworks`: UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0? = null,
+    @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+) : Structure() {
+    class UniffiByValue(
+        `handleWifiNetworks`: UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0? = null,
+        `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+    ): UniffiVTableCallbackInterfaceHandleWifiNetworksCallback(`handleWifiNetworks`,`uniffiFree`,), Structure.ByValue
+
+   internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceHandleWifiNetworksCallback) {
+        `handleWifiNetworks` = other.`handleWifiNetworks`
+        `uniffiFree` = other.`uniffiFree`
+    }
+
+}
+@Structure.FieldOrder("done", "uniffiFree")
+internal open class UniffiVTableCallbackInterfaceInsertKeychainCallback(
+    @JvmField internal var `done`: UniffiCallbackInterfaceInsertKeychainCallbackMethod0? = null,
+    @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+) : Structure() {
+    class UniffiByValue(
+        `done`: UniffiCallbackInterfaceInsertKeychainCallbackMethod0? = null,
+        `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+    ): UniffiVTableCallbackInterfaceInsertKeychainCallback(`done`,`uniffiFree`,), Structure.ByValue
+
+   internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceInsertKeychainCallback) {
+        `done` = other.`done`
         `uniffiFree` = other.`uniffiFree`
     }
 
@@ -826,6 +870,66 @@ internal open class UniffiVTableCallbackInterfaceNativeKeystore(
     }
 
 }
+@Structure.FieldOrder("keys", "uniffiFree")
+internal open class UniffiVTableCallbackInterfaceRetrieveKeysCallback(
+    @JvmField internal var `keys`: UniffiCallbackInterfaceRetrieveKeysCallbackMethod0? = null,
+    @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+) : Structure() {
+    class UniffiByValue(
+        `keys`: UniffiCallbackInterfaceRetrieveKeysCallbackMethod0? = null,
+        `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+    ): UniffiVTableCallbackInterfaceRetrieveKeysCallback(`keys`,`uniffiFree`,), Structure.ByValue
+
+   internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceRetrieveKeysCallback) {
+        `keys` = other.`keys`
+        `uniffiFree` = other.`uniffiFree`
+    }
+
+}
+@Structure.FieldOrder("gotVerification", "uniffiFree")
+internal open class UniffiVTableCallbackInterfaceSpecialAppleAuthCallback(
+    @JvmField internal var `gotVerification`: UniffiCallbackInterfaceSpecialAppleAuthCallbackMethod0? = null,
+    @JvmField internal var `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+) : Structure() {
+    class UniffiByValue(
+        `gotVerification`: UniffiCallbackInterfaceSpecialAppleAuthCallbackMethod0? = null,
+        `uniffiFree`: UniffiCallbackInterfaceFree? = null,
+    ): UniffiVTableCallbackInterfaceSpecialAppleAuthCallback(`gotVerification`,`uniffiFree`,), Structure.ByValue
+
+   internal fun uniffiSetValue(other: UniffiVTableCallbackInterfaceSpecialAppleAuthCallback) {
+        `gotVerification` = other.`gotVerification`
+        `uniffiFree` = other.`uniffiFree`
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -999,6 +1103,10 @@ fun uniffi_rust_lib_bluebubbles_checksum_func_start(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_carrierhandler_got_gateway(
 ): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_handlewifinetworkscallback_handle_wifi_networks(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_insertkeychaincallback_done(
+): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_kotlinfilepackager_get_file(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_kotlinfilepackager_scan_files(
@@ -1039,15 +1147,27 @@ fun uniffi_rust_lib_bluebubbles_checksum_method_nativekeystore_decrypt(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime(
 ): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_do_special_apple_auth(
+): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_auth_code(
 ): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_site_config(
+): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_state(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_keychain_passkey_insert(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_keychain_password_insert(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_publish_status(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_start_loop(
 ): Short
 fun uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_teardown_2fa(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_retrievekeyscallback_keys(
+): Short
+fun uniffi_rust_lib_bluebubbles_checksum_method_specialappleauthcallback_got_verification(
 ): Short
 fun ffi_rust_lib_bluebubbles_uniffi_contract_version(
 ): Int
@@ -1088,9 +1208,13 @@ internal interface UniffiLib : Library {
             // No need to check the contract version and checksums, since 
             // we already did that with `IntegrityCheckingUniffiLib` above.
             uniffiCallbackInterfaceCarrierHandler.register(lib)
+            uniffiCallbackInterfaceHandleWifiNetworksCallback.register(lib)
+            uniffiCallbackInterfaceInsertKeychainCallback.register(lib)
             uniffiCallbackInterfaceKotlinFilePackager.register(lib)
             uniffiCallbackInterfaceMsgReceiver.register(lib)
             uniffiCallbackInterfaceNativeKeystore.register(lib)
+            uniffiCallbackInterfaceRetrieveKeysCallback.register(lib)
+            uniffiCallbackInterfaceSpecialAppleAuthCallback.register(lib)
             // Loading of library with integrity check done.
             lib
         }
@@ -1109,6 +1233,22 @@ fun uniffi_rust_lib_bluebubbles_fn_free_carrierhandler(`ptr`: Pointer,uniffi_out
 fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_carrierhandler(`vtable`: UniffiVTableCallbackInterfaceCarrierHandler,
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_carrierhandler_got_gateway(`ptr`: Pointer,`gateway`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_clone_handlewifinetworkscallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Pointer
+fun uniffi_rust_lib_bluebubbles_fn_free_handlewifinetworkscallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_handlewifinetworkscallback(`vtable`: UniffiVTableCallbackInterfaceHandleWifiNetworksCallback,
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_handlewifinetworkscallback_handle_wifi_networks(`ptr`: Pointer,`networks`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_clone_insertkeychaincallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Pointer
+fun uniffi_rust_lib_bluebubbles_fn_free_insertkeychaincallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_insertkeychaincallback(`vtable`: UniffiVTableCallbackInterfaceInsertKeychainCallback,
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_insertkeychaincallback_done(`ptr`: Pointer,`error`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_clone_kotlinfilepackager(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Pointer
@@ -1172,15 +1312,39 @@ fun uniffi_rust_lib_bluebubbles_fn_free_nativepushstate(`ptr`: Pointer,uniffi_ou
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_decline_facetime(`ptr`: Pointer,`guid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_do_special_apple_auth(`ptr`: Pointer,`clientDataHash`: RustBuffer.ByValue,`callback`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_auth_code(`ptr`: Pointer,`txnid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Int
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_site_config(`ptr`: Pointer,`site`: RustBuffer.ByValue,`callback`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_state(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Long
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_keychain_passkey_insert(`ptr`: Pointer,`site`: RustBuffer.ByValue,`recordId`: RustBuffer.ByValue,`id`: RustBuffer.ByValue,`tag`: RustBuffer.ByValue,`key`: RustBuffer.ByValue,`callback`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_keychain_password_insert(`ptr`: Pointer,`site`: RustBuffer.ByValue,`user`: RustBuffer.ByValue,`password`: RustBuffer.ByValue,`callback`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_publish_status(`ptr`: Pointer,`guid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_start_loop(`ptr`: Pointer,`handler`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_teardown_2fa(`ptr`: Pointer,`action`: RustBuffer.ByValue,`txnid`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_clone_retrievekeyscallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Pointer
+fun uniffi_rust_lib_bluebubbles_fn_free_retrievekeyscallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_retrievekeyscallback(`vtable`: UniffiVTableCallbackInterfaceRetrieveKeysCallback,
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_retrievekeyscallback_keys(`ptr`: Pointer,`passwords`: RustBuffer.ByValue,`passkeys`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_clone_specialappleauthcallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Pointer
+fun uniffi_rust_lib_bluebubbles_fn_free_specialappleauthcallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_specialappleauthcallback(`vtable`: UniffiVTableCallbackInterfaceSpecialAppleAuthCallback,
+): Unit
+fun uniffi_rust_lib_bluebubbles_fn_method_specialappleauthcallback_got_verification(`ptr`: Pointer,`token`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_do_lock(uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
@@ -1196,7 +1360,7 @@ fun uniffi_rust_lib_bluebubbles_fn_func_recover_keychain(uniffi_out_err: UniffiR
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_func_setup_keystore(`dir`: RustBuffer.ByValue,`keystore`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
-fun uniffi_rust_lib_bluebubbles_fn_func_start(`dir`: RustBuffer.ByValue,`packager`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
+fun uniffi_rust_lib_bluebubbles_fn_func_start(`dir`: RustBuffer.ByValue,`packager`: Pointer,`wifi`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun ffi_rust_lib_bluebubbles_rustbuffer_alloc(`size`: Long,uniffi_out_err: UniffiRustCallStatus, 
 ): RustBuffer.ByValue
@@ -1346,10 +1510,16 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if (lib.uniffi_rust_lib_bluebubbles_checksum_func_setup_keystore() != 48449.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_start() != 41758.toShort()) {
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_func_start() != 59154.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_carrierhandler_got_gateway() != 11467.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_handlewifinetworkscallback_handle_wifi_networks() != 20800.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_insertkeychaincallback_done() != 26973.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_kotlinfilepackager_get_file() != 33145.toShort()) {
@@ -1412,10 +1582,22 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_decline_facetime() != 51777.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_do_special_apple_auth() != 60368.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_auth_code() != 63817.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_site_config() != 18452.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_get_state() != 53880.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_keychain_passkey_insert() != 60789.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_keychain_password_insert() != 51623.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_publish_status() != 57426.toShort()) {
@@ -1425,6 +1607,12 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_nativepushstate_teardown_2fa() != 59540.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_retrievekeyscallback_keys() != 62637.toShort()) {
+        throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
+    }
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_specialappleauthcallback_got_verification() != 5368.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
 }
@@ -2031,6 +2219,546 @@ public object FfiConverterTypeCarrierHandler: FfiConverter<CarrierHandler, Point
     override fun allocationSize(value: CarrierHandler) = 8UL
 
     override fun write(value: CarrierHandler, buf: ByteBuffer) {
+        // The Rust code always expects pointers written as 8 bytes,
+        // and will fail to compile if they don't fit.
+        buf.putLong(Pointer.nativeValue(lower(value)))
+    }
+}
+
+
+// This template implements a class for working with a Rust struct via a Pointer/Arc<T>
+// to the live Rust struct on the other side of the FFI.
+//
+// Each instance implements core operations for working with the Rust `Arc<T>` and the
+// Kotlin Pointer to work with the live Rust struct on the other side of the FFI.
+//
+// There's some subtlety here, because we have to be careful not to operate on a Rust
+// struct after it has been dropped, and because we must expose a public API for freeing
+// theq Kotlin wrapper object in lieu of reliable finalizers. The core requirements are:
+//
+//   * Each instance holds an opaque pointer to the underlying Rust struct.
+//     Method calls need to read this pointer from the object's state and pass it in to
+//     the Rust FFI.
+//
+//   * When an instance is no longer needed, its pointer should be passed to a
+//     special destructor function provided by the Rust FFI, which will drop the
+//     underlying Rust struct.
+//
+//   * Given an instance, calling code is expected to call the special
+//     `destroy` method in order to free it after use, either by calling it explicitly
+//     or by using a higher-level helper like the `use` method. Failing to do so risks
+//     leaking the underlying Rust struct.
+//
+//   * We can't assume that calling code will do the right thing, and must be prepared
+//     to handle Kotlin method calls executing concurrently with or even after a call to
+//     `destroy`, and to handle multiple (possibly concurrent!) calls to `destroy`.
+//
+//   * We must never allow Rust code to operate on the underlying Rust struct after
+//     the destructor has been called, and must never call the destructor more than once.
+//     Doing so may trigger memory unsafety.
+//
+//   * To mitigate many of the risks of leaking memory and use-after-free unsafety, a `Cleaner`
+//     is implemented to call the destructor when the Kotlin object becomes unreachable.
+//     This is done in a background thread. This is not a panacea, and client code should be aware that
+//      1. the thread may starve if some there are objects that have poorly performing
+//     `drop` methods or do significant work in their `drop` methods.
+//      2. the thread is shared across the whole library. This can be tuned by using `android_cleaner = true`,
+//         or `android = true` in the [`kotlin` section of the `uniffi.toml` file](https://mozilla.github.io/uniffi-rs/kotlin/configuration.html).
+//
+// If we try to implement this with mutual exclusion on access to the pointer, there is the
+// possibility of a race between a method call and a concurrent call to `destroy`:
+//
+//    * Thread A starts a method call, reads the value of the pointer, but is interrupted
+//      before it can pass the pointer over the FFI to Rust.
+//    * Thread B calls `destroy` and frees the underlying Rust struct.
+//    * Thread A resumes, passing the already-read pointer value to Rust and triggering
+//      a use-after-free.
+//
+// One possible solution would be to use a `ReadWriteLock`, with each method call taking
+// a read lock (and thus allowed to run concurrently) and the special `destroy` method
+// taking a write lock (and thus blocking on live method calls). However, we aim not to
+// generate methods with any hidden blocking semantics, and a `destroy` method that might
+// block if called incorrectly seems to meet that bar.
+//
+// So, we achieve our goals by giving each instance an associated `AtomicLong` counter to track
+// the number of in-flight method calls, and an `AtomicBoolean` flag to indicate whether `destroy`
+// has been called. These are updated according to the following rules:
+//
+//    * The initial value of the counter is 1, indicating a live object with no in-flight calls.
+//      The initial value for the flag is false.
+//
+//    * At the start of each method call, we atomically check the counter.
+//      If it is 0 then the underlying Rust struct has already been destroyed and the call is aborted.
+//      If it is nonzero them we atomically increment it by 1 and proceed with the method call.
+//
+//    * At the end of each method call, we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+//    * When `destroy` is called, we atomically flip the flag from false to true.
+//      If the flag was already true we silently fail.
+//      Otherwise we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+// Astute readers may observe that this all sounds very similar to the way that Rust's `Arc<T>` works,
+// and indeed it is, with the addition of a flag to guard against multiple calls to `destroy`.
+//
+// The overall effect is that the underlying Rust struct is destroyed only when `destroy` has been
+// called *and* all in-flight method calls have completed, avoiding violating any of the expectations
+// of the underlying Rust code.
+//
+// This makes a cleaner a better alternative to _not_ calling `destroy()` as
+// and when the object is finished with, but the abstraction is not perfect: if the Rust object's `drop`
+// method is slow, and/or there are many objects to cleanup, and it's on a low end Android device, then the cleaner
+// thread may be starved, and the app will leak memory.
+//
+// In this case, `destroy`ing manually may be a better solution.
+//
+// The cleaner can live side by side with the manual calling of `destroy`. In the order of responsiveness, uniffi objects
+// with Rust peers are reclaimed:
+//
+// 1. By calling the `destroy` method of the object, which calls `rustObject.free()`. If that doesn't happen:
+// 2. When the object becomes unreachable, AND the Cleaner thread gets to call `rustObject.free()`. If the thread is starved then:
+// 3. The memory is reclaimed when the process terminates.
+//
+// [1] https://stackoverflow.com/questions/24376768/can-java-finalize-an-object-when-it-is-still-in-scope/24380219
+//
+
+
+public interface HandleWifiNetworksCallback {
+    
+    fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>)
+    
+    companion object
+}
+
+open class HandleWifiNetworksCallbackImpl: Disposable, AutoCloseable, HandleWifiNetworksCallback
+{
+
+    constructor(pointer: Pointer) {
+        this.pointer = pointer
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    /**
+     * This constructor can be used to instantiate a fake object. Only used for tests. Any
+     * attempt to actually use an object constructed this way will fail as there is no
+     * connected Rust object.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    constructor(noPointer: NoPointer) {
+        this.pointer = null
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    protected val pointer: Pointer?
+    protected val cleanable: UniffiCleaner.Cleanable
+
+    private val wasDestroyed = AtomicBoolean(false)
+    private val callCounter = AtomicLong(1)
+
+    override fun destroy() {
+        // Only allow a single call to this method.
+        // TODO: maybe we should log a warning if called more than once?
+        if (this.wasDestroyed.compareAndSet(false, true)) {
+            // This decrement always matches the initial count of 1 given at creation time.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    @Synchronized
+    override fun close() {
+        this.destroy()
+    }
+
+    internal inline fun <R> callWithPointer(block: (ptr: Pointer) -> R): R {
+        // Check and increment the call counter, to keep the object alive.
+        // This needs a compare-and-set retry loop in case of concurrent updates.
+        do {
+            val c = this.callCounter.get()
+            if (c == 0L) {
+                throw IllegalStateException("${this.javaClass.simpleName} object has already been destroyed")
+            }
+            if (c == Long.MAX_VALUE) {
+                throw IllegalStateException("${this.javaClass.simpleName} call counter would overflow")
+            }
+        } while (! this.callCounter.compareAndSet(c, c + 1L))
+        // Now we can safely do the method call without the pointer being freed concurrently.
+        try {
+            return block(this.uniffiClonePointer())
+        } finally {
+            // This decrement always matches the increment we performed above.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    // Use a static inner class instead of a closure so as not to accidentally
+    // capture `this` as part of the cleanable's action.
+    private class UniffiCleanAction(private val pointer: Pointer?) : Runnable {
+        override fun run() {
+            pointer?.let { ptr ->
+                uniffiRustCall { status ->
+                    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_free_handlewifinetworkscallback(ptr, status)
+                }
+            }
+        }
+    }
+
+    fun uniffiClonePointer(): Pointer {
+        return uniffiRustCall() { status ->
+            UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_clone_handlewifinetworkscallback(pointer!!, status)
+        }
+    }
+
+    override fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_handlewifinetworkscallback_handle_wifi_networks(
+        it, FfiConverterMapStringString.lower(`networks`),_status)
+}
+    }
+    
+    
+
+    
+
+    
+    
+    companion object
+    
+}
+
+
+// Put the implementation in an object so we don't pollute the top-level namespace
+internal object uniffiCallbackInterfaceHandleWifiNetworksCallback {
+    internal object `handleWifiNetworks`: UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0 {
+        override fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeHandleWifiNetworksCallback.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`handleWifiNetworks`(
+                    FfiConverterMapStringString.lift(`networks`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
+        }
+    }
+
+    internal object uniffiFree: UniffiCallbackInterfaceFree {
+        override fun callback(handle: Long) {
+            FfiConverterTypeHandleWifiNetworksCallback.handleMap.remove(handle)
+        }
+    }
+
+    internal var vtable = UniffiVTableCallbackInterfaceHandleWifiNetworksCallback.UniffiByValue(
+        `handleWifiNetworks`,
+        uniffiFree,
+    )
+
+    // Registers the foreign callback with the Rust side.
+    // This method is generated for each callback interface.
+    internal fun register(lib: UniffiLib) {
+        lib.uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_handlewifinetworkscallback(vtable)
+    }
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeHandleWifiNetworksCallback: FfiConverter<HandleWifiNetworksCallback, Pointer> {
+    internal val handleMap = UniffiHandleMap<HandleWifiNetworksCallback>()
+
+    override fun lower(value: HandleWifiNetworksCallback): Pointer {
+        return Pointer(handleMap.insert(value))
+    }
+
+    override fun lift(value: Pointer): HandleWifiNetworksCallback {
+        return HandleWifiNetworksCallbackImpl(value)
+    }
+
+    override fun read(buf: ByteBuffer): HandleWifiNetworksCallback {
+        // The Rust code always writes pointers as 8 bytes, and will
+        // fail to compile if they don't fit.
+        return lift(Pointer(buf.getLong()))
+    }
+
+    override fun allocationSize(value: HandleWifiNetworksCallback) = 8UL
+
+    override fun write(value: HandleWifiNetworksCallback, buf: ByteBuffer) {
+        // The Rust code always expects pointers written as 8 bytes,
+        // and will fail to compile if they don't fit.
+        buf.putLong(Pointer.nativeValue(lower(value)))
+    }
+}
+
+
+// This template implements a class for working with a Rust struct via a Pointer/Arc<T>
+// to the live Rust struct on the other side of the FFI.
+//
+// Each instance implements core operations for working with the Rust `Arc<T>` and the
+// Kotlin Pointer to work with the live Rust struct on the other side of the FFI.
+//
+// There's some subtlety here, because we have to be careful not to operate on a Rust
+// struct after it has been dropped, and because we must expose a public API for freeing
+// theq Kotlin wrapper object in lieu of reliable finalizers. The core requirements are:
+//
+//   * Each instance holds an opaque pointer to the underlying Rust struct.
+//     Method calls need to read this pointer from the object's state and pass it in to
+//     the Rust FFI.
+//
+//   * When an instance is no longer needed, its pointer should be passed to a
+//     special destructor function provided by the Rust FFI, which will drop the
+//     underlying Rust struct.
+//
+//   * Given an instance, calling code is expected to call the special
+//     `destroy` method in order to free it after use, either by calling it explicitly
+//     or by using a higher-level helper like the `use` method. Failing to do so risks
+//     leaking the underlying Rust struct.
+//
+//   * We can't assume that calling code will do the right thing, and must be prepared
+//     to handle Kotlin method calls executing concurrently with or even after a call to
+//     `destroy`, and to handle multiple (possibly concurrent!) calls to `destroy`.
+//
+//   * We must never allow Rust code to operate on the underlying Rust struct after
+//     the destructor has been called, and must never call the destructor more than once.
+//     Doing so may trigger memory unsafety.
+//
+//   * To mitigate many of the risks of leaking memory and use-after-free unsafety, a `Cleaner`
+//     is implemented to call the destructor when the Kotlin object becomes unreachable.
+//     This is done in a background thread. This is not a panacea, and client code should be aware that
+//      1. the thread may starve if some there are objects that have poorly performing
+//     `drop` methods or do significant work in their `drop` methods.
+//      2. the thread is shared across the whole library. This can be tuned by using `android_cleaner = true`,
+//         or `android = true` in the [`kotlin` section of the `uniffi.toml` file](https://mozilla.github.io/uniffi-rs/kotlin/configuration.html).
+//
+// If we try to implement this with mutual exclusion on access to the pointer, there is the
+// possibility of a race between a method call and a concurrent call to `destroy`:
+//
+//    * Thread A starts a method call, reads the value of the pointer, but is interrupted
+//      before it can pass the pointer over the FFI to Rust.
+//    * Thread B calls `destroy` and frees the underlying Rust struct.
+//    * Thread A resumes, passing the already-read pointer value to Rust and triggering
+//      a use-after-free.
+//
+// One possible solution would be to use a `ReadWriteLock`, with each method call taking
+// a read lock (and thus allowed to run concurrently) and the special `destroy` method
+// taking a write lock (and thus blocking on live method calls). However, we aim not to
+// generate methods with any hidden blocking semantics, and a `destroy` method that might
+// block if called incorrectly seems to meet that bar.
+//
+// So, we achieve our goals by giving each instance an associated `AtomicLong` counter to track
+// the number of in-flight method calls, and an `AtomicBoolean` flag to indicate whether `destroy`
+// has been called. These are updated according to the following rules:
+//
+//    * The initial value of the counter is 1, indicating a live object with no in-flight calls.
+//      The initial value for the flag is false.
+//
+//    * At the start of each method call, we atomically check the counter.
+//      If it is 0 then the underlying Rust struct has already been destroyed and the call is aborted.
+//      If it is nonzero them we atomically increment it by 1 and proceed with the method call.
+//
+//    * At the end of each method call, we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+//    * When `destroy` is called, we atomically flip the flag from false to true.
+//      If the flag was already true we silently fail.
+//      Otherwise we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+// Astute readers may observe that this all sounds very similar to the way that Rust's `Arc<T>` works,
+// and indeed it is, with the addition of a flag to guard against multiple calls to `destroy`.
+//
+// The overall effect is that the underlying Rust struct is destroyed only when `destroy` has been
+// called *and* all in-flight method calls have completed, avoiding violating any of the expectations
+// of the underlying Rust code.
+//
+// This makes a cleaner a better alternative to _not_ calling `destroy()` as
+// and when the object is finished with, but the abstraction is not perfect: if the Rust object's `drop`
+// method is slow, and/or there are many objects to cleanup, and it's on a low end Android device, then the cleaner
+// thread may be starved, and the app will leak memory.
+//
+// In this case, `destroy`ing manually may be a better solution.
+//
+// The cleaner can live side by side with the manual calling of `destroy`. In the order of responsiveness, uniffi objects
+// with Rust peers are reclaimed:
+//
+// 1. By calling the `destroy` method of the object, which calls `rustObject.free()`. If that doesn't happen:
+// 2. When the object becomes unreachable, AND the Cleaner thread gets to call `rustObject.free()`. If the thread is starved then:
+// 3. The memory is reclaimed when the process terminates.
+//
+// [1] https://stackoverflow.com/questions/24376768/can-java-finalize-an-object-when-it-is-still-in-scope/24380219
+//
+
+
+public interface InsertKeychainCallback {
+    
+    fun `done`(`error`: kotlin.String?)
+    
+    companion object
+}
+
+open class InsertKeychainCallbackImpl: Disposable, AutoCloseable, InsertKeychainCallback
+{
+
+    constructor(pointer: Pointer) {
+        this.pointer = pointer
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    /**
+     * This constructor can be used to instantiate a fake object. Only used for tests. Any
+     * attempt to actually use an object constructed this way will fail as there is no
+     * connected Rust object.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    constructor(noPointer: NoPointer) {
+        this.pointer = null
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    protected val pointer: Pointer?
+    protected val cleanable: UniffiCleaner.Cleanable
+
+    private val wasDestroyed = AtomicBoolean(false)
+    private val callCounter = AtomicLong(1)
+
+    override fun destroy() {
+        // Only allow a single call to this method.
+        // TODO: maybe we should log a warning if called more than once?
+        if (this.wasDestroyed.compareAndSet(false, true)) {
+            // This decrement always matches the initial count of 1 given at creation time.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    @Synchronized
+    override fun close() {
+        this.destroy()
+    }
+
+    internal inline fun <R> callWithPointer(block: (ptr: Pointer) -> R): R {
+        // Check and increment the call counter, to keep the object alive.
+        // This needs a compare-and-set retry loop in case of concurrent updates.
+        do {
+            val c = this.callCounter.get()
+            if (c == 0L) {
+                throw IllegalStateException("${this.javaClass.simpleName} object has already been destroyed")
+            }
+            if (c == Long.MAX_VALUE) {
+                throw IllegalStateException("${this.javaClass.simpleName} call counter would overflow")
+            }
+        } while (! this.callCounter.compareAndSet(c, c + 1L))
+        // Now we can safely do the method call without the pointer being freed concurrently.
+        try {
+            return block(this.uniffiClonePointer())
+        } finally {
+            // This decrement always matches the increment we performed above.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    // Use a static inner class instead of a closure so as not to accidentally
+    // capture `this` as part of the cleanable's action.
+    private class UniffiCleanAction(private val pointer: Pointer?) : Runnable {
+        override fun run() {
+            pointer?.let { ptr ->
+                uniffiRustCall { status ->
+                    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_free_insertkeychaincallback(ptr, status)
+                }
+            }
+        }
+    }
+
+    fun uniffiClonePointer(): Pointer {
+        return uniffiRustCall() { status ->
+            UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_clone_insertkeychaincallback(pointer!!, status)
+        }
+    }
+
+    override fun `done`(`error`: kotlin.String?)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_insertkeychaincallback_done(
+        it, FfiConverterOptionalString.lower(`error`),_status)
+}
+    }
+    
+    
+
+    
+
+    
+    
+    companion object
+    
+}
+
+
+// Put the implementation in an object so we don't pollute the top-level namespace
+internal object uniffiCallbackInterfaceInsertKeychainCallback {
+    internal object `done`: UniffiCallbackInterfaceInsertKeychainCallbackMethod0 {
+        override fun callback(`uniffiHandle`: Long,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeInsertKeychainCallback.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`done`(
+                    FfiConverterOptionalString.lift(`error`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
+        }
+    }
+
+    internal object uniffiFree: UniffiCallbackInterfaceFree {
+        override fun callback(handle: Long) {
+            FfiConverterTypeInsertKeychainCallback.handleMap.remove(handle)
+        }
+    }
+
+    internal var vtable = UniffiVTableCallbackInterfaceInsertKeychainCallback.UniffiByValue(
+        `done`,
+        uniffiFree,
+    )
+
+    // Registers the foreign callback with the Rust side.
+    // This method is generated for each callback interface.
+    internal fun register(lib: UniffiLib) {
+        lib.uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_insertkeychaincallback(vtable)
+    }
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeInsertKeychainCallback: FfiConverter<InsertKeychainCallback, Pointer> {
+    internal val handleMap = UniffiHandleMap<InsertKeychainCallback>()
+
+    override fun lower(value: InsertKeychainCallback): Pointer {
+        return Pointer(handleMap.insert(value))
+    }
+
+    override fun lift(value: Pointer): InsertKeychainCallback {
+        return InsertKeychainCallbackImpl(value)
+    }
+
+    override fun read(buf: ByteBuffer): InsertKeychainCallback {
+        // The Rust code always writes pointers as 8 bytes, and will
+        // fail to compile if they don't fit.
+        return lift(Pointer(buf.getLong()))
+    }
+
+    override fun allocationSize(value: InsertKeychainCallback) = 8UL
+
+    override fun write(value: InsertKeychainCallback, buf: ByteBuffer) {
         // The Rust code always expects pointers written as 8 bytes,
         // and will fail to compile if they don't fit.
         buf.putLong(Pointer.nativeValue(lower(value)))
@@ -3469,9 +4197,17 @@ public interface NativePushStateInterface {
     
     fun `declineFacetime`(`guid`: kotlin.String)
     
+    fun `doSpecialAppleAuth`(`clientDataHash`: kotlin.String, `callback`: SpecialAppleAuthCallback)
+    
     fun `getAuthCode`(`txnid`: kotlin.String): kotlin.UInt
     
+    fun `getSiteConfig`(`site`: kotlin.String, `callback`: RetrieveKeysCallback)
+    
     fun `getState`(): kotlin.ULong
+    
+    fun `keychainPasskeyInsert`(`site`: kotlin.String, `recordId`: kotlin.String, `id`: kotlin.ByteArray, `tag`: kotlin.ByteArray, `key`: kotlin.ByteArray, `callback`: InsertKeychainCallback)
+    
+    fun `keychainPasswordInsert`(`site`: kotlin.String, `user`: kotlin.String, `password`: kotlin.String, `callback`: InsertKeychainCallback)
     
     fun `publishStatus`(`guid`: kotlin.String?)
     
@@ -3575,6 +4311,17 @@ open class NativePushState: Disposable, AutoCloseable, NativePushStateInterface
     
     
 
+    override fun `doSpecialAppleAuth`(`clientDataHash`: kotlin.String, `callback`: SpecialAppleAuthCallback)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_do_special_apple_auth(
+        it, FfiConverterString.lower(`clientDataHash`),FfiConverterTypeSpecialAppleAuthCallback.lower(`callback`),_status)
+}
+    }
+    
+    
+
     override fun `getAuthCode`(`txnid`: kotlin.String): kotlin.UInt {
             return FfiConverterUInt.lift(
     callWithPointer {
@@ -3587,6 +4334,17 @@ open class NativePushState: Disposable, AutoCloseable, NativePushStateInterface
     }
     
 
+    override fun `getSiteConfig`(`site`: kotlin.String, `callback`: RetrieveKeysCallback)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_get_site_config(
+        it, FfiConverterString.lower(`site`),FfiConverterTypeRetrieveKeysCallback.lower(`callback`),_status)
+}
+    }
+    
+    
+
     override fun `getState`(): kotlin.ULong {
             return FfiConverterULong.lift(
     callWithPointer {
@@ -3597,6 +4355,28 @@ open class NativePushState: Disposable, AutoCloseable, NativePushStateInterface
     }
     )
     }
+    
+
+    override fun `keychainPasskeyInsert`(`site`: kotlin.String, `recordId`: kotlin.String, `id`: kotlin.ByteArray, `tag`: kotlin.ByteArray, `key`: kotlin.ByteArray, `callback`: InsertKeychainCallback)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_keychain_passkey_insert(
+        it, FfiConverterString.lower(`site`),FfiConverterString.lower(`recordId`),FfiConverterByteArray.lower(`id`),FfiConverterByteArray.lower(`tag`),FfiConverterByteArray.lower(`key`),FfiConverterTypeInsertKeychainCallback.lower(`callback`),_status)
+}
+    }
+    
+    
+
+    override fun `keychainPasswordInsert`(`site`: kotlin.String, `user`: kotlin.String, `password`: kotlin.String, `callback`: InsertKeychainCallback)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_nativepushstate_keychain_password_insert(
+        it, FfiConverterString.lower(`site`),FfiConverterString.lower(`user`),FfiConverterString.lower(`password`),FfiConverterTypeInsertKeychainCallback.lower(`callback`),_status)
+}
+    }
+    
     
 
     override fun `publishStatus`(`guid`: kotlin.String?)
@@ -3662,6 +4442,548 @@ public object FfiConverterTypeNativePushState: FfiConverter<NativePushState, Poi
     override fun allocationSize(value: NativePushState) = 8UL
 
     override fun write(value: NativePushState, buf: ByteBuffer) {
+        // The Rust code always expects pointers written as 8 bytes,
+        // and will fail to compile if they don't fit.
+        buf.putLong(Pointer.nativeValue(lower(value)))
+    }
+}
+
+
+// This template implements a class for working with a Rust struct via a Pointer/Arc<T>
+// to the live Rust struct on the other side of the FFI.
+//
+// Each instance implements core operations for working with the Rust `Arc<T>` and the
+// Kotlin Pointer to work with the live Rust struct on the other side of the FFI.
+//
+// There's some subtlety here, because we have to be careful not to operate on a Rust
+// struct after it has been dropped, and because we must expose a public API for freeing
+// theq Kotlin wrapper object in lieu of reliable finalizers. The core requirements are:
+//
+//   * Each instance holds an opaque pointer to the underlying Rust struct.
+//     Method calls need to read this pointer from the object's state and pass it in to
+//     the Rust FFI.
+//
+//   * When an instance is no longer needed, its pointer should be passed to a
+//     special destructor function provided by the Rust FFI, which will drop the
+//     underlying Rust struct.
+//
+//   * Given an instance, calling code is expected to call the special
+//     `destroy` method in order to free it after use, either by calling it explicitly
+//     or by using a higher-level helper like the `use` method. Failing to do so risks
+//     leaking the underlying Rust struct.
+//
+//   * We can't assume that calling code will do the right thing, and must be prepared
+//     to handle Kotlin method calls executing concurrently with or even after a call to
+//     `destroy`, and to handle multiple (possibly concurrent!) calls to `destroy`.
+//
+//   * We must never allow Rust code to operate on the underlying Rust struct after
+//     the destructor has been called, and must never call the destructor more than once.
+//     Doing so may trigger memory unsafety.
+//
+//   * To mitigate many of the risks of leaking memory and use-after-free unsafety, a `Cleaner`
+//     is implemented to call the destructor when the Kotlin object becomes unreachable.
+//     This is done in a background thread. This is not a panacea, and client code should be aware that
+//      1. the thread may starve if some there are objects that have poorly performing
+//     `drop` methods or do significant work in their `drop` methods.
+//      2. the thread is shared across the whole library. This can be tuned by using `android_cleaner = true`,
+//         or `android = true` in the [`kotlin` section of the `uniffi.toml` file](https://mozilla.github.io/uniffi-rs/kotlin/configuration.html).
+//
+// If we try to implement this with mutual exclusion on access to the pointer, there is the
+// possibility of a race between a method call and a concurrent call to `destroy`:
+//
+//    * Thread A starts a method call, reads the value of the pointer, but is interrupted
+//      before it can pass the pointer over the FFI to Rust.
+//    * Thread B calls `destroy` and frees the underlying Rust struct.
+//    * Thread A resumes, passing the already-read pointer value to Rust and triggering
+//      a use-after-free.
+//
+// One possible solution would be to use a `ReadWriteLock`, with each method call taking
+// a read lock (and thus allowed to run concurrently) and the special `destroy` method
+// taking a write lock (and thus blocking on live method calls). However, we aim not to
+// generate methods with any hidden blocking semantics, and a `destroy` method that might
+// block if called incorrectly seems to meet that bar.
+//
+// So, we achieve our goals by giving each instance an associated `AtomicLong` counter to track
+// the number of in-flight method calls, and an `AtomicBoolean` flag to indicate whether `destroy`
+// has been called. These are updated according to the following rules:
+//
+//    * The initial value of the counter is 1, indicating a live object with no in-flight calls.
+//      The initial value for the flag is false.
+//
+//    * At the start of each method call, we atomically check the counter.
+//      If it is 0 then the underlying Rust struct has already been destroyed and the call is aborted.
+//      If it is nonzero them we atomically increment it by 1 and proceed with the method call.
+//
+//    * At the end of each method call, we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+//    * When `destroy` is called, we atomically flip the flag from false to true.
+//      If the flag was already true we silently fail.
+//      Otherwise we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+// Astute readers may observe that this all sounds very similar to the way that Rust's `Arc<T>` works,
+// and indeed it is, with the addition of a flag to guard against multiple calls to `destroy`.
+//
+// The overall effect is that the underlying Rust struct is destroyed only when `destroy` has been
+// called *and* all in-flight method calls have completed, avoiding violating any of the expectations
+// of the underlying Rust code.
+//
+// This makes a cleaner a better alternative to _not_ calling `destroy()` as
+// and when the object is finished with, but the abstraction is not perfect: if the Rust object's `drop`
+// method is slow, and/or there are many objects to cleanup, and it's on a low end Android device, then the cleaner
+// thread may be starved, and the app will leak memory.
+//
+// In this case, `destroy`ing manually may be a better solution.
+//
+// The cleaner can live side by side with the manual calling of `destroy`. In the order of responsiveness, uniffi objects
+// with Rust peers are reclaimed:
+//
+// 1. By calling the `destroy` method of the object, which calls `rustObject.free()`. If that doesn't happen:
+// 2. When the object becomes unreachable, AND the Cleaner thread gets to call `rustObject.free()`. If the thread is starved then:
+// 3. The memory is reclaimed when the process terminates.
+//
+// [1] https://stackoverflow.com/questions/24376768/can-java-finalize-an-object-when-it-is-still-in-scope/24380219
+//
+
+
+public interface RetrieveKeysCallback {
+    
+    fun `keys`(`passwords`: List<SavedPassword>, `passkeys`: List<SavedPasskey>)
+    
+    companion object
+}
+
+open class RetrieveKeysCallbackImpl: Disposable, AutoCloseable, RetrieveKeysCallback
+{
+
+    constructor(pointer: Pointer) {
+        this.pointer = pointer
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    /**
+     * This constructor can be used to instantiate a fake object. Only used for tests. Any
+     * attempt to actually use an object constructed this way will fail as there is no
+     * connected Rust object.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    constructor(noPointer: NoPointer) {
+        this.pointer = null
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    protected val pointer: Pointer?
+    protected val cleanable: UniffiCleaner.Cleanable
+
+    private val wasDestroyed = AtomicBoolean(false)
+    private val callCounter = AtomicLong(1)
+
+    override fun destroy() {
+        // Only allow a single call to this method.
+        // TODO: maybe we should log a warning if called more than once?
+        if (this.wasDestroyed.compareAndSet(false, true)) {
+            // This decrement always matches the initial count of 1 given at creation time.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    @Synchronized
+    override fun close() {
+        this.destroy()
+    }
+
+    internal inline fun <R> callWithPointer(block: (ptr: Pointer) -> R): R {
+        // Check and increment the call counter, to keep the object alive.
+        // This needs a compare-and-set retry loop in case of concurrent updates.
+        do {
+            val c = this.callCounter.get()
+            if (c == 0L) {
+                throw IllegalStateException("${this.javaClass.simpleName} object has already been destroyed")
+            }
+            if (c == Long.MAX_VALUE) {
+                throw IllegalStateException("${this.javaClass.simpleName} call counter would overflow")
+            }
+        } while (! this.callCounter.compareAndSet(c, c + 1L))
+        // Now we can safely do the method call without the pointer being freed concurrently.
+        try {
+            return block(this.uniffiClonePointer())
+        } finally {
+            // This decrement always matches the increment we performed above.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    // Use a static inner class instead of a closure so as not to accidentally
+    // capture `this` as part of the cleanable's action.
+    private class UniffiCleanAction(private val pointer: Pointer?) : Runnable {
+        override fun run() {
+            pointer?.let { ptr ->
+                uniffiRustCall { status ->
+                    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_free_retrievekeyscallback(ptr, status)
+                }
+            }
+        }
+    }
+
+    fun uniffiClonePointer(): Pointer {
+        return uniffiRustCall() { status ->
+            UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_clone_retrievekeyscallback(pointer!!, status)
+        }
+    }
+
+    override fun `keys`(`passwords`: List<SavedPassword>, `passkeys`: List<SavedPasskey>)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_retrievekeyscallback_keys(
+        it, FfiConverterSequenceTypeSavedPassword.lower(`passwords`),FfiConverterSequenceTypeSavedPasskey.lower(`passkeys`),_status)
+}
+    }
+    
+    
+
+    
+
+    
+    
+    companion object
+    
+}
+
+
+// Put the implementation in an object so we don't pollute the top-level namespace
+internal object uniffiCallbackInterfaceRetrieveKeysCallback {
+    internal object `keys`: UniffiCallbackInterfaceRetrieveKeysCallbackMethod0 {
+        override fun callback(`uniffiHandle`: Long,`passwords`: RustBuffer.ByValue,`passkeys`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeRetrieveKeysCallback.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`keys`(
+                    FfiConverterSequenceTypeSavedPassword.lift(`passwords`),
+                    FfiConverterSequenceTypeSavedPasskey.lift(`passkeys`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
+        }
+    }
+
+    internal object uniffiFree: UniffiCallbackInterfaceFree {
+        override fun callback(handle: Long) {
+            FfiConverterTypeRetrieveKeysCallback.handleMap.remove(handle)
+        }
+    }
+
+    internal var vtable = UniffiVTableCallbackInterfaceRetrieveKeysCallback.UniffiByValue(
+        `keys`,
+        uniffiFree,
+    )
+
+    // Registers the foreign callback with the Rust side.
+    // This method is generated for each callback interface.
+    internal fun register(lib: UniffiLib) {
+        lib.uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_retrievekeyscallback(vtable)
+    }
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeRetrieveKeysCallback: FfiConverter<RetrieveKeysCallback, Pointer> {
+    internal val handleMap = UniffiHandleMap<RetrieveKeysCallback>()
+
+    override fun lower(value: RetrieveKeysCallback): Pointer {
+        return Pointer(handleMap.insert(value))
+    }
+
+    override fun lift(value: Pointer): RetrieveKeysCallback {
+        return RetrieveKeysCallbackImpl(value)
+    }
+
+    override fun read(buf: ByteBuffer): RetrieveKeysCallback {
+        // The Rust code always writes pointers as 8 bytes, and will
+        // fail to compile if they don't fit.
+        return lift(Pointer(buf.getLong()))
+    }
+
+    override fun allocationSize(value: RetrieveKeysCallback) = 8UL
+
+    override fun write(value: RetrieveKeysCallback, buf: ByteBuffer) {
+        // The Rust code always expects pointers written as 8 bytes,
+        // and will fail to compile if they don't fit.
+        buf.putLong(Pointer.nativeValue(lower(value)))
+    }
+}
+
+
+// This template implements a class for working with a Rust struct via a Pointer/Arc<T>
+// to the live Rust struct on the other side of the FFI.
+//
+// Each instance implements core operations for working with the Rust `Arc<T>` and the
+// Kotlin Pointer to work with the live Rust struct on the other side of the FFI.
+//
+// There's some subtlety here, because we have to be careful not to operate on a Rust
+// struct after it has been dropped, and because we must expose a public API for freeing
+// theq Kotlin wrapper object in lieu of reliable finalizers. The core requirements are:
+//
+//   * Each instance holds an opaque pointer to the underlying Rust struct.
+//     Method calls need to read this pointer from the object's state and pass it in to
+//     the Rust FFI.
+//
+//   * When an instance is no longer needed, its pointer should be passed to a
+//     special destructor function provided by the Rust FFI, which will drop the
+//     underlying Rust struct.
+//
+//   * Given an instance, calling code is expected to call the special
+//     `destroy` method in order to free it after use, either by calling it explicitly
+//     or by using a higher-level helper like the `use` method. Failing to do so risks
+//     leaking the underlying Rust struct.
+//
+//   * We can't assume that calling code will do the right thing, and must be prepared
+//     to handle Kotlin method calls executing concurrently with or even after a call to
+//     `destroy`, and to handle multiple (possibly concurrent!) calls to `destroy`.
+//
+//   * We must never allow Rust code to operate on the underlying Rust struct after
+//     the destructor has been called, and must never call the destructor more than once.
+//     Doing so may trigger memory unsafety.
+//
+//   * To mitigate many of the risks of leaking memory and use-after-free unsafety, a `Cleaner`
+//     is implemented to call the destructor when the Kotlin object becomes unreachable.
+//     This is done in a background thread. This is not a panacea, and client code should be aware that
+//      1. the thread may starve if some there are objects that have poorly performing
+//     `drop` methods or do significant work in their `drop` methods.
+//      2. the thread is shared across the whole library. This can be tuned by using `android_cleaner = true`,
+//         or `android = true` in the [`kotlin` section of the `uniffi.toml` file](https://mozilla.github.io/uniffi-rs/kotlin/configuration.html).
+//
+// If we try to implement this with mutual exclusion on access to the pointer, there is the
+// possibility of a race between a method call and a concurrent call to `destroy`:
+//
+//    * Thread A starts a method call, reads the value of the pointer, but is interrupted
+//      before it can pass the pointer over the FFI to Rust.
+//    * Thread B calls `destroy` and frees the underlying Rust struct.
+//    * Thread A resumes, passing the already-read pointer value to Rust and triggering
+//      a use-after-free.
+//
+// One possible solution would be to use a `ReadWriteLock`, with each method call taking
+// a read lock (and thus allowed to run concurrently) and the special `destroy` method
+// taking a write lock (and thus blocking on live method calls). However, we aim not to
+// generate methods with any hidden blocking semantics, and a `destroy` method that might
+// block if called incorrectly seems to meet that bar.
+//
+// So, we achieve our goals by giving each instance an associated `AtomicLong` counter to track
+// the number of in-flight method calls, and an `AtomicBoolean` flag to indicate whether `destroy`
+// has been called. These are updated according to the following rules:
+//
+//    * The initial value of the counter is 1, indicating a live object with no in-flight calls.
+//      The initial value for the flag is false.
+//
+//    * At the start of each method call, we atomically check the counter.
+//      If it is 0 then the underlying Rust struct has already been destroyed and the call is aborted.
+//      If it is nonzero them we atomically increment it by 1 and proceed with the method call.
+//
+//    * At the end of each method call, we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+//    * When `destroy` is called, we atomically flip the flag from false to true.
+//      If the flag was already true we silently fail.
+//      Otherwise we atomically decrement and check the counter.
+//      If it has reached zero then we destroy the underlying Rust struct.
+//
+// Astute readers may observe that this all sounds very similar to the way that Rust's `Arc<T>` works,
+// and indeed it is, with the addition of a flag to guard against multiple calls to `destroy`.
+//
+// The overall effect is that the underlying Rust struct is destroyed only when `destroy` has been
+// called *and* all in-flight method calls have completed, avoiding violating any of the expectations
+// of the underlying Rust code.
+//
+// This makes a cleaner a better alternative to _not_ calling `destroy()` as
+// and when the object is finished with, but the abstraction is not perfect: if the Rust object's `drop`
+// method is slow, and/or there are many objects to cleanup, and it's on a low end Android device, then the cleaner
+// thread may be starved, and the app will leak memory.
+//
+// In this case, `destroy`ing manually may be a better solution.
+//
+// The cleaner can live side by side with the manual calling of `destroy`. In the order of responsiveness, uniffi objects
+// with Rust peers are reclaimed:
+//
+// 1. By calling the `destroy` method of the object, which calls `rustObject.free()`. If that doesn't happen:
+// 2. When the object becomes unreachable, AND the Cleaner thread gets to call `rustObject.free()`. If the thread is starved then:
+// 3. The memory is reclaimed when the process terminates.
+//
+// [1] https://stackoverflow.com/questions/24376768/can-java-finalize-an-object-when-it-is-still-in-scope/24380219
+//
+
+
+public interface SpecialAppleAuthCallback {
+    
+    fun `gotVerification`(`token`: Map<kotlin.String, kotlin.String>, `error`: kotlin.String?)
+    
+    companion object
+}
+
+open class SpecialAppleAuthCallbackImpl: Disposable, AutoCloseable, SpecialAppleAuthCallback
+{
+
+    constructor(pointer: Pointer) {
+        this.pointer = pointer
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    /**
+     * This constructor can be used to instantiate a fake object. Only used for tests. Any
+     * attempt to actually use an object constructed this way will fail as there is no
+     * connected Rust object.
+     */
+    @Suppress("UNUSED_PARAMETER")
+    constructor(noPointer: NoPointer) {
+        this.pointer = null
+        this.cleanable = UniffiLib.CLEANER.register(this, UniffiCleanAction(pointer))
+    }
+
+    protected val pointer: Pointer?
+    protected val cleanable: UniffiCleaner.Cleanable
+
+    private val wasDestroyed = AtomicBoolean(false)
+    private val callCounter = AtomicLong(1)
+
+    override fun destroy() {
+        // Only allow a single call to this method.
+        // TODO: maybe we should log a warning if called more than once?
+        if (this.wasDestroyed.compareAndSet(false, true)) {
+            // This decrement always matches the initial count of 1 given at creation time.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    @Synchronized
+    override fun close() {
+        this.destroy()
+    }
+
+    internal inline fun <R> callWithPointer(block: (ptr: Pointer) -> R): R {
+        // Check and increment the call counter, to keep the object alive.
+        // This needs a compare-and-set retry loop in case of concurrent updates.
+        do {
+            val c = this.callCounter.get()
+            if (c == 0L) {
+                throw IllegalStateException("${this.javaClass.simpleName} object has already been destroyed")
+            }
+            if (c == Long.MAX_VALUE) {
+                throw IllegalStateException("${this.javaClass.simpleName} call counter would overflow")
+            }
+        } while (! this.callCounter.compareAndSet(c, c + 1L))
+        // Now we can safely do the method call without the pointer being freed concurrently.
+        try {
+            return block(this.uniffiClonePointer())
+        } finally {
+            // This decrement always matches the increment we performed above.
+            if (this.callCounter.decrementAndGet() == 0L) {
+                cleanable.clean()
+            }
+        }
+    }
+
+    // Use a static inner class instead of a closure so as not to accidentally
+    // capture `this` as part of the cleanable's action.
+    private class UniffiCleanAction(private val pointer: Pointer?) : Runnable {
+        override fun run() {
+            pointer?.let { ptr ->
+                uniffiRustCall { status ->
+                    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_free_specialappleauthcallback(ptr, status)
+                }
+            }
+        }
+    }
+
+    fun uniffiClonePointer(): Pointer {
+        return uniffiRustCall() { status ->
+            UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_clone_specialappleauthcallback(pointer!!, status)
+        }
+    }
+
+    override fun `gotVerification`(`token`: Map<kotlin.String, kotlin.String>, `error`: kotlin.String?)
+        = 
+    callWithPointer {
+    uniffiRustCall() { _status ->
+    UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_specialappleauthcallback_got_verification(
+        it, FfiConverterMapStringString.lower(`token`),FfiConverterOptionalString.lower(`error`),_status)
+}
+    }
+    
+    
+
+    
+
+    
+    
+    companion object
+    
+}
+
+
+// Put the implementation in an object so we don't pollute the top-level namespace
+internal object uniffiCallbackInterfaceSpecialAppleAuthCallback {
+    internal object `gotVerification`: UniffiCallbackInterfaceSpecialAppleAuthCallbackMethod0 {
+        override fun callback(`uniffiHandle`: Long,`token`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+            val uniffiObj = FfiConverterTypeSpecialAppleAuthCallback.handleMap.get(uniffiHandle)
+            val makeCall = { ->
+                uniffiObj.`gotVerification`(
+                    FfiConverterMapStringString.lift(`token`),
+                    FfiConverterOptionalString.lift(`error`),
+                )
+            }
+            val writeReturn = { _: Unit -> Unit }
+            uniffiTraitInterfaceCall(uniffiCallStatus, makeCall, writeReturn)
+        }
+    }
+
+    internal object uniffiFree: UniffiCallbackInterfaceFree {
+        override fun callback(handle: Long) {
+            FfiConverterTypeSpecialAppleAuthCallback.handleMap.remove(handle)
+        }
+    }
+
+    internal var vtable = UniffiVTableCallbackInterfaceSpecialAppleAuthCallback.UniffiByValue(
+        `gotVerification`,
+        uniffiFree,
+    )
+
+    // Registers the foreign callback with the Rust side.
+    // This method is generated for each callback interface.
+    internal fun register(lib: UniffiLib) {
+        lib.uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_specialappleauthcallback(vtable)
+    }
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeSpecialAppleAuthCallback: FfiConverter<SpecialAppleAuthCallback, Pointer> {
+    internal val handleMap = UniffiHandleMap<SpecialAppleAuthCallback>()
+
+    override fun lower(value: SpecialAppleAuthCallback): Pointer {
+        return Pointer(handleMap.insert(value))
+    }
+
+    override fun lift(value: Pointer): SpecialAppleAuthCallback {
+        return SpecialAppleAuthCallbackImpl(value)
+    }
+
+    override fun read(buf: ByteBuffer): SpecialAppleAuthCallback {
+        // The Rust code always writes pointers as 8 bytes, and will
+        // fail to compile if they don't fit.
+        return lift(Pointer(buf.getLong()))
+    }
+
+    override fun allocationSize(value: SpecialAppleAuthCallback) = 8UL
+
+    override fun write(value: SpecialAppleAuthCallback, buf: ByteBuffer) {
         // The Rust code always expects pointers written as 8 bytes,
         // and will fail to compile if they don't fit.
         buf.putLong(Pointer.nativeValue(lower(value)))
@@ -3769,6 +5091,86 @@ public object FfiConverterTypeKeystoreAccessRules: FfiConverterRustBuffer<Keysto
             FfiConverterBoolean.write(value.`canSign`, buf)
             FfiConverterBoolean.write(value.`canEncrypt`, buf)
             FfiConverterBoolean.write(value.`canDecrypt`, buf)
+    }
+}
+
+
+
+data class SavedPasskey (
+    var `credId`: kotlin.String, 
+    var `id`: kotlin.ByteArray, 
+    var `tag`: kotlin.ByteArray, 
+    var `key`: kotlin.ByteArray
+) {
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeSavedPasskey: FfiConverterRustBuffer<SavedPasskey> {
+    override fun read(buf: ByteBuffer): SavedPasskey {
+        return SavedPasskey(
+            FfiConverterString.read(buf),
+            FfiConverterByteArray.read(buf),
+            FfiConverterByteArray.read(buf),
+            FfiConverterByteArray.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: SavedPasskey) = (
+            FfiConverterString.allocationSize(value.`credId`) +
+            FfiConverterByteArray.allocationSize(value.`id`) +
+            FfiConverterByteArray.allocationSize(value.`tag`) +
+            FfiConverterByteArray.allocationSize(value.`key`)
+    )
+
+    override fun write(value: SavedPasskey, buf: ByteBuffer) {
+            FfiConverterString.write(value.`credId`, buf)
+            FfiConverterByteArray.write(value.`id`, buf)
+            FfiConverterByteArray.write(value.`tag`, buf)
+            FfiConverterByteArray.write(value.`key`, buf)
+    }
+}
+
+
+
+data class SavedPassword (
+    var `credId`: kotlin.String, 
+    var `username`: kotlin.String, 
+    var `password`: kotlin.String, 
+    var `otp`: kotlin.UInt?
+) {
+    
+    companion object
+}
+
+/**
+ * @suppress
+ */
+public object FfiConverterTypeSavedPassword: FfiConverterRustBuffer<SavedPassword> {
+    override fun read(buf: ByteBuffer): SavedPassword {
+        return SavedPassword(
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterString.read(buf),
+            FfiConverterOptionalUInt.read(buf),
+        )
+    }
+
+    override fun allocationSize(value: SavedPassword) = (
+            FfiConverterString.allocationSize(value.`credId`) +
+            FfiConverterString.allocationSize(value.`username`) +
+            FfiConverterString.allocationSize(value.`password`) +
+            FfiConverterOptionalUInt.allocationSize(value.`otp`)
+    )
+
+    override fun write(value: SavedPassword, buf: ByteBuffer) {
+            FfiConverterString.write(value.`credId`, buf)
+            FfiConverterString.write(value.`username`, buf)
+            FfiConverterString.write(value.`password`, buf)
+            FfiConverterOptionalUInt.write(value.`otp`, buf)
     }
 }
 
@@ -4204,6 +5606,38 @@ public object FfiConverterTypePackagedFile : FfiConverterRustBuffer<PackagedFile
 /**
  * @suppress
  */
+public object FfiConverterOptionalUInt: FfiConverterRustBuffer<kotlin.UInt?> {
+    override fun read(buf: ByteBuffer): kotlin.UInt? {
+        if (buf.get().toInt() == 0) {
+            return null
+        }
+        return FfiConverterUInt.read(buf)
+    }
+
+    override fun allocationSize(value: kotlin.UInt?): ULong {
+        if (value == null) {
+            return 1UL
+        } else {
+            return 1UL + FfiConverterUInt.allocationSize(value)
+        }
+    }
+
+    override fun write(value: kotlin.UInt?, buf: ByteBuffer) {
+        if (value == null) {
+            buf.put(0)
+        } else {
+            buf.put(1)
+            FfiConverterUInt.write(value, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterOptionalDouble: FfiConverterRustBuffer<kotlin.Double?> {
     override fun read(buf: ByteBuffer): kotlin.Double? {
         if (buf.get().toInt() == 0) {
@@ -4392,6 +5826,62 @@ public object FfiConverterSequenceString: FfiConverterRustBuffer<List<kotlin.Str
 /**
  * @suppress
  */
+public object FfiConverterSequenceTypeSavedPasskey: FfiConverterRustBuffer<List<SavedPasskey>> {
+    override fun read(buf: ByteBuffer): List<SavedPasskey> {
+        val len = buf.getInt()
+        return List<SavedPasskey>(len) {
+            FfiConverterTypeSavedPasskey.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<SavedPasskey>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeSavedPasskey.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<SavedPasskey>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeSavedPasskey.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterSequenceTypeSavedPassword: FfiConverterRustBuffer<List<SavedPassword>> {
+    override fun read(buf: ByteBuffer): List<SavedPassword> {
+        val len = buf.getInt()
+        return List<SavedPassword>(len) {
+            FfiConverterTypeSavedPassword.read(buf)
+        }
+    }
+
+    override fun allocationSize(value: List<SavedPassword>): ULong {
+        val sizeForLength = 4UL
+        val sizeForItems = value.map { FfiConverterTypeSavedPassword.allocationSize(it) }.sum()
+        return sizeForLength + sizeForItems
+    }
+
+    override fun write(value: List<SavedPassword>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        value.iterator().forEach {
+            FfiConverterTypeSavedPassword.write(it, buf)
+        }
+    }
+}
+
+
+
+
+/**
+ * @suppress
+ */
 public object FfiConverterSequenceTypeEncryptMode: FfiConverterRustBuffer<List<EncryptMode>> {
     override fun read(buf: ByteBuffer): List<EncryptMode> {
         val len = buf.getInt()
@@ -4468,6 +5958,45 @@ public object FfiConverterSequenceTypeKeystorePadding: FfiConverterRustBuffer<Li
             FfiConverterTypeKeystorePadding.write(it, buf)
         }
     }
+}
+
+
+
+
+/**
+ * @suppress
+ */
+public object FfiConverterMapStringString: FfiConverterRustBuffer<Map<kotlin.String, kotlin.String>> {
+    override fun read(buf: ByteBuffer): Map<kotlin.String, kotlin.String> {
+        val len = buf.getInt()
+        return buildMap<kotlin.String, kotlin.String>(len) {
+            repeat(len) {
+                val k = FfiConverterString.read(buf)
+                val v = FfiConverterString.read(buf)
+                this[k] = v
+            }
+        }
+    }
+
+    override fun allocationSize(value: Map<kotlin.String, kotlin.String>): ULong {
+        val spaceForMapSize = 4UL
+        val spaceForChildren = value.map { (k, v) ->
+            FfiConverterString.allocationSize(k) +
+            FfiConverterString.allocationSize(v)
+        }.sum()
+        return spaceForMapSize + spaceForChildren
+    }
+
+    override fun write(value: Map<kotlin.String, kotlin.String>, buf: ByteBuffer) {
+        buf.putInt(value.size)
+        // The parens on `(k, v)` here ensure we're calling the right method,
+        // which is important for compatibility with older android devices.
+        // Ref https://blog.danlew.net/2017/03/16/kotlin-puzzler-whose-line-is-it-anyways/
+        value.forEach { (k, v) ->
+            FfiConverterString.write(k, buf)
+            FfiConverterString.write(v, buf)
+        }
+    }
 } fun `doLock`()
         = 
     uniffiRustCall() { _status ->
@@ -4525,11 +6054,11 @@ public object FfiConverterSequenceTypeKeystorePadding: FfiConverterRustBuffer<Li
 }
     
     
- fun `start`(`dir`: kotlin.String, `packager`: KotlinFilePackager)
+ fun `start`(`dir`: kotlin.String, `packager`: KotlinFilePackager, `wifi`: HandleWifiNetworksCallback)
         = 
     uniffiRustCall() { _status ->
     UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_func_start(
-        FfiConverterString.lower(`dir`),FfiConverterTypeKotlinFilePackager.lower(`packager`),_status)
+        FfiConverterString.lower(`dir`),FfiConverterTypeKotlinFilePackager.lower(`packager`),FfiConverterTypeHandleWifiNetworksCallback.lower(`wifi`),_status)
 }
     
     

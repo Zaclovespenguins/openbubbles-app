@@ -1,11 +1,13 @@
-use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, LazyLock, OnceLock, RwLock, Weak}, time::Duration};
+use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, LazyLock, OnceLock, RwLock, Weak}, time::{Duration, SystemTime}};
 
 use flexi_logger::{FileSpec, Logger, WriteMode};
 use log::{error, info, warn};
-use rustpush::{EntitlementAuthState, PushError, get_gateways_for_mccmnc};
+use openssl::{ec::EcKey, pkey::PKey};
+use rustpush::{EntitlementAuthState, GenerateVerificationTokenRequest, PushError, get_gateways_for_mccmnc, passwords::{Passkey, PasswordManager, PasswordManagerMeta, PasswordManagerMetaChange, PasswordManagerMetaData, PasswordManagerMetaDataCtx}};
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
+use uuid::Uuid;
 use crate::{RUNTIME, api::api::{APSWatcher, DaemonData, PollResult, PushMessage, SharedPushState, approve_circle, decline_facetime, do_first_time_init, get_2fa_code, get_entitlements, recv_wait, set_status, teardown_2fa}, frb_generated::FLUTTER_RUST_BRIDGE_HANDLER, init_logger};
 
 #[derive(uniffi::Record)] 
@@ -43,6 +45,43 @@ pub trait CarrierHandler: Send + Sync + Debug {
     fn got_gateway(&self, gateway: Option<String>, error: Option<String>);
 }
 
+#[uniffi::export(with_foreign)]
+pub trait InsertKeychainCallback: Send + Sync + Debug {
+    fn done(&self, error: Option<String>);
+}
+
+#[derive(uniffi::Record)]
+pub struct SavedPassword {
+    cred_id: String,
+    username: String,
+    password: String,
+    otp: Option<u32>,
+}
+
+#[derive(uniffi::Record)]
+pub struct SavedPasskey {
+    cred_id: String,
+    id: Vec<u8>,
+    tag: Vec<u8>,
+    key: Vec<u8>,
+}
+
+#[uniffi::export(with_foreign)]
+pub trait RetrieveKeysCallback: Send + Sync + Debug {
+    fn keys(&self, passwords: Vec<SavedPassword>, passkeys: Vec<SavedPasskey>);
+}
+
+#[uniffi::export(with_foreign)]
+pub trait SpecialAppleAuthCallback: Send + Sync + Debug {
+    fn got_verification(&self, token: HashMap<String, String>, error: Option<String>);
+}
+
+pub static HANDLE_WIFI_NETWORKS: OnceLock<Arc<dyn HandleWifiNetworksCallback>> = OnceLock::new();
+
+#[uniffi::export(with_foreign)]
+pub trait HandleWifiNetworksCallback: Send + Sync + Debug {
+    fn handle_wifi_networks(&self, networks: HashMap<String, String>);
+}
 
 #[derive(uniffi::Object)] 
 pub struct NativePushState {
@@ -51,8 +90,9 @@ pub struct NativePushState {
 }
 
 #[uniffi::export]
-pub fn start(dir: String, packager: Arc<dyn KotlinFilePackager>) {
+pub fn start(dir: String, packager: Arc<dyn KotlinFilePackager>, wifi: Arc<dyn HandleWifiNetworksCallback>) {
     let _ = PACKAGER_LOCK.set(packager);
+    let _ = HANDLE_WIFI_NETWORKS.set(wifi);
     do_first_time_init(dir);
 }
 
@@ -172,6 +212,110 @@ impl NativePushState {
             }
             info!("finishing loop");
             handler.finish();
+        });
+    }
+
+    pub fn keychain_password_insert(&self, site: String, user: String, password: String, callback: Arc<dyn InsertKeychainCallback>) {
+        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+        RUNTIME.spawn(async move {
+            let id = passwords.get_password_for_site(site.clone()).await.passwords_meta.into_iter().find(|(_, p)| p.acct == user).map(|i| i.0)
+                .unwrap_or_else(|| Uuid::new_v4().to_string().to_uppercase());
+            let result = passwords.insert_password(&id, &PasswordManagerMeta {
+                cdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
+                mdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
+                srvr: site,
+                acct: user,
+                agrp: "com.apple.password-manager".to_string(),
+                data: PasswordManagerMeta::get_data(&PasswordManagerMetaData {
+                    history: vec![
+                        PasswordManagerMetaChange {
+                            date: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
+                            password,
+                            old_password: None,
+                            id: id.clone(),
+                            typ: "pwcr".to_string()
+                        }
+                    ],
+                    alt_domains: vec![],
+                    totp: None,
+                    ctxt: HashMap::from_iter([
+                        ("".to_string(), PasswordManagerMetaDataCtx {
+                            last_used: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs_f64()
+                        })
+                    ])
+                }).unwrap(),
+            }).await.err();
+            callback.done(result.map(|e| format!("{e}")));
+        });
+    }
+
+    pub fn keychain_passkey_insert(&self, site: String, record_id: String, id: Vec<u8>, tag: Vec<u8>, key: Vec<u8>, callback: Arc<dyn InsertKeychainCallback>) {
+        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+        RUNTIME.spawn(async move {
+            let result = passwords.insert_password_entry(&record_id, &Passkey {
+                cdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
+                mdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
+                agrp: "com.apple.webkit.webauthn".to_string(),
+                labl: site,
+                atag: tag,
+                data: Passkey::encode_key(PKey::private_key_from_pkcs8(&key).expect("Invalid EC key??").ec_key().expect("not ec key??")),
+                klbl: id,
+            }).await.err();
+            callback.done(result.map(|e| format!("{e}")));
+        });
+    }
+
+    pub fn get_site_config(&self, site: String, callback: Arc<dyn RetrieveKeysCallback>) {
+        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+        RUNTIME.spawn(async move {
+            let passwords = passwords.get_password_for_site(site).await;
+            callback.keys(passwords.passwords.into_iter().map(|(k, p)| SavedPassword {
+                cred_id: k,
+                username: p.acct.clone(),
+                password: String::from_utf8(p.data.clone()).expect("password not utf8??"),
+                otp: passwords.passwords_meta.values().find_map(|m| {
+                    if p.acct != m.acct { return None }
+                    let totp = m.get_password_data().ok()?.totp?;
+                    Some(totp.generate_otp().ok()?.0)
+                })
+            }).collect(), passwords.passkeys.into_iter().map(|(k, p)| SavedPasskey {
+                cred_id: k,
+                id: p.klbl.clone(),
+                tag: p.atag.clone(),
+                key: PKey::from_ec_key(p.get_key()).unwrap().private_key_to_pkcs8().unwrap(),
+            }).collect());
+        });
+    }
+
+    pub fn do_special_apple_auth(&self, client_data_hash: String, callback: Arc<dyn SpecialAppleAuthCallback>) {
+        let token = self.state.icloud_services.as_ref().map(|i| i.token_provider.clone()).expect("no token");
+        RUNTIME.spawn(async move {
+            let result = std::panic::AssertUnwindSafe(token.generate_verification_token(GenerateVerificationTokenRequest::Passkey { 
+                client_data_hash,
+            })).catch_unwind().await;
+            match result {
+                Ok(Ok(success)) => {
+                    let (key, value) = success.split_once(":").expect("Bad token form??");
+                    callback.got_verification(HashMap::from_iter([
+                        (key.to_string(), value.to_string())
+                    ]), None);
+                },
+                Ok(Err(e)) => {
+                    callback.got_verification(HashMap::new(), Some(format!("{e}")));
+                }
+                Err(payload) => {
+                    let panic = match payload.downcast_ref::<&'static str>() {
+                        Some(msg) => Some(*msg),
+                        None => match payload.downcast_ref::<String>() {
+                            Some(msg) => Some(msg.as_str()),
+                            // Copy what rustc does in the default panic handler
+                            None => None,
+                        },
+                    };
+                    error!("Failed {:?}", panic);
+                    callback.got_verification(HashMap::new(), Some(format!("{panic:?}")));
+                }
+            }
         });
     }
 

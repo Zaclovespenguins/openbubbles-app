@@ -213,6 +213,7 @@ dependencies:
   geocoding: ^4.0.0
   flutter_contacts: ^1.1.8
   google_sign_in_all_platforms: ^1.0.0
+  cbor: ^6.3.5
 
 
 dependency_overrides:
