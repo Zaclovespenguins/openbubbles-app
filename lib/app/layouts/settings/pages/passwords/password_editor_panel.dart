@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:math';
 
 import 'package:bluebubbles/app/layouts/settings/pages/passwords/password_models.dart';
 import 'package:bluebubbles/app/layouts/setup/pages/sync/qr_code_scanner.dart';
@@ -7,6 +7,7 @@ import 'package:bluebubbles/app/layouts/settings/widgets/settings_widgets.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:bluebubbles/src/rust/lib.dart' as lib;
 import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +15,31 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class PasswordEditorPanel extends StatefulWidget {
-  final api.PasswordManagerDefaultAnisetteProvider provider;
+  final lib.ArcPasswordManagerDefaultAnisetteProvider provider;
   final PasswordGroupType groupType;
   final String? id;
+  final String? group;
+  final String? passwordMetaId;
   final api.PasswordManagerMeta? passwordMeta;
+  final api.PasswordRawEntry? passwordRaw;
   final api.WifiPassword? wifiPassword;
+  final Map<String, String> availableGroups;
+  final String? groupUserId;
 
   const PasswordEditorPanel({
     super.key,
     required this.provider,
     required this.groupType,
     this.id,
+    this.group,
+    this.passwordMetaId,
     this.passwordMeta,
+    this.passwordRaw,
     this.wifiPassword,
+    this.availableGroups = const {},
+    this.groupUserId,
   });
 
   @override
@@ -37,10 +47,16 @@ class PasswordEditorPanel extends StatefulWidget {
 }
 
 class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
+  static const String _passwordChars =
+      'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#\$%^&*()-_=+';
+
+  late final TextEditingController _titleController;
   late final TextEditingController _serverController;
   late final TextEditingController _accountController;
+  late final TextEditingController _notesController;
   late final TextEditingController _ssidController;
   late final TextEditingController _passwordController;
+  String? _selectedGroup;
   bool _showPassword = false;
   final List<TextEditingController> _altDomainControllers = [];
   api.PasswordManagerTotp? _totp;
@@ -52,11 +68,18 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
   @override
   void initState() {
     super.initState();
+    final existingData = widget.passwordMeta?.getPasswordData();
+    _titleController = TextEditingController(
+      text: _decodeOptionalUtf8(existingData?.title),
+    );
     _serverController = TextEditingController(
-      text: widget.passwordMeta?.srvr ?? "",
+      text: widget.passwordMeta?.srvr ?? widget.passwordRaw?.srvr ?? "",
     );
     _accountController = TextEditingController(
-      text: widget.passwordMeta?.acct ?? "",
+      text: widget.passwordMeta?.acct ?? widget.passwordRaw?.acct ?? "",
+    );
+    _notesController = TextEditingController(
+      text: _decodeOptionalUtf8(existingData?.notes),
     );
     _ssidController = TextEditingController(
       text: widget.wifiPassword?.acct ?? "",
@@ -64,8 +87,12 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     _passwordController = TextEditingController(
       text: _isWifi
           ? _decodeWifiPassword(widget.wifiPassword)
-          : _readPassword(widget.passwordMeta),
+          : _readPassword(
+              meta: widget.passwordMeta,
+              password: widget.passwordRaw,
+            ),
     );
+    _selectedGroup = widget.group;
     if (widget.passwordMeta != null) {
       final data = widget.passwordMeta!.getPasswordData();
       for (final domain in data.altDomains) {
@@ -81,6 +108,8 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     _accountController.dispose();
     _ssidController.dispose();
     _passwordController.dispose();
+    _titleController.dispose();
+    _notesController.dispose();
     for (final controller in _altDomainControllers) {
       controller.dispose();
     }
@@ -114,7 +143,9 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
             [
               SettingsSection(
                 backgroundColor: tileColor,
-                children: _isWifi ? _buildWifiFields(context) : _buildWebFields(context),
+                children: _isWifi
+                    ? _buildWifiFields(context)
+                    : _buildWebFields(context),
               ),
               if (error != null)
                 Padding(
@@ -126,8 +157,7 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
                     ),
                   ),
                 ),
-              if (widget.id != null)
-                const SizedBox(height: 12),
+              if (widget.id != null) const SizedBox(height: 12),
               if (widget.id != null)
                 SettingsSection(
                   backgroundColor: tileColor,
@@ -154,6 +184,12 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     return [
       _buildTextField(
         context,
+        controller: _titleController,
+        label: "Title",
+      ),
+      const SettingsDivider(),
+      _buildTextField(
+        context,
         controller: _serverController,
         label: "Server",
         enabled: widget.id == null,
@@ -165,6 +201,8 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
         label: "Account",
       ),
       const SettingsDivider(),
+      _buildGroupSelector(context),
+      const SettingsDivider(),
       _buildTextField(
         context,
         controller: _passwordController,
@@ -173,11 +211,28 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
         suffixIcon: IconButton(
           onPressed: () => setState(() => _showPassword = !_showPassword),
           icon: Icon(
-            _showPassword
-                ? Icons.visibility_off
-                : Icons.visibility,
+            _showPassword ? Icons.visibility_off : Icons.visibility,
           ),
         ),
+      ),
+      if (_passwordController.text.trim().isEmpty)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: _generateRandomPassword,
+              icon: const Icon(Icons.auto_fix_high),
+              label: const Text("Generate Password"),
+            ),
+          ),
+        ),
+      const SettingsDivider(),
+      _buildTextField(
+        context,
+        controller: _notesController,
+        label: "Notes",
+        maxLines: 4,
       ),
       const SettingsDivider(),
       Padding(
@@ -236,6 +291,58 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     ];
   }
 
+  Widget _buildGroupSelector(BuildContext context) {
+    final items = <DropdownMenuItem<String?>>[
+      const DropdownMenuItem<String?>(
+        value: null,
+        child: Text("No Group"),
+      ),
+    ];
+
+    final groups = widget.availableGroups.entries.toList()
+      ..sort((a, b) => a.value.toLowerCase().compareTo(b.value.toLowerCase()));
+    for (final entry in groups) {
+      items.add(
+        DropdownMenuItem<String?>(
+          value: entry.key,
+          child: Text(entry.value),
+        ),
+      );
+    }
+    final selectedGroup = _selectedGroup;
+    if (selectedGroup != null &&
+        !widget.availableGroups.containsKey(selectedGroup)) {
+      items.add(
+        DropdownMenuItem<String?>(
+          value: selectedGroup,
+          child: const Text("(unknown group)"),
+        ),
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: DropdownButtonFormField<String?>(
+        value: _selectedGroup,
+        decoration: InputDecoration(
+          labelText: "Group",
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: context.theme.colorScheme.outline,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: context.theme.colorScheme.primary,
+            ),
+          ),
+        ),
+        items: items,
+        onChanged: (value) => setState(() => _selectedGroup = value),
+      ),
+    );
+  }
+
   List<Widget> _buildWifiFields(BuildContext context) {
     return [
       _buildTextField(
@@ -258,6 +365,18 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
           ),
         ),
       ),
+      if (_passwordController.text.trim().isEmpty)
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              onPressed: _generateRandomPassword,
+              icon: const Icon(Icons.auto_fix_high),
+              label: const Text("Generate Password"),
+            ),
+          ),
+        ),
     ];
   }
 
@@ -267,6 +386,7 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     required String label,
     bool obscureText = false,
     bool enabled = true,
+    int maxLines = 1,
     Widget? suffixIcon,
   }) {
     return Padding(
@@ -274,6 +394,7 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
       child: TextField(
         controller: controller,
         obscureText: obscureText,
+        maxLines: maxLines,
         onChanged: (_) => setState(() {}),
         enabled: enabled,
         decoration: InputDecoration(
@@ -336,16 +457,64 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
         final templateHistory = widget.passwordMeta == null
             ? await _maybeLoadPasswordHistoryTemplate()
             : null;
-        final entry = _buildPasswordEntry(
+        final passwordEntry = _buildPasswordRecord(
+          existing: widget.passwordRaw,
+        );
+        final metaEntry = _buildPasswordMetaEntry(
           id: id,
           existing: widget.passwordMeta,
           historyTemplate: templateHistory,
+          group: _selectedGroup,
+          userId: widget.groupUserId,
         );
-        await api.savePassword(
-          passwords: widget.provider,
-          id: id,
-          entry: entry,
-        );
+        final metaId = _resolveMetaId(passwordId: id);
+        final sourceGroup = widget.group;
+        final targetGroup = _selectedGroup;
+        final isExisting = widget.id != null;
+        final groupChanged = isExisting && sourceGroup != targetGroup;
+
+        await Future.wait([
+          api.savePassword(
+            passwords: widget.provider,
+            id: id,
+            entry: passwordEntry,
+            group: targetGroup,
+          ),
+          api.savePasswordMeta(
+            passwords: widget.provider,
+            id: metaId,
+            entry: metaEntry,
+            group: targetGroup,
+          ),
+        ]);
+
+        if (groupChanged) {
+          try {
+            await Future.wait([
+              api.deletePassword(
+                passwords: widget.provider,
+                id: id,
+                group: sourceGroup,
+              ),
+              if (widget.passwordMetaId != null)
+                api.deletePasswordMeta(
+                  passwords: widget.provider,
+                  id: widget.passwordMetaId!,
+                  group: sourceGroup,
+                ),
+            ]);
+          } catch (error, stack) {
+            Logger.warn(
+              "Credential copied to new group but old group cleanup failed",
+              error: error,
+              trace: stack,
+            );
+            showSnackbar(
+              "Warning",
+              "Moved to new group, but old entry could not be removed.",
+            );
+          }
+        }
       }
       if (mounted) {
         Navigator.of(context).pop(true);
@@ -369,17 +538,36 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
 
   Future<List<api.PasswordManagerMetaChange>?>
       _maybeLoadPasswordHistoryTemplate() async {
-    final entries = await api.getPasswords(passwords: widget.provider);
-    if (entries.isEmpty) {
-      return null;
+    final entries = await api.getPasswordsMeta(passwords: widget.provider);
+    for (final entry in entries.values) {
+      final history = entry.$2.getPasswordData().history;
+      if (history.isNotEmpty) {
+        return history;
+      }
     }
-    return entries.values.first.getPasswordData().history;
+    return null;
   }
 
-  api.PasswordManagerMeta _buildPasswordEntry({
+  api.PasswordRawEntry _buildPasswordRecord({
+    api.PasswordRawEntry? existing,
+  }) {
+    final now = _nowDate();
+    return api.PasswordRawEntry(
+      cdat: existing?.cdat ?? now,
+      mdat: now,
+      srvr: _serverController.text.trim(),
+      acct: _accountController.text.trim(),
+      agrp: existing?.agrp ?? "com.apple.cfnetwork",
+      data: Uint8List.fromList(utf8.encode(_passwordController.text)),
+    );
+  }
+
+  api.PasswordManagerMeta _buildPasswordMetaEntry({
     required String id,
     api.PasswordManagerMeta? existing,
     List<api.PasswordManagerMetaChange>? historyTemplate,
+    required String? group,
+    required String? userId,
   }) {
     final now = _nowDate();
     final existingData = existing?.getPasswordData();
@@ -389,9 +577,6 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
       existingHistory: existingData?.history ?? historyTemplate,
       id: id,
       isNew: existing == null,
-      existingMeta: existing,
-      server: server,
-      account: account,
       password: _passwordController.text,
     );
     final altDomains = _collectAltDomains();
@@ -401,6 +586,9 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
         altDomains: altDomains,
         totp: _totp,
         ctxt: existingData?.ctxt ?? const {},
+        title: _encodeOptionalUtf8(_titleController.text),
+        notes: _encodeOptionalUtf8(_notesController.text),
+        ocpid: _buildOcpid(group: group, userId: userId),
       ),
     );
     return api.PasswordManagerMeta(
@@ -413,13 +601,36 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     );
   }
 
+  Uint8List? _buildOcpid({
+    required String? group,
+    required String? userId,
+  }) {
+    if (group == null) {
+      return null;
+    }
+    if (userId == null || userId.trim().isEmpty) {
+      return null;
+    }
+    return Uint8List.fromList(utf8.encode(userId));
+  }
+
+  String _resolveMetaId({required String passwordId}) {
+    final existing = widget.passwordMetaId?.trim();
+    if (existing != null && existing.isNotEmpty && existing != passwordId) {
+      return existing;
+    }
+    final uuid = const Uuid();
+    String candidate = uuid.v4().toUpperCase();
+    while (candidate == passwordId) {
+      candidate = uuid.v4().toUpperCase();
+    }
+    return candidate;
+  }
+
   List<api.PasswordManagerMetaChange> _buildHistory({
     required List<api.PasswordManagerMetaChange>? existingHistory,
     required String id,
     required bool isNew,
-    required api.PasswordManagerMeta? existingMeta,
-    required String server,
-    required String account,
     required String password,
   }) {
     final history = existingHistory == null
@@ -438,20 +649,15 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
       ];
     }
 
-    final last = history.last;
-    final priorPassword = last.password;
+    final priorPassword = _latestHistoryPassword(history);
     final passwordChanged = priorPassword != password;
-    final serverChanged =
-        existingMeta != null && existingMeta.srvr.trim() != server;
-    final accountChanged =
-        existingMeta != null && existingMeta.acct.trim() != account;
-    final shouldAppend = !isNew &&
-        passwordChanged;
+    final shouldAppend = !isNew && passwordChanged;
 
     final updated = api.PasswordManagerMetaChange(
       date: now,
       password: password,
-      oldPassword: shouldAppend ? priorPassword : (isNew ? null : priorPassword),
+      oldPassword:
+          shouldAppend ? priorPassword : (isNew ? null : priorPassword),
       id: id,
       typ: "pwch",
     );
@@ -476,11 +682,34 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     );
   }
 
-  String _readPassword(api.PasswordManagerMeta? entry) {
-    if (entry == null) return "";
-    final data = entry.getPasswordData();
-    if (data.history.isEmpty) return "";
-    return data.history.last.password;
+  String _readPassword({
+    required api.PasswordManagerMeta? meta,
+    required api.PasswordRawEntry? password,
+  }) {
+    if (meta != null) {
+      final data = meta.getPasswordData();
+      final latestHistoryPassword = _latestHistoryPassword(data.history);
+      if (latestHistoryPassword != null) {
+        return latestHistoryPassword;
+      }
+    }
+    if (password == null || password.data.isEmpty) {
+      return "";
+    }
+    try {
+      return utf8.decode(password.data);
+    } catch (_) {
+      return "";
+    }
+  }
+
+  String? _latestHistoryPassword(List<api.PasswordManagerMetaChange> history) {
+    for (final change in history.reversed) {
+      if (change.password != null) {
+        return change.password;
+      }
+    }
+    return null;
   }
 
   String _decodeWifiPassword(api.WifiPassword? entry) {
@@ -490,6 +719,38 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     } catch (_) {
       return "";
     }
+  }
+
+  String _decodeOptionalUtf8(Uint8List? data) {
+    if (data == null || data.isEmpty) {
+      return "";
+    }
+    try {
+      return utf8.decode(data);
+    } catch (_) {
+      return "";
+    }
+  }
+
+  Uint8List? _encodeOptionalUtf8(String value) {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return null;
+    }
+    return Uint8List.fromList(utf8.encode(trimmed));
+  }
+
+  void _generateRandomPassword() {
+    final rng = Random.secure();
+    final buffer = StringBuffer();
+    const length = 20;
+    for (var i = 0; i < length; i++) {
+      final index = rng.nextInt(_passwordChars.length);
+      buffer.write(_passwordChars[index]);
+    }
+    setState(() {
+      _passwordController.text = buffer.toString();
+    });
   }
 
   Widget _buildTotpSection(BuildContext context) {
@@ -732,11 +993,8 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
   }
 
   Uint8List _decodeBase32(String input) {
-    final normalized = input
-        .trim()
-        .replaceAll(" ", "")
-        .replaceAll("=", "")
-        .toUpperCase();
+    final normalized =
+        input.trim().replaceAll(" ", "").replaceAll("=", "").toUpperCase();
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
     var buffer = 0;
     var bitsLeft = 0;
@@ -798,7 +1056,9 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
       if (value.isEmpty) continue;
       domains.add(value);
     }
-    return domains.map((domain) => api.PasswordManagerAltDomain(domain: domain)).toList();
+    return domains
+        .map((domain) => api.PasswordManagerAltDomain(domain: domain))
+        .toList();
   }
 
   void _confirmDelete() {
@@ -824,16 +1084,58 @@ class _PasswordEditorPanelState extends OptimizedState<PasswordEditorPanel> {
     try {
       switch (widget.groupType) {
         case PasswordGroupType.web:
-          await api.deletePassword(passwords: widget.provider, id: id);
+          final metaId = widget.passwordMetaId;
+          await Future.wait([
+            api.deletePassword(
+              passwords: widget.provider,
+              id: id,
+              group: widget.group,
+            ),
+            if (metaId != null)
+              api.deletePasswordMeta(
+                passwords: widget.provider,
+                id: metaId,
+                group: widget.group,
+              ),
+          ]);
           break;
         case PasswordGroupType.passkeys:
-          await api.deletePasskey(passwords: widget.provider, id: id);
+          final metaId = widget.passwordMetaId;
+          await Future.wait([
+            api.deletePasskey(
+              passwords: widget.provider,
+              id: id,
+              group: widget.group,
+            ),
+            if (metaId != null)
+              api.deletePasswordMeta(
+                passwords: widget.provider,
+                id: metaId,
+                group: widget.group,
+              ),
+          ]);
           break;
         case PasswordGroupType.codes:
-          await api.deletePassword(passwords: widget.provider, id: id);
+          final metaId = widget.passwordMetaId;
+          await Future.wait([
+            api.deletePassword(
+              passwords: widget.provider,
+              id: id,
+              group: widget.group,
+            ),
+            if (metaId != null)
+              api.deletePasswordMeta(
+                passwords: widget.provider,
+                id: metaId,
+                group: widget.group,
+              ),
+          ]);
           break;
         case PasswordGroupType.wifi:
-          await api.deleteWifiPassword(passwords: widget.provider, id: id);
+          await api.deleteWifiPassword(
+            passwords: widget.provider,
+            id: id,
+          );
           break;
       }
       if (mounted) {

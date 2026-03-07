@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 pub use rustpush::name_photo_sharing::{IMessageNameRecord, IMessagePosterRecord, IMessageNicknameRecord};
 pub use rustpush::{DeleteTarget, MoveToRecycleBinMessage, OperatedChat};
-pub use rustpush::{SetTranscriptBackgroundMessage, ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, macos::MacOSConfig, Message, MessageTarget, macos::HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
+pub use rustpush::{SetTranscriptBackgroundMessage, ShareProfileMessage, SharedPoster, UpdateProfileSharingMessage, UpdateProfileMessage, NSArrayClass, TextFlags, TextEffect, TextFormat, ScheduleMode, SupportAction, NSArray, SupportAlert, PrivateDeviceInfo, PermanentDeleteMessage, NormalMessage, MessageType, UpdateExtensionMessage, ErrorMessage, UnsendMessage, EditMessage, PartExtension, IconChangeMessage, RichLinkImageAttachmentSubstitute, ChangeParticipantMessage, ReactMessage, Reaction, ReactMessageType, RenameMessage, LPLinkMetadata, LPSpecializationMetadata, NSURL, LPIconMetadata, LPImageMetadata, LinkMeta, ExtensionApp, NSDictionaryClass, BalloonLayout, Balloon, IndexedMessagePart, AttachmentType, macos::MacOSConfig, Message, MessageTarget, macos::HardwareConfig, APSConnection, APSConnectionResource, APSState, Attachment, AuthPhone, IDSUserIdentity, MMCSFile, MessageInst, MessagePart, MessageParts, OSConfig, RelayConfig, ResourceState};
 pub use rustpush::{TypingApp, ApsData, ApsAlert, AkData, IdmsCircleMessage, IdmsRequestedSignIn, TeardownSignIn, IdmsMessage, CertifiedContext, PushError, IDSUser, IMClient, ConversationData, ReportMessage, register};
 pub use rustpush::{LoginState, AppleAccount, VerifyBody, TrustedPhoneNumber};
 pub use rustpush::findmy::{Follow, Address, Location, FoundDevice};
@@ -516,7 +516,13 @@ pub struct DartPasswordManagerMeta {
     pub data: Vec<u8>,
 }
 
-pub use rustpush::passwords::{PasswordManagerMeta, WifiPassword, PasswordManagerMetaData, PasswordManagerMetaChange, PasswordManagerAltDomain, PasswordManagerTotp, PasswordManagerMetaDataCtx, Passkey};
+pub use rustpush::passwords::{PasswordManagerMeta, ShareInviteContentData, PasswordRawEntry, WifiPassword, PasswordManagerMetaDataFormerlyShared, PasswordManagerMetaData, PasswordManagerMetaChange, PasswordManagerAltDomain, PasswordManagerTotp, PasswordManagerMetaDataCtx, Passkey};
+
+#[frb(mirror(PasswordManagerMetaDataFormerlyShared))]
+pub struct DartPasswordManagerMetaDataFormerlyShared {
+    pub group_name: Option<String>,
+    pub password_manager_credential_identifier: Option<String>,
+}
 
 #[frb(mirror(PasswordManagerMetaData))]
 pub struct DartPasswordManagerMetaData {
@@ -524,6 +530,10 @@ pub struct DartPasswordManagerMetaData {
     pub alt_domains: Vec<PasswordManagerAltDomain>,
     pub totp: Option<PasswordManagerTotp>,
     pub ctxt: HashMap<String, PasswordManagerMetaDataCtx>,
+    pub title: Option<Vec<u8>>,
+    pub notes: Option<Vec<u8>>,
+    pub formerly_shared: Option<PasswordManagerMetaDataFormerlyShared>,
+    pub ocpid: Option<Vec<u8>>,
 }
 
 #[frb(external)]
@@ -537,10 +547,23 @@ impl PasswordManagerMeta {
 #[frb(mirror(PasswordManagerMetaChange), type_64bit_int)]
 pub struct DartPasswordManagerMetaChange {
     pub date: u64,
-    pub password: String,
+    pub password: Option<String>,
     pub old_password: Option<String>,
+    pub group_name: Option<String>,
+    pub group_id: Option<String>,
+    pub share_type: Option<String>,
     pub id: String,
     pub typ: String,
+}
+
+#[frb(mirror(ShareInviteContentData), non_opaque)]
+pub struct DartShareInviteContentData {
+    pub invitation_token: Vec<u8>,
+    pub group_id: String,
+    pub sent_time: Date,
+    pub group_name: String,
+    pub share_url: String,
+    pub invitee_handle: String,
 }
 
 #[frb(mirror(PasswordManagerAltDomain))]
@@ -558,6 +581,16 @@ pub struct DartPasswordManagerTotp {
     pub algorithm: u32,
     pub account_name: Option<String>,
     pub original_url: Option<String>,
+}
+
+#[frb(mirror(PasswordRawEntry), type_64bit_int)]
+pub struct DartPasswordRawEntry {
+    pub cdat: u64,
+    pub mdat: u64,
+    pub srvr: String,
+    pub acct: String,
+    pub agrp: String,
+    pub data: Vec<u8>,
 }
 
 #[frb(external)]
@@ -1137,7 +1170,7 @@ pub struct DartLPLinkMetadata {
     pub image_metadata: Option<LPImageMetadata>,
     pub version: u8,
     pub icon_metadata: Option<LPIconMetadata>,
-    pub original_url: NSURL,
+    pub original_url: Option<NSURL>,
     pub url: Option<NSURL>,
     pub title: Option<String>,
     pub summary: Option<String>,
@@ -1145,7 +1178,22 @@ pub struct DartLPLinkMetadata {
     pub icon: Option<RichLinkImageAttachmentSubstitute>,
     pub images: Option<NSArray<LPImageMetadata>>,
     pub icons: Option<NSArray<LPIconMetadata>>,
+
+    pub is_incomplete: Option<bool>,
+    pub uses_activity_pub: Option<bool>,
+    pub is_encoded_for_local_use: Option<bool>,
+    pub collaboration_type: Option<u32>,
+    pub specialization2: Option<LPSpecializationMetadata>,
 }
+
+#[frb(mirror(LPSpecializationMetadata))]
+pub enum DartLPSpecializationMetadata {
+    LPPasswordsInviteMetadata {
+        group_name: String,
+        url_parameters: String,
+    }
+}
+
 
 
 #[frb(mirror(LinkMeta))]

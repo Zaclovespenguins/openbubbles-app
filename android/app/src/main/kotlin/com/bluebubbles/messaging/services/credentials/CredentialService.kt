@@ -32,14 +32,15 @@ import com.bluebubbles.messaging.MainActivity
 import com.bluebubbles.messaging.services.rustpush.APNClient
 import com.bluebubbles.messaging.services.rustpush.APNService
 import org.json.JSONObject
+import uniffi.rust_lib_bluebubbles.AvailableGroupsCallback
 import uniffi.rust_lib_bluebubbles.RetrieveKeysCallback
 import uniffi.rust_lib_bluebubbles.SavedPassword
 import uniffi.rust_lib_bluebubbles.SavedPasskey
 import java.security.MessageDigest
+import java.time.Instant
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class CredentialService : CredentialProviderService() {
-    val ICLOUD_ACCOUNT_ID = "OpenBubbles-iCloud"
 
     override fun onBeginCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
@@ -54,18 +55,54 @@ class CredentialService : CredentialProviderService() {
                 return@ensurePrivilegedAllowlistFresh
             }
 
+            val prefs = getSharedPreferences("credential_usage_stats", Context.MODE_PRIVATE)
+
             val intent = Intent(this, CredentialCreateActivity::class.java)
             val pending = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_MUTABLE
                     or PendingIntent.FLAG_UPDATE_CURRENT)
 
-            val createEntries = listOf(
-                CreateEntry(
-                    ICLOUD_ACCOUNT_ID,
-                    pending
-                )
-            )
+            val client = APNClient(this)
+            client.bind { service: APNService ->
+                val push = service.pushState
 
-            callback.onResult(BeginCreateCredentialResponse(createEntries))
+                // 1 to always put this first by default
+                val lastUsedNull = prefs.getLong("usage_last_null", 1)
+                val createEntries = mutableListOf(
+                    CreateEntry(
+                        accountName = "Not shared",
+                        pendingIntent = pending,
+                        description = null,
+                        lastUsedTime = if (lastUsedNull > 0) Instant.ofEpochMilli(lastUsedNull) else null
+                    )
+                )
+
+                if (push == null) {
+                    client.destroy()
+                    callback.onResult(BeginCreateCredentialResponse(createEntries))
+                    return@bind
+                }
+
+                push.getAvailableGroups(object : AvailableGroupsCallback {
+                    override fun groups(groups: Map<String, String>) {
+                        createEntries.addAll(groups.asSequence().mapIndexed { idx, group ->
+                            val intent = Intent(this@CredentialService, CredentialCreateActivity::class.java)
+                            intent.putExtra("group_id", group.value)
+                            val pending = PendingIntent.getActivity(this@CredentialService, idx + 1, intent, PendingIntent.FLAG_MUTABLE
+                                    or PendingIntent.FLAG_UPDATE_CURRENT)
+                            
+                            val lastUsed = prefs.getLong("usage_last_group_${group.value}", 0)
+                            CreateEntry(
+                                accountName = group.key,
+                                pendingIntent = pending,
+                                description = "Saving to ${group.key}",
+                                lastUsedTime = if (lastUsed > 0) Instant.ofEpochMilli(lastUsed) else null
+                            )
+                        })
+                        callback.onResult(BeginCreateCredentialResponse(createEntries))
+                    }
+                })
+            }
+
         }
     }
 

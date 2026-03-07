@@ -1,5 +1,6 @@
 package com.bluebubbles.messaging.services.credentials
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -29,6 +30,7 @@ import java.security.spec.ECGenParameterSpec
 import java.util.UUID
 import org.json.JSONObject
 import uniffi.rust_lib_bluebubbles.SavedPassword
+import androidx.core.content.edit
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class CredentialCreateActivity : FragmentActivity() {
@@ -70,6 +72,17 @@ class CredentialCreateActivity : FragmentActivity() {
             )
         } else {
             continueFlow()
+        }
+    }
+
+    private fun updateLastUsed() {
+        val groupId = intent.getStringExtra("group_id")
+        val prefs = getSharedPreferences("credential_usage_stats", Context.MODE_PRIVATE)
+        val now = System.currentTimeMillis()
+        if (groupId == null) {
+            prefs.edit { putLong("usage_last_null", now) }
+        } else {
+            prefs.edit { putLong("usage_last_group_$groupId", now) }
         }
     }
 
@@ -181,6 +194,8 @@ class CredentialCreateActivity : FragmentActivity() {
                                 return
                             }
 
+                            updateLastUsed()
+
                             // Set the CreateCredentialResponse as the result of the Activity
                             PendingIntentHandler.setCreateCredentialResponse(
                                 result,
@@ -189,7 +204,7 @@ class CredentialCreateActivity : FragmentActivity() {
                             setResult(RESULT_OK, result)
                             finish()
                         }
-                    })
+                    }, intent.getStringExtra("group_id"))
                 }
             })
         } else if (request.callingRequest is CreatePasswordRequest) {
@@ -207,6 +222,8 @@ class CredentialCreateActivity : FragmentActivity() {
                             return
                         }
 
+                        updateLastUsed()
+
                         PendingIntentHandler.setCreateCredentialResponse(
                             result,
                             CreatePasswordResponse()
@@ -214,7 +231,8 @@ class CredentialCreateActivity : FragmentActivity() {
                         setResult(RESULT_OK, result)
                         finish()
                     }
-                }
+                },
+                intent.getStringExtra("group_id")
             )
         }
     }

@@ -154,7 +154,7 @@
         <service android:name=".services.credentials.CredentialService"
             android:enabled="true"
             android:exported="true"
-            android:label="iCloud Passwords"
+            android:label="iCloud Keychain"
             android:icon="@mipmap/ic_launcher"
             android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
             tools:targetApi="upside_down_cake">
@@ -168,7 +168,7 @@
 
         <service
             android:name=".services.credentials.OBAutofillService"
-            android:label="iCloud Passwords"
+            android:label="iCloud Keychain"
             android:exported="true"
             android:permission="android.permission.BIND_AUTOFILL_SERVICE"
             tools:targetApi="27">

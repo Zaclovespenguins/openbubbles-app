@@ -52,6 +52,10 @@ abstract class ArcMutexOptionCircleClientSessionDefaultAnisetteProvider
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc < Mutex < Vec < ActiveCircleSession > > >>>
 abstract class ArcMutexVecActiveCircleSession implements RustOpaqueInterface {}
 
+// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc < PasswordManager < DefaultAnisetteProvider > >>>
+abstract class ArcPasswordManagerDefaultAnisetteProvider
+    implements RustOpaqueInterface {}
+
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Arc < ProfilesClient < DefaultAnisetteProvider > >>>
 abstract class ArcProfilesClientDefaultAnisetteProvider
     implements RustOpaqueInterface {}

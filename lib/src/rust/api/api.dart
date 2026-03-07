@@ -180,6 +180,19 @@ Future<ArcProfilesClientDefaultAnisetteProvider> makeProfiles(
         {required ArcCloudKitClientDefaultAnisetteProvider cloudkit}) =>
     RustLib.instance.api.crateApiApiMakeProfiles(cloudkit: cloudkit);
 
+Future<ArcPasswordManagerDefaultAnisetteProvider> makePasswords(
+        {required String path,
+        required ArcKeychainClientDefaultAnisetteProvider keychain,
+        required ArcCloudKitClientDefaultAnisetteProvider cloudkit,
+        required ArcImClient client,
+        required ApsConnection conn}) =>
+    RustLib.instance.api.crateApiApiMakePasswords(
+        path: path,
+        keychain: keychain,
+        cloudkit: cloudkit,
+        client: client,
+        conn: conn);
+
 Future<ArcFtClient> makeFacetime(
         {required String path,
         required ApsConnection conn,
@@ -353,63 +366,141 @@ Future<NsArrayLpIconMetadata> createIconArray({required LPIconMetadata img}) =>
 
 Uint8List nsNull() => RustLib.instance.api.crateApiApiNsNull();
 
-PasswordManagerDefaultAnisetteProvider getPasswordManager(
-        {required ArcKeychainClientDefaultAnisetteProvider keychain}) =>
-    RustLib.instance.api.crateApiApiGetPasswordManager(keychain: keychain);
-
 Future<void> syncPasswords(
-        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
-    RustLib.instance.api.crateApiApiSyncPasswords(passwords: passwords);
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required ApsConnection conn}) =>
+    RustLib.instance.api
+        .crateApiApiSyncPasswords(passwords: passwords, conn: conn);
 
-Future<Map<String, PasswordManagerMeta>> getPasswords(
-        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+Future<Map<String, (String?, PasswordRawEntry)>> getPasswords(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords}) =>
     RustLib.instance.api.crateApiApiGetPasswords(passwords: passwords);
 
-Future<Map<String, Passkey>> getPasskeys(
-        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+Future<Map<String, (String?, PasswordManagerMeta)>> getPasswordsMeta(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords}) =>
+    RustLib.instance.api.crateApiApiGetPasswordsMeta(passwords: passwords);
+
+Future<Map<String, (String?, Passkey)>> getPasskeys(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords}) =>
     RustLib.instance.api.crateApiApiGetPasskeys(passwords: passwords);
 
-Future<Map<String, WifiPassword>> getWifiPasswords(
-        {required PasswordManagerDefaultAnisetteProvider passwords}) =>
+Future<Map<String, (String?, WifiPassword)>> getWifiPasswords(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords}) =>
     RustLib.instance.api.crateApiApiGetWifiPasswords(passwords: passwords);
 
 Future<void> savePassword(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
         required String id,
-        required PasswordManagerMeta entry}) =>
-    RustLib.instance.api
-        .crateApiApiSavePassword(passwords: passwords, id: id, entry: entry);
+        required PasswordRawEntry entry,
+        String? group}) =>
+    RustLib.instance.api.crateApiApiSavePassword(
+        passwords: passwords, id: id, entry: entry, group: group);
+
+Future<void> savePasswordMeta(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        required PasswordManagerMeta entry,
+        String? group}) =>
+    RustLib.instance.api.crateApiApiSavePasswordMeta(
+        passwords: passwords, id: id, entry: entry, group: group);
 
 Future<void> savePasskey(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
         required String id,
-        required Passkey entry}) =>
-    RustLib.instance.api
-        .crateApiApiSavePasskey(passwords: passwords, id: id, entry: entry);
+        required Passkey entry,
+        String? group}) =>
+    RustLib.instance.api.crateApiApiSavePasskey(
+        passwords: passwords, id: id, entry: entry, group: group);
 
 Future<void> saveWifiPassword(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
         required String id,
-        required WifiPassword entry}) =>
+        required WifiPassword entry,
+        String? group}) =>
     RustLib.instance.api.crateApiApiSaveWifiPassword(
-        passwords: passwords, id: id, entry: entry);
+        passwords: passwords, id: id, entry: entry, group: group);
 
 Future<void> deletePassword(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
-        required String id}) =>
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        String? group}) =>
     RustLib.instance.api
-        .crateApiApiDeletePassword(passwords: passwords, id: id);
+        .crateApiApiDeletePassword(passwords: passwords, id: id, group: group);
+
+Future<void> deletePasswordMeta(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        String? group}) =>
+    RustLib.instance.api.crateApiApiDeletePasswordMeta(
+        passwords: passwords, id: id, group: group);
 
 Future<void> deletePasskey(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
-        required String id}) =>
-    RustLib.instance.api.crateApiApiDeletePasskey(passwords: passwords, id: id);
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        String? group}) =>
+    RustLib.instance.api
+        .crateApiApiDeletePasskey(passwords: passwords, id: id, group: group);
 
 Future<void> deleteWifiPassword(
-        {required PasswordManagerDefaultAnisetteProvider passwords,
-        required String id}) =>
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String id,
+        String? group}) =>
+    RustLib.instance.api.crateApiApiDeleteWifiPassword(
+        passwords: passwords, id: id, group: group);
+
+Future<(String, Map<String, GroupSummary>, Map<String, ShareInviteContentData>)>
+    getGroups({required ArcPasswordManagerDefaultAnisetteProvider passwords}) =>
+        RustLib.instance.api.crateApiApiGetGroups(passwords: passwords);
+
+Future<String> createGroup(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String name}) =>
     RustLib.instance.api
-        .crateApiApiDeleteWifiPassword(passwords: passwords, id: id);
+        .crateApiApiCreateGroup(passwords: passwords, name: name);
+
+Future<void> deleteGroup(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String gid}) =>
+    RustLib.instance.api.crateApiApiDeleteGroup(passwords: passwords, gid: gid);
+
+Future<void> inviteUser(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String gid,
+        required String handle}) =>
+    RustLib.instance.api
+        .crateApiApiInviteUser(passwords: passwords, gid: gid, handle: handle);
+
+Future<void> removeUser(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String gid,
+        required String handle}) =>
+    RustLib.instance.api
+        .crateApiApiRemoveUser(passwords: passwords, gid: gid, handle: handle);
+
+Future<void> renameGroup(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String gid,
+        required String newname}) =>
+    RustLib.instance.api.crateApiApiRenameGroup(
+        passwords: passwords, gid: gid, newname: newname);
+
+Future<void> acceptInvite(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String inviteId}) =>
+    RustLib.instance.api
+        .crateApiApiAcceptInvite(passwords: passwords, inviteId: inviteId);
+
+Future<void> declineInvite(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String inviteId}) =>
+    RustLib.instance.api
+        .crateApiApiDeclineInvite(passwords: passwords, inviteId: inviteId);
+
+Future<bool> queryHandle(
+        {required ArcPasswordManagerDefaultAnisetteProvider passwords,
+        required String handle}) =>
+    RustLib.instance.api
+        .crateApiApiQueryHandle(passwords: passwords, handle: handle);
 
 Future<String> updateAccountHeaders(
         {required ArcMutexAppleAccountDefaultAnisetteProvider account}) =>
@@ -1201,10 +1292,6 @@ abstract class MessageFlags implements RustOpaqueInterface {
   static MessageFlags fromBitsTruncate({required PlatformInt64 val}) =>
       RustLib.instance.api.crateApiApiMessageFlagsFromBitsTruncate(val: val);
 }
-
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PasswordManager < DefaultAnisetteProvider >>>
-abstract class PasswordManagerDefaultAnisetteProvider
-    implements RustOpaqueInterface {}
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<PushError>>
 abstract class PushError implements RustOpaqueInterface {}
@@ -2676,6 +2763,59 @@ class FTSession {
           recentMemberAdds == other.recentMemberAdds;
 }
 
+class GroupSummary {
+  final String displayName;
+  final bool isOwner;
+  final List<GroupSummaryMember> members;
+
+  const GroupSummary({
+    required this.displayName,
+    required this.isOwner,
+    required this.members,
+  });
+
+  @override
+  int get hashCode =>
+      displayName.hashCode ^ isOwner.hashCode ^ members.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GroupSummary &&
+          runtimeType == other.runtimeType &&
+          displayName == other.displayName &&
+          isOwner == other.isOwner &&
+          members == other.members;
+}
+
+class GroupSummaryMember {
+  final String? name;
+  final String handle;
+  final String? userId;
+  final bool isJoined;
+
+  const GroupSummaryMember({
+    this.name,
+    required this.handle,
+    this.userId,
+    required this.isJoined,
+  });
+
+  @override
+  int get hashCode =>
+      name.hashCode ^ handle.hashCode ^ userId.hashCode ^ isJoined.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GroupSummaryMember &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          handle == other.handle &&
+          userId == other.userId &&
+          isJoined == other.isJoined;
+}
+
 class HwExtra {
   final String version;
   final int protocolVersion;
@@ -3113,7 +3253,7 @@ class LPLinkMetadata {
   final LPImageMetadata? imageMetadata;
   final int version;
   final LPIconMetadata? iconMetadata;
-  final NSURL originalUrl;
+  final NSURL? originalUrl;
   final NSURL? url;
   final String? title;
   final String? summary;
@@ -3121,12 +3261,17 @@ class LPLinkMetadata {
   final RichLinkImageAttachmentSubstitute? icon;
   final NsArrayLpImageMetadata? images;
   final NsArrayLpIconMetadata? icons;
+  final bool? isIncomplete;
+  final bool? usesActivityPub;
+  final bool? isEncodedForLocalUse;
+  final int? collaborationType;
+  final LPSpecializationMetadata? specialization2;
 
   const LPLinkMetadata({
     this.imageMetadata,
     required this.version,
     this.iconMetadata,
-    required this.originalUrl,
+    this.originalUrl,
     this.url,
     this.title,
     this.summary,
@@ -3134,6 +3279,11 @@ class LPLinkMetadata {
     this.icon,
     this.images,
     this.icons,
+    this.isIncomplete,
+    this.usesActivityPub,
+    this.isEncodedForLocalUse,
+    this.collaborationType,
+    this.specialization2,
   });
 
   @override
@@ -3148,7 +3298,12 @@ class LPLinkMetadata {
       image.hashCode ^
       icon.hashCode ^
       images.hashCode ^
-      icons.hashCode;
+      icons.hashCode ^
+      isIncomplete.hashCode ^
+      usesActivityPub.hashCode ^
+      isEncodedForLocalUse.hashCode ^
+      collaborationType.hashCode ^
+      specialization2.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -3165,7 +3320,22 @@ class LPLinkMetadata {
           image == other.image &&
           icon == other.icon &&
           images == other.images &&
-          icons == other.icons;
+          icons == other.icons &&
+          isIncomplete == other.isIncomplete &&
+          usesActivityPub == other.usesActivityPub &&
+          isEncodedForLocalUse == other.isEncodedForLocalUse &&
+          collaborationType == other.collaborationType &&
+          specialization2 == other.specialization2;
+}
+
+@freezed
+sealed class LPSpecializationMetadata with _$LPSpecializationMetadata {
+  const LPSpecializationMetadata._();
+
+  const factory LPSpecializationMetadata.lpPasswordsInviteMetadata({
+    required String groupName,
+    required String urlParameters,
+  }) = LPSpecializationMetadata_LPPasswordsInviteMetadata;
 }
 
 class MemojiData {
@@ -4224,15 +4394,21 @@ class PasswordManagerMeta {
 
 class PasswordManagerMetaChange {
   final int date;
-  final String password;
+  final String? password;
   final String? oldPassword;
+  final String? groupName;
+  final String? groupId;
+  final String? shareType;
   final String id;
   final String typ;
 
   const PasswordManagerMetaChange({
     required this.date,
-    required this.password,
+    this.password,
     this.oldPassword,
+    this.groupName,
+    this.groupId,
+    this.shareType,
     required this.id,
     required this.typ,
   });
@@ -4242,6 +4418,9 @@ class PasswordManagerMetaChange {
       date.hashCode ^
       password.hashCode ^
       oldPassword.hashCode ^
+      groupName.hashCode ^
+      groupId.hashCode ^
+      shareType.hashCode ^
       id.hashCode ^
       typ.hashCode;
 
@@ -4253,6 +4432,9 @@ class PasswordManagerMetaChange {
           date == other.date &&
           password == other.password &&
           oldPassword == other.oldPassword &&
+          groupName == other.groupName &&
+          groupId == other.groupId &&
+          shareType == other.shareType &&
           id == other.id &&
           typ == other.typ;
 }
@@ -4262,17 +4444,32 @@ class PasswordManagerMetaData {
   final List<PasswordManagerAltDomain> altDomains;
   final PasswordManagerTotp? totp;
   final Map<String, PasswordManagerMetaDataCtx> ctxt;
+  final Uint8List? title;
+  final Uint8List? notes;
+  final PasswordManagerMetaDataFormerlyShared? formerlyShared;
+  final Uint8List? ocpid;
 
   const PasswordManagerMetaData({
     required this.history,
     required this.altDomains,
     this.totp,
     required this.ctxt,
+    this.title,
+    this.notes,
+    this.formerlyShared,
+    this.ocpid,
   });
 
   @override
   int get hashCode =>
-      history.hashCode ^ altDomains.hashCode ^ totp.hashCode ^ ctxt.hashCode;
+      history.hashCode ^
+      altDomains.hashCode ^
+      totp.hashCode ^
+      ctxt.hashCode ^
+      title.hashCode ^
+      notes.hashCode ^
+      formerlyShared.hashCode ^
+      ocpid.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -4282,7 +4479,11 @@ class PasswordManagerMetaData {
           history == other.history &&
           altDomains == other.altDomains &&
           totp == other.totp &&
-          ctxt == other.ctxt;
+          ctxt == other.ctxt &&
+          title == other.title &&
+          notes == other.notes &&
+          formerlyShared == other.formerlyShared &&
+          ocpid == other.ocpid;
 }
 
 class PasswordManagerMetaDataCtx {
@@ -4301,6 +4502,29 @@ class PasswordManagerMetaDataCtx {
       other is PasswordManagerMetaDataCtx &&
           runtimeType == other.runtimeType &&
           lastUsed == other.lastUsed;
+}
+
+class PasswordManagerMetaDataFormerlyShared {
+  final String? groupName;
+  final String? passwordManagerCredentialIdentifier;
+
+  const PasswordManagerMetaDataFormerlyShared({
+    this.groupName,
+    this.passwordManagerCredentialIdentifier,
+  });
+
+  @override
+  int get hashCode =>
+      groupName.hashCode ^ passwordManagerCredentialIdentifier.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordManagerMetaDataFormerlyShared &&
+          runtimeType == other.runtimeType &&
+          groupName == other.groupName &&
+          passwordManagerCredentialIdentifier ==
+              other.passwordManagerCredentialIdentifier;
 }
 
 class PasswordManagerTotp {
@@ -4353,6 +4577,45 @@ class PasswordManagerTotp {
           algorithm == other.algorithm &&
           accountName == other.accountName &&
           originalUrl == other.originalUrl;
+}
+
+class PasswordRawEntry {
+  final int cdat;
+  final int mdat;
+  final String srvr;
+  final String acct;
+  final String agrp;
+  final Uint8List data;
+
+  const PasswordRawEntry({
+    required this.cdat,
+    required this.mdat,
+    required this.srvr,
+    required this.acct,
+    required this.agrp,
+    required this.data,
+  });
+
+  @override
+  int get hashCode =>
+      cdat.hashCode ^
+      mdat.hashCode ^
+      srvr.hashCode ^
+      acct.hashCode ^
+      agrp.hashCode ^
+      data.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PasswordRawEntry &&
+          runtimeType == other.runtimeType &&
+          cdat == other.cdat &&
+          mdat == other.mdat &&
+          srvr == other.srvr &&
+          acct == other.acct &&
+          agrp == other.agrp &&
+          data == other.data;
 }
 
 class PermanentDeleteMessage {
@@ -5109,6 +5372,45 @@ sealed class SetTranscriptBackgroundMessage
   }) = SetTranscriptBackgroundMessage_Set;
 }
 
+class ShareInviteContentData {
+  final Uint8List invitationToken;
+  final String groupId;
+  final Date sentTime;
+  final String groupName;
+  final String shareUrl;
+  final String inviteeHandle;
+
+  const ShareInviteContentData({
+    required this.invitationToken,
+    required this.groupId,
+    required this.sentTime,
+    required this.groupName,
+    required this.shareUrl,
+    required this.inviteeHandle,
+  });
+
+  @override
+  int get hashCode =>
+      invitationToken.hashCode ^
+      groupId.hashCode ^
+      sentTime.hashCode ^
+      groupName.hashCode ^
+      shareUrl.hashCode ^
+      inviteeHandle.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ShareInviteContentData &&
+          runtimeType == other.runtimeType &&
+          invitationToken == other.invitationToken &&
+          groupId == other.groupId &&
+          sentTime == other.sentTime &&
+          groupName == other.groupName &&
+          shareUrl == other.shareUrl &&
+          inviteeHandle == other.inviteeHandle;
+}
+
 class ShareProfileMessage {
   final Uint8List cloudKitDecryptionRecordKey;
   final String cloudKitRecordKey;
@@ -5192,6 +5494,7 @@ class SharedICloudServices {
   final ArcTokenProviderDefaultAnisetteProvider tokenProvider;
   final ArcCloudKitClientDefaultAnisetteProvider? cloudkitClient;
   final ArcKeychainClientDefaultAnisetteProvider? keychain;
+  final ArcPasswordManagerDefaultAnisetteProvider? passwords;
   final ArcProfilesClientDefaultAnisetteProvider profilesClient;
   final ArcFindMyClientDefaultAnisetteProvider? fmfd;
   final SyncManagerDefaultAnisetteProviderMyFilePackager? sharedstreams;
@@ -5203,6 +5506,7 @@ class SharedICloudServices {
     required this.tokenProvider,
     this.cloudkitClient,
     this.keychain,
+    this.passwords,
     required this.profilesClient,
     this.fmfd,
     this.sharedstreams,
@@ -5216,6 +5520,7 @@ class SharedICloudServices {
       tokenProvider.hashCode ^
       cloudkitClient.hashCode ^
       keychain.hashCode ^
+      passwords.hashCode ^
       profilesClient.hashCode ^
       fmfd.hashCode ^
       sharedstreams.hashCode ^
@@ -5231,6 +5536,7 @@ class SharedICloudServices {
           tokenProvider == other.tokenProvider &&
           cloudkitClient == other.cloudkitClient &&
           keychain == other.keychain &&
+          passwords == other.passwords &&
           profilesClient == other.profilesClient &&
           fmfd == other.fmfd &&
           sharedstreams == other.sharedstreams &&

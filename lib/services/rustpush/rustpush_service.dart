@@ -1575,7 +1575,28 @@ class RustPushService extends GetxService {
     );
   }
 
+  String linkToBalloonBundleId(api.LinkMeta link) {
+    if (link.data.specialization2 is api.LPSpecializationMetadata_LPPasswordsInviteMetadata) {
+      return "com.openbubbles.passwords";
+    }
+    return "com.apple.messages.URLBalloonProvider";
+  }
+
   PayloadData linkToData(api.LinkMeta link) {
+    if (link.data.specialization2 is api.LPSpecializationMetadata_LPPasswordsInviteMetadata) {
+      var data = link.data.specialization2 as api.LPSpecializationMetadata_LPPasswordsInviteMetadata;
+      return PayloadData(
+        type: constants.PayloadType.app,
+        urlData: null,
+        appData: [
+          iMessageAppData(
+            appName: "Shared Passwords",
+            ldText: "You have been invited to join the group “${data.groupName}”.",
+            url: data.urlParameters,
+          )
+        ],
+      );
+    }
     return PayloadData(
       type: constants.PayloadType.url,
       urlData: [
@@ -1583,7 +1604,7 @@ class RustPushService extends GetxService {
           imageMetadata: rpToMedia(link.data.imageMetadata),
           videoMetadata: null,
           iconMetadata: rpIToMedia(link.data.iconMetadata),
-          originalUrl: link.data.originalUrl.relative,
+          originalUrl: link.data.originalUrl?.relative,
           url: link.data.url?.relative,
           title: link.data.title,
           summary: link.data.summary,
@@ -1646,7 +1667,7 @@ class RustPushService extends GetxService {
         attributedBody: [attributedBodyData.$1],
         attachments: attributedBodyData.$3,
         hasAttachments: attributedBodyData.$3.isNotEmpty,
-        balloonBundleId: innerMsg.field0.app?.balloon != null ? innerMsg.field0.app?.bundleId : innerMsg.field0.linkMeta != null ? "com.apple.messages.URLBalloonProvider" : null,
+        balloonBundleId: innerMsg.field0.app?.balloon != null ? innerMsg.field0.app?.bundleId : innerMsg.field0.linkMeta != null ? linkToBalloonBundleId(innerMsg.field0.linkMeta!) : null,
         payloadData: innerMsg.field0.app?.balloon != null ? appToData(innerMsg.field0.app!) : innerMsg.field0.linkMeta != null ? linkToData(innerMsg.field0.linkMeta!) : null,
         amkSessionId: innerMsg.field0.app?.balloon != null ? myMsg.id : null,
         verificationFailed: myMsg.verificationFailed,
@@ -3088,6 +3109,7 @@ class RustPushService extends GetxService {
   Future handleMsgInner(api.PushMessage push) async {
     if (push is api.PushMessage_CircleFinishEvent) {
       if (await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!)) {
+        cachedInClique = true;
         // enable after battle testing
         
         // Logger.info("Joined clique, enabling sync!");
@@ -4257,15 +4279,21 @@ class RustPushService extends GetxService {
     return result;
   }
 
-  Future<bool> joinClique() async {
+  Future<bool> checkClique() async {
     var isInClique = await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!);
+    cachedInClique = isInClique;
+    return isInClique;
+  }
+
+  Future<bool> joinClique() async {
+    var isInClique = await checkClique();
     if (isInClique) return true;
 
     var bottles = await wrapPromise(api.getBottles(keychain: pushService.state!.icloudServices!.keychain!), "Fetching Bottles...");
 
     if (bottles.isEmpty) {
       await promptResetData(true);
-      return await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!);
+      return await checkClique();
     }
     
     api.ViableBottle? bottle = bottles[0];
@@ -4273,10 +4301,10 @@ class RustPushService extends GetxService {
     while(await attemptBottle(bottle!) == 2) {
       bottle = await promptChange(bottles);
       if (bottle == null) {
-        return await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!);
+        return await checkClique();
       }
     }
-    return await api.isInClique(keychain: pushService.state!.icloudServices!.keychain!);
+    return await checkClique();
   }
 
   void markBackgroundChange(String sender, int ms, Chat chat) async {
@@ -4716,6 +4744,7 @@ class RustPushService extends GetxService {
   String serviceId = "";
 
   BillingClientManager client = BillingClientManager();
+  bool cachedInClique = false;
 
   @override
   Future<void> onInit() async {
@@ -4772,13 +4801,28 @@ class RustPushService extends GetxService {
       validateSubState();
       if (ls.isUiThread) {
         Timer.periodic(const Duration(days: 1), (timer) async {
-          if (!ss.settings.cloudSyncingEnabled.value || state == null) return;
+          if (state == null) return;
+          var passwords = state!.icloudServices?.passwords;
+          if (passwords != null) {
+            api.syncPasswords(passwords: passwords, conn: state!.conn);
+          }
+          if (!ss.settings.cloudSyncingEnabled.value) return;
           Logger.info("Doing cloudkit sync!");
           await pushService.doCloudKitSync();
         });
-        if (ss.settings.cloudSyncingEnabled.value && state != null) {
-          Logger.info("Doing cloudkit sync!");
-          pushService.doCloudKitSync();
+        if (state != null) {
+          var passwords = state!.icloudServices?.passwords;
+          if (passwords != null) {
+            api.syncPasswords(passwords: passwords, conn: state!.conn);
+          }
+          if (ss.settings.cloudSyncingEnabled.value) {
+            Logger.info("Doing cloudkit sync!");
+            pushService.doCloudKitSync();
+          }
+        }
+        var keychain = pushService.state?.icloudServices?.keychain;
+        if (keychain != null) {
+          cachedInClique = await api.isInClique(keychain: keychain);
         }
       }
     })();

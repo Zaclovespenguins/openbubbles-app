@@ -167,7 +167,7 @@ class OBAutofillService : AutofillService() {
                         }
                         client.destroy()
                     }
-                })
+                }, null)
             }
         }
         callback.onSuccess()

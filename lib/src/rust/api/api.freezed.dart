@@ -4883,6 +4883,278 @@ abstract class LoginState_NeedsLogin extends LoginState {
 }
 
 /// @nodoc
+mixin _$LPSpecializationMetadata {
+  String get groupName => throw _privateConstructorUsedError;
+  String get urlParameters => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String groupName, String urlParameters)
+        lpPasswordsInviteMetadata,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String groupName, String urlParameters)?
+        lpPasswordsInviteMetadata,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String groupName, String urlParameters)?
+        lpPasswordsInviteMetadata,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            LPSpecializationMetadata_LPPasswordsInviteMetadata value)
+        lpPasswordsInviteMetadata,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LPSpecializationMetadata_LPPasswordsInviteMetadata value)?
+        lpPasswordsInviteMetadata,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LPSpecializationMetadata_LPPasswordsInviteMetadata value)?
+        lpPasswordsInviteMetadata,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of LPSpecializationMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $LPSpecializationMetadataCopyWith<LPSpecializationMetadata> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LPSpecializationMetadataCopyWith<$Res> {
+  factory $LPSpecializationMetadataCopyWith(LPSpecializationMetadata value,
+          $Res Function(LPSpecializationMetadata) then) =
+      _$LPSpecializationMetadataCopyWithImpl<$Res, LPSpecializationMetadata>;
+  @useResult
+  $Res call({String groupName, String urlParameters});
+}
+
+/// @nodoc
+class _$LPSpecializationMetadataCopyWithImpl<$Res,
+        $Val extends LPSpecializationMetadata>
+    implements $LPSpecializationMetadataCopyWith<$Res> {
+  _$LPSpecializationMetadataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of LPSpecializationMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? groupName = null,
+    Object? urlParameters = null,
+  }) {
+    return _then(_value.copyWith(
+      groupName: null == groupName
+          ? _value.groupName
+          : groupName // ignore: cast_nullable_to_non_nullable
+              as String,
+      urlParameters: null == urlParameters
+          ? _value.urlParameters
+          : urlParameters // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWith<
+    $Res> implements $LPSpecializationMetadataCopyWith<$Res> {
+  factory _$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWith(
+          _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl value,
+          $Res Function(
+                  _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl)
+              then) =
+      __$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWithImpl<
+          $Res>;
+  @override
+  @useResult
+  $Res call({String groupName, String urlParameters});
+}
+
+/// @nodoc
+class __$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWithImpl<
+        $Res>
+    extends _$LPSpecializationMetadataCopyWithImpl<$Res,
+        _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl>
+    implements
+        _$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWith<
+            $Res> {
+  __$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWithImpl(
+      _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl _value,
+      $Res Function(_$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl)
+          _then)
+      : super(_value, _then);
+
+  /// Create a copy of LPSpecializationMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? groupName = null,
+    Object? urlParameters = null,
+  }) {
+    return _then(_$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl(
+      groupName: null == groupName
+          ? _value.groupName
+          : groupName // ignore: cast_nullable_to_non_nullable
+              as String,
+      urlParameters: null == urlParameters
+          ? _value.urlParameters
+          : urlParameters // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl
+    extends LPSpecializationMetadata_LPPasswordsInviteMetadata {
+  const _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl(
+      {required this.groupName, required this.urlParameters})
+      : super._();
+
+  @override
+  final String groupName;
+  @override
+  final String urlParameters;
+
+  @override
+  String toString() {
+    return 'LPSpecializationMetadata.lpPasswordsInviteMetadata(groupName: $groupName, urlParameters: $urlParameters)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl &&
+            (identical(other.groupName, groupName) ||
+                other.groupName == groupName) &&
+            (identical(other.urlParameters, urlParameters) ||
+                other.urlParameters == urlParameters));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, groupName, urlParameters);
+
+  /// Create a copy of LPSpecializationMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWith<
+          _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl>
+      get copyWith =>
+          __$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWithImpl<
+                  _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String groupName, String urlParameters)
+        lpPasswordsInviteMetadata,
+  }) {
+    return lpPasswordsInviteMetadata(groupName, urlParameters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String groupName, String urlParameters)?
+        lpPasswordsInviteMetadata,
+  }) {
+    return lpPasswordsInviteMetadata?.call(groupName, urlParameters);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String groupName, String urlParameters)?
+        lpPasswordsInviteMetadata,
+    required TResult orElse(),
+  }) {
+    if (lpPasswordsInviteMetadata != null) {
+      return lpPasswordsInviteMetadata(groupName, urlParameters);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(
+            LPSpecializationMetadata_LPPasswordsInviteMetadata value)
+        lpPasswordsInviteMetadata,
+  }) {
+    return lpPasswordsInviteMetadata(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(LPSpecializationMetadata_LPPasswordsInviteMetadata value)?
+        lpPasswordsInviteMetadata,
+  }) {
+    return lpPasswordsInviteMetadata?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(LPSpecializationMetadata_LPPasswordsInviteMetadata value)?
+        lpPasswordsInviteMetadata,
+    required TResult orElse(),
+  }) {
+    if (lpPasswordsInviteMetadata != null) {
+      return lpPasswordsInviteMetadata(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LPSpecializationMetadata_LPPasswordsInviteMetadata
+    extends LPSpecializationMetadata {
+  const factory LPSpecializationMetadata_LPPasswordsInviteMetadata(
+          {required final String groupName,
+          required final String urlParameters}) =
+      _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl;
+  const LPSpecializationMetadata_LPPasswordsInviteMetadata._() : super._();
+
+  @override
+  String get groupName;
+  @override
+  String get urlParameters;
+
+  /// Create a copy of LPSpecializationMetadata
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LPSpecializationMetadata_LPPasswordsInviteMetadataImplCopyWith<
+          _$LPSpecializationMetadata_LPPasswordsInviteMetadataImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$Message {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({

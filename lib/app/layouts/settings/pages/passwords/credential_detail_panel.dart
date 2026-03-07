@@ -14,23 +14,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
+import 'package:bluebubbles/src/rust/lib.dart' as lib;
 import 'package:get/get.dart';
 
 class CredentialDetailPanel extends StatefulWidget {
   final CredentialEntry credential;
-  final api.PasswordManagerDefaultAnisetteProvider provider;
+  final lib.ArcPasswordManagerDefaultAnisetteProvider provider;
+  final Map<String, String> groupNamesById;
+  final String? groupUserId;
 
   const CredentialDetailPanel({
     super.key,
     required this.credential,
     required this.provider,
+    required this.groupNamesById,
+    required this.groupUserId,
   });
 
   @override
   State<CredentialDetailPanel> createState() => _CredentialDetailPanelState();
 }
 
-class _CredentialDetailPanelState extends OptimizedState<CredentialDetailPanel> {
+class _CredentialDetailPanelState
+    extends OptimizedState<CredentialDetailPanel> {
   bool get _canEdit => widget.credential.isEditable;
   bool _showPassword = false;
   bool get _isApplePasskey {
@@ -78,8 +84,13 @@ class _CredentialDetailPanelState extends OptimizedState<CredentialDetailPanel> 
                     provider: widget.provider,
                     groupType: widget.credential.groupType,
                     id: widget.credential.id,
+                    group: widget.credential.group,
+                    passwordMetaId: widget.credential.passwordMetaId,
                     passwordMeta: widget.credential.passwordMeta,
+                    passwordRaw: widget.credential.passwordRaw,
                     wifiPassword: widget.credential.wifiPassword,
+                    availableGroups: widget.groupNamesById,
+                    groupUserId: widget.groupUserId,
                   ),
                 );
                 if (result == true && mounted) {
@@ -99,7 +110,8 @@ class _CredentialDetailPanelState extends OptimizedState<CredentialDetailPanel> 
                     backgroundColor: tileColor,
                     title: widget.credential.item.title,
                     subtitle: widget.credential.item.subtitle,
-                    leading: CredentialAvatar(credential: widget.credential.item),
+                    leading:
+                        CredentialAvatar(credential: widget.credential.item),
                   ),
                 ],
               ),
@@ -269,10 +281,19 @@ class _CredentialDetailPanelState extends OptimizedState<CredentialDetailPanel> 
 
   Future<void> _deletePasskey() async {
     try {
-      await api.deletePasskey(
-        passwords: widget.provider,
-        id: widget.credential.id,
-      );
+      await Future.wait([
+        api.deletePasskey(
+          passwords: widget.provider,
+          id: widget.credential.id,
+          group: widget.credential.group,
+        ),
+        if (widget.credential.passwordMetaId != null)
+          api.deletePasswordMeta(
+            passwords: widget.provider,
+            id: widget.credential.passwordMetaId!,
+            group: widget.credential.group,
+          ),
+      ]);
       if (mounted) {
         Navigator.of(context).pop(true);
       }

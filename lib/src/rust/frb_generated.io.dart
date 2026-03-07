@@ -74,6 +74,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr;
 
   CrossPlatformFinalizerArg
+      get rust_arc_decrement_strong_count_ArcPasswordManagerDefaultAnisetteProviderPtr =>
+          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProviderPtr;
+
+  CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_ArcProfilesClientDefaultAnisetteProviderPtr =>
           wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProviderPtr;
 
@@ -176,10 +180,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   CrossPlatformFinalizerArg
       get rust_arc_decrement_strong_count_NsArrayLpImageMetadataPtr => wire
           ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadataPtr;
-
-  CrossPlatformFinalizerArg
-      get rust_arc_decrement_strong_count_PasswordManagerDefaultAnisetteProviderPtr =>
-          wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProviderPtr;
 
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_PushErrorPtr =>
       wire._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushErrorPtr;
@@ -284,6 +284,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexVecActiveCircleSession
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -419,11 +424,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
-          dynamic raw);
-
-  @protected
-  PasswordManagerDefaultAnisetteProvider
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -572,6 +572,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
   ArcProfilesClientDefaultAnisetteProvider
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
           dynamic raw);
@@ -662,11 +667,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  PasswordManagerDefaultAnisetteProvider
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          dynamic raw);
-
-  @protected
   SavedHardwareState
       dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
           dynamic raw);
@@ -746,6 +746,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Map<String, FTParticipant> dco_decode_Map_String_ft_participant(dynamic raw);
 
   @protected
+  Map<String, GroupSummary> dco_decode_Map_String_group_summary(dynamic raw);
+
+  @protected
   Map<String, List<MessageEdit>> dco_decode_Map_String_list_message_edit(
       dynamic raw);
 
@@ -770,15 +773,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dco_decode_Map_String_opt_box_autoadd_cloud_message(dynamic raw);
 
   @protected
-  Map<String, Passkey> dco_decode_Map_String_passkey(dynamic raw);
-
-  @protected
-  Map<String, PasswordManagerMeta> dco_decode_Map_String_password_manager_meta(
-      dynamic raw);
-
-  @protected
   Map<String, PasswordManagerMetaDataCtx>
       dco_decode_Map_String_password_manager_meta_data_ctx(dynamic raw);
+
+  @protected
+  Map<String, (String?, Passkey)>
+      dco_decode_Map_String_record_opt_string_passkey(dynamic raw);
+
+  @protected
+  Map<String, (String?, PasswordManagerMeta)>
+      dco_decode_Map_String_record_opt_string_password_manager_meta(
+          dynamic raw);
+
+  @protected
+  Map<String, (String?, PasswordRawEntry)>
+      dco_decode_Map_String_record_opt_string_password_raw_entry(dynamic raw);
+
+  @protected
+  Map<String, (String?, WifiPassword)>
+      dco_decode_Map_String_record_opt_string_wifi_password(dynamic raw);
+
+  @protected
+  Map<String, ShareInviteContentData>
+      dco_decode_Map_String_share_invite_content_data(dynamic raw);
 
   @protected
   Map<String, StatusKitPersonalConfig>
@@ -786,9 +803,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Map<String, SyncStatus> dco_decode_Map_String_sync_status(dynamic raw);
-
-  @protected
-  Map<String, WifiPassword> dco_decode_Map_String_wifi_password(dynamic raw);
 
   @protected
   ApsConnection
@@ -858,6 +872,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexVecActiveCircleSession
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          dynamic raw);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -996,11 +1015,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
-  PasswordManagerDefaultAnisetteProvider
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          dynamic raw);
-
-  @protected
   PushError
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           dynamic raw);
@@ -1126,6 +1140,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexAppleAccountDefaultAnisetteProvider
       dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -1341,6 +1360,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LPImageMetadata dco_decode_box_autoadd_lp_image_metadata(dynamic raw);
 
   @protected
+  LPSpecializationMetadata dco_decode_box_autoadd_lp_specialization_metadata(
+      dynamic raw);
+
+  @protected
   MemojiData dco_decode_box_autoadd_memoji_data(dynamic raw);
 
   @protected
@@ -1415,7 +1438,15 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  PasswordManagerMetaDataFormerlyShared
+      dco_decode_box_autoadd_password_manager_meta_data_formerly_shared(
+          dynamic raw);
+
+  @protected
   PasswordManagerTotp dco_decode_box_autoadd_password_manager_totp(dynamic raw);
+
+  @protected
+  PasswordRawEntry dco_decode_box_autoadd_password_raw_entry(dynamic raw);
 
   @protected
   PermanentDeleteMessage dco_decode_box_autoadd_permanent_delete_message(
@@ -1625,6 +1656,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FTSession dco_decode_ft_session(dynamic raw);
 
   @protected
+  GroupSummary dco_decode_group_summary(dynamic raw);
+
+  @protected
+  GroupSummaryMember dco_decode_group_summary_member(dynamic raw);
+
+  @protected
   HwExtra dco_decode_hw_extra(dynamic raw);
 
   @protected
@@ -1698,6 +1735,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<FTSession> dco_decode_list_ft_session(dynamic raw);
+
+  @protected
+  List<GroupSummaryMember> dco_decode_list_group_summary_member(dynamic raw);
 
   @protected
   List<IndexedMessagePart> dco_decode_list_indexed_message_part(dynamic raw);
@@ -1780,6 +1820,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  List<(String, GroupSummary)> dco_decode_list_record_string_group_summary(
+      dynamic raw);
+
+  @protected
   List<(String, List<MessageEdit>)>
       dco_decode_list_record_string_list_message_edit(dynamic raw);
 
@@ -1805,15 +1849,31 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dco_decode_list_record_string_opt_box_autoadd_cloud_message(dynamic raw);
 
   @protected
-  List<(String, Passkey)> dco_decode_list_record_string_passkey(dynamic raw);
-
-  @protected
-  List<(String, PasswordManagerMeta)>
-      dco_decode_list_record_string_password_manager_meta(dynamic raw);
-
-  @protected
   List<(String, PasswordManagerMetaDataCtx)>
       dco_decode_list_record_string_password_manager_meta_data_ctx(dynamic raw);
+
+  @protected
+  List<(String, (String?, Passkey))>
+      dco_decode_list_record_string_record_opt_string_passkey(dynamic raw);
+
+  @protected
+  List<(String, (String?, PasswordManagerMeta))>
+      dco_decode_list_record_string_record_opt_string_password_manager_meta(
+          dynamic raw);
+
+  @protected
+  List<(String, (String?, PasswordRawEntry))>
+      dco_decode_list_record_string_record_opt_string_password_raw_entry(
+          dynamic raw);
+
+  @protected
+  List<(String, (String?, WifiPassword))>
+      dco_decode_list_record_string_record_opt_string_wifi_password(
+          dynamic raw);
+
+  @protected
+  List<(String, ShareInviteContentData)>
+      dco_decode_list_record_string_share_invite_content_data(dynamic raw);
 
   @protected
   List<(String, StatusKitPersonalConfig)>
@@ -1824,10 +1884,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<(String, SyncStatus)> dco_decode_list_record_string_sync_status(
-      dynamic raw);
-
-  @protected
-  List<(String, WifiPassword)> dco_decode_list_record_string_wifi_password(
       dynamic raw);
 
   @protected
@@ -1860,6 +1916,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LPLinkMetadata dco_decode_lp_link_metadata(dynamic raw);
+
+  @protected
+  LPSpecializationMetadata dco_decode_lp_specialization_metadata(dynamic raw);
 
   @protected
   MemojiData dco_decode_memoji_data(dynamic raw);
@@ -1988,6 +2047,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexAppleAccountDefaultAnisetteProvider?
       dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          dynamic raw);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider?
+      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           dynamic raw);
 
   @protected
@@ -2160,6 +2224,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   LPImageMetadata? dco_decode_opt_box_autoadd_lp_image_metadata(dynamic raw);
 
   @protected
+  LPSpecializationMetadata?
+      dco_decode_opt_box_autoadd_lp_specialization_metadata(dynamic raw);
+
+  @protected
   MMCSAttachmentMeta? dco_decode_opt_box_autoadd_mmcs_attachment_meta(
       dynamic raw);
 
@@ -2174,6 +2242,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   PartExtension? dco_decode_opt_box_autoadd_part_extension(dynamic raw);
+
+  @protected
+  PasswordManagerMetaDataFormerlyShared?
+      dco_decode_opt_box_autoadd_password_manager_meta_data_formerly_shared(
+          dynamic raw);
 
   @protected
   PasswordManagerTotp? dco_decode_opt_box_autoadd_password_manager_totp(
@@ -2278,7 +2351,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  PasswordManagerMetaDataFormerlyShared
+      dco_decode_password_manager_meta_data_formerly_shared(dynamic raw);
+
+  @protected
   PasswordManagerTotp dco_decode_password_manager_totp(dynamic raw);
+
+  @protected
+  PasswordRawEntry dco_decode_password_raw_entry(dynamic raw);
 
   @protected
   PermanentDeleteMessage dco_decode_permanent_delete_message(dynamic raw);
@@ -2450,6 +2530,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dynamic raw);
 
   @protected
+  (String?, Passkey) dco_decode_record_opt_string_passkey(dynamic raw);
+
+  @protected
+  (String?, PasswordManagerMeta)
+      dco_decode_record_opt_string_password_manager_meta(dynamic raw);
+
+  @protected
+  (String?, PasswordRawEntry) dco_decode_record_opt_string_password_raw_entry(
+      dynamic raw);
+
+  @protected
+  (String?, WifiPassword) dco_decode_record_opt_string_wifi_password(
+      dynamic raw);
+
+  @protected
   (
     SharedPushState,
     ApsWatcher
@@ -2490,11 +2585,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, FTParticipant) dco_decode_record_string_ft_participant(dynamic raw);
 
   @protected
+  (String, GroupSummary) dco_decode_record_string_group_summary(dynamic raw);
+
+  @protected
   (String, List<MessageEdit>) dco_decode_record_string_list_message_edit(
       dynamic raw);
 
   @protected
   (String, Uint8List) dco_decode_record_string_list_prim_u_8_strict(
+      dynamic raw);
+
+  @protected
+  (
+    String,
+    Map<String, GroupSummary>,
+    Map<String, ShareInviteContentData>
+  ) dco_decode_record_string_map_string_group_summary_map_string_share_invite_content_data(
       dynamic raw);
 
   @protected
@@ -2514,15 +2620,31 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       dco_decode_record_string_opt_box_autoadd_cloud_message(dynamic raw);
 
   @protected
-  (String, Passkey) dco_decode_record_string_passkey(dynamic raw);
-
-  @protected
-  (String, PasswordManagerMeta) dco_decode_record_string_password_manager_meta(
-      dynamic raw);
-
-  @protected
   (String, PasswordManagerMetaDataCtx)
       dco_decode_record_string_password_manager_meta_data_ctx(dynamic raw);
+
+  @protected
+  (String, (String?, Passkey))
+      dco_decode_record_string_record_opt_string_passkey(dynamic raw);
+
+  @protected
+  (String, (String?, PasswordManagerMeta))
+      dco_decode_record_string_record_opt_string_password_manager_meta(
+          dynamic raw);
+
+  @protected
+  (
+    String,
+    (String?, PasswordRawEntry)
+  ) dco_decode_record_string_record_opt_string_password_raw_entry(dynamic raw);
+
+  @protected
+  (String, (String?, WifiPassword))
+      dco_decode_record_string_record_opt_string_wifi_password(dynamic raw);
+
+  @protected
+  (String, ShareInviteContentData)
+      dco_decode_record_string_share_invite_content_data(dynamic raw);
 
   @protected
   (String, SharedPushState) dco_decode_record_string_shared_push_state(
@@ -2540,9 +2662,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, BigInt) dco_decode_record_string_u_64(dynamic raw);
-
-  @protected
-  (String, WifiPassword) dco_decode_record_string_wifi_password(dynamic raw);
 
   @protected
   (int, NSDictionaryTypedCoder)
@@ -2570,6 +2689,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   SetTranscriptBackgroundMessage dco_decode_set_transcript_background_message(
       dynamic raw);
+
+  @protected
+  ShareInviteContentData dco_decode_share_invite_content_data(dynamic raw);
 
   @protected
   ShareProfileMessage dco_decode_share_profile_message(dynamic raw);
@@ -2751,6 +2873,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
   ArcProfilesClientDefaultAnisetteProvider
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
           SseDeserializer deserializer);
@@ -2883,11 +3010,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   NsArrayLpImageMetadata
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
-          SseDeserializer deserializer);
-
-  @protected
-  PasswordManagerDefaultAnisetteProvider
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -3036,6 +3158,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
   ArcProfilesClientDefaultAnisetteProvider
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
           SseDeserializer deserializer);
@@ -3126,11 +3253,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  PasswordManagerDefaultAnisetteProvider
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          SseDeserializer deserializer);
-
-  @protected
   SavedHardwareState
       sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
           SseDeserializer deserializer);
@@ -3210,6 +3332,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  Map<String, GroupSummary> sse_decode_Map_String_group_summary(
+      SseDeserializer deserializer);
+
+  @protected
   Map<String, List<MessageEdit>> sse_decode_Map_String_list_message_edit(
       SseDeserializer deserializer);
 
@@ -3236,16 +3362,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  Map<String, Passkey> sse_decode_Map_String_passkey(
-      SseDeserializer deserializer);
-
-  @protected
-  Map<String, PasswordManagerMeta> sse_decode_Map_String_password_manager_meta(
-      SseDeserializer deserializer);
-
-  @protected
   Map<String, PasswordManagerMetaDataCtx>
       sse_decode_Map_String_password_manager_meta_data_ctx(
+          SseDeserializer deserializer);
+
+  @protected
+  Map<String, (String?, Passkey)>
+      sse_decode_Map_String_record_opt_string_passkey(
+          SseDeserializer deserializer);
+
+  @protected
+  Map<String, (String?, PasswordManagerMeta)>
+      sse_decode_Map_String_record_opt_string_password_manager_meta(
+          SseDeserializer deserializer);
+
+  @protected
+  Map<String, (String?, PasswordRawEntry)>
+      sse_decode_Map_String_record_opt_string_password_raw_entry(
+          SseDeserializer deserializer);
+
+  @protected
+  Map<String, (String?, WifiPassword)>
+      sse_decode_Map_String_record_opt_string_wifi_password(
+          SseDeserializer deserializer);
+
+  @protected
+  Map<String, ShareInviteContentData>
+      sse_decode_Map_String_share_invite_content_data(
           SseDeserializer deserializer);
 
   @protected
@@ -3255,10 +3398,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Map<String, SyncStatus> sse_decode_Map_String_sync_status(
-      SseDeserializer deserializer);
-
-  @protected
-  Map<String, WifiPassword> sse_decode_Map_String_wifi_password(
       SseDeserializer deserializer);
 
   @protected
@@ -3329,6 +3468,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexVecActiveCircleSession
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -3467,11 +3611,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  PasswordManagerDefaultAnisetteProvider
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          SseDeserializer deserializer);
-
-  @protected
   PushError
       sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           SseDeserializer deserializer);
@@ -3600,6 +3739,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexAppleAccountDefaultAnisetteProvider
       sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider
+      sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -3831,6 +3975,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LPSpecializationMetadata sse_decode_box_autoadd_lp_specialization_metadata(
+      SseDeserializer deserializer);
+
+  @protected
   MemojiData sse_decode_box_autoadd_memoji_data(SseDeserializer deserializer);
 
   @protected
@@ -3919,7 +4067,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  PasswordManagerMetaDataFormerlyShared
+      sse_decode_box_autoadd_password_manager_meta_data_formerly_shared(
+          SseDeserializer deserializer);
+
+  @protected
   PasswordManagerTotp sse_decode_box_autoadd_password_manager_totp(
+      SseDeserializer deserializer);
+
+  @protected
+  PasswordRawEntry sse_decode_box_autoadd_password_raw_entry(
       SseDeserializer deserializer);
 
   @protected
@@ -4154,6 +4311,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   FTSession sse_decode_ft_session(SseDeserializer deserializer);
 
   @protected
+  GroupSummary sse_decode_group_summary(SseDeserializer deserializer);
+
+  @protected
+  GroupSummaryMember sse_decode_group_summary_member(
+      SseDeserializer deserializer);
+
+  @protected
   HwExtra sse_decode_hw_extra(SseDeserializer deserializer);
 
   @protected
@@ -4235,6 +4399,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<FTSession> sse_decode_list_ft_session(SseDeserializer deserializer);
+
+  @protected
+  List<GroupSummaryMember> sse_decode_list_group_summary_member(
+      SseDeserializer deserializer);
 
   @protected
   List<IndexedMessagePart> sse_decode_list_indexed_message_part(
@@ -4324,6 +4492,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  List<(String, GroupSummary)> sse_decode_list_record_string_group_summary(
+      SseDeserializer deserializer);
+
+  @protected
   List<(String, List<MessageEdit>)>
       sse_decode_list_record_string_list_message_edit(
           SseDeserializer deserializer);
@@ -4353,17 +4525,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  List<(String, Passkey)> sse_decode_list_record_string_passkey(
-      SseDeserializer deserializer);
-
-  @protected
-  List<(String, PasswordManagerMeta)>
-      sse_decode_list_record_string_password_manager_meta(
+  List<(String, PasswordManagerMetaDataCtx)>
+      sse_decode_list_record_string_password_manager_meta_data_ctx(
           SseDeserializer deserializer);
 
   @protected
-  List<(String, PasswordManagerMetaDataCtx)>
-      sse_decode_list_record_string_password_manager_meta_data_ctx(
+  List<(String, (String?, Passkey))>
+      sse_decode_list_record_string_record_opt_string_passkey(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, (String?, PasswordManagerMeta))>
+      sse_decode_list_record_string_record_opt_string_password_manager_meta(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, (String?, PasswordRawEntry))>
+      sse_decode_list_record_string_record_opt_string_password_raw_entry(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, (String?, WifiPassword))>
+      sse_decode_list_record_string_record_opt_string_wifi_password(
+          SseDeserializer deserializer);
+
+  @protected
+  List<(String, ShareInviteContentData)>
+      sse_decode_list_record_string_share_invite_content_data(
           SseDeserializer deserializer);
 
   @protected
@@ -4377,10 +4565,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<(String, SyncStatus)> sse_decode_list_record_string_sync_status(
-      SseDeserializer deserializer);
-
-  @protected
-  List<(String, WifiPassword)> sse_decode_list_record_string_wifi_password(
       SseDeserializer deserializer);
 
   @protected
@@ -4416,6 +4600,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   LPLinkMetadata sse_decode_lp_link_metadata(SseDeserializer deserializer);
+
+  @protected
+  LPSpecializationMetadata sse_decode_lp_specialization_metadata(
+      SseDeserializer deserializer);
 
   @protected
   MemojiData sse_decode_memoji_data(SseDeserializer deserializer);
@@ -4551,6 +4739,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ArcMutexAppleAccountDefaultAnisetteProvider?
       sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+          SseDeserializer deserializer);
+
+  @protected
+  ArcPasswordManagerDefaultAnisetteProvider?
+      sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
           SseDeserializer deserializer);
 
   @protected
@@ -4735,6 +4928,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  LPSpecializationMetadata?
+      sse_decode_opt_box_autoadd_lp_specialization_metadata(
+          SseDeserializer deserializer);
+
+  @protected
   MMCSAttachmentMeta? sse_decode_opt_box_autoadd_mmcs_attachment_meta(
       SseDeserializer deserializer);
 
@@ -4751,6 +4949,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   PartExtension? sse_decode_opt_box_autoadd_part_extension(
       SseDeserializer deserializer);
+
+  @protected
+  PasswordManagerMetaDataFormerlyShared?
+      sse_decode_opt_box_autoadd_password_manager_meta_data_formerly_shared(
+          SseDeserializer deserializer);
 
   @protected
   PasswordManagerTotp? sse_decode_opt_box_autoadd_password_manager_totp(
@@ -4869,8 +5072,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  PasswordManagerMetaDataFormerlyShared
+      sse_decode_password_manager_meta_data_formerly_shared(
+          SseDeserializer deserializer);
+
+  @protected
   PasswordManagerTotp sse_decode_password_manager_totp(
       SseDeserializer deserializer);
+
+  @protected
+  PasswordRawEntry sse_decode_password_raw_entry(SseDeserializer deserializer);
 
   @protected
   PermanentDeleteMessage sse_decode_permanent_delete_message(
@@ -5052,6 +5263,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  (String?, Passkey) sse_decode_record_opt_string_passkey(
+      SseDeserializer deserializer);
+
+  @protected
+  (String?, PasswordManagerMeta)
+      sse_decode_record_opt_string_password_manager_meta(
+          SseDeserializer deserializer);
+
+  @protected
+  (String?, PasswordRawEntry) sse_decode_record_opt_string_password_raw_entry(
+      SseDeserializer deserializer);
+
+  @protected
+  (String?, WifiPassword) sse_decode_record_opt_string_wifi_password(
+      SseDeserializer deserializer);
+
+  @protected
   (
     SharedPushState,
     ApsWatcher
@@ -5096,11 +5324,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  (String, GroupSummary) sse_decode_record_string_group_summary(
+      SseDeserializer deserializer);
+
+  @protected
   (String, List<MessageEdit>) sse_decode_record_string_list_message_edit(
       SseDeserializer deserializer);
 
   @protected
   (String, Uint8List) sse_decode_record_string_list_prim_u_8_strict(
+      SseDeserializer deserializer);
+
+  @protected
+  (
+    String,
+    Map<String, GroupSummary>,
+    Map<String, ShareInviteContentData>
+  ) sse_decode_record_string_map_string_group_summary_map_string_share_invite_content_data(
       SseDeserializer deserializer);
 
   @protected
@@ -5122,16 +5362,33 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           SseDeserializer deserializer);
 
   @protected
-  (String, Passkey) sse_decode_record_string_passkey(
-      SseDeserializer deserializer);
-
-  @protected
-  (String, PasswordManagerMeta) sse_decode_record_string_password_manager_meta(
-      SseDeserializer deserializer);
-
-  @protected
   (String, PasswordManagerMetaDataCtx)
       sse_decode_record_string_password_manager_meta_data_ctx(
+          SseDeserializer deserializer);
+
+  @protected
+  (String, (String?, Passkey))
+      sse_decode_record_string_record_opt_string_passkey(
+          SseDeserializer deserializer);
+
+  @protected
+  (String, (String?, PasswordManagerMeta))
+      sse_decode_record_string_record_opt_string_password_manager_meta(
+          SseDeserializer deserializer);
+
+  @protected
+  (String, (String?, PasswordRawEntry))
+      sse_decode_record_string_record_opt_string_password_raw_entry(
+          SseDeserializer deserializer);
+
+  @protected
+  (String, (String?, WifiPassword))
+      sse_decode_record_string_record_opt_string_wifi_password(
+          SseDeserializer deserializer);
+
+  @protected
+  (String, ShareInviteContentData)
+      sse_decode_record_string_share_invite_content_data(
           SseDeserializer deserializer);
 
   @protected
@@ -5153,10 +5410,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   (String, BigInt) sse_decode_record_string_u_64(SseDeserializer deserializer);
-
-  @protected
-  (String, WifiPassword) sse_decode_record_string_wifi_password(
-      SseDeserializer deserializer);
 
   @protected
   (int, NSDictionaryTypedCoder)
@@ -5185,6 +5438,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   SetTranscriptBackgroundMessage sse_decode_set_transcript_background_message(
+      SseDeserializer deserializer);
+
+  @protected
+  ShareInviteContentData sse_decode_share_invite_content_data(
       SseDeserializer deserializer);
 
   @protected
@@ -5382,6 +5639,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          ArcPasswordManagerDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
           ArcProfilesClientDefaultAnisetteProvider self,
           SseSerializer serializer);
@@ -5520,12 +5783,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata(
           NsArrayLpImageMetadata self, SseSerializer serializer);
-
-  @protected
-  void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          PasswordManagerDefaultAnisetteProvider self,
-          SseSerializer serializer);
 
   @protected
   void
@@ -5685,6 +5942,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          ArcPasswordManagerDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcProfilesClientDefaultAnisetteProvider(
           ArcProfilesClientDefaultAnisetteProvider self,
           SseSerializer serializer);
@@ -5778,12 +6041,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          PasswordManagerDefaultAnisetteProvider self,
-          SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerSavedHardwareState(
           SavedHardwareState self, SseSerializer serializer);
 
@@ -5868,6 +6125,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Map<String, FTParticipant> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_Map_String_group_summary(
+      Map<String, GroupSummary> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_Map_String_list_message_edit(
       Map<String, List<MessageEdit>> self, SseSerializer serializer);
 
@@ -5892,16 +6153,29 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       Map<String, CloudMessage?> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_Map_String_passkey(
-      Map<String, Passkey> self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_Map_String_password_manager_meta(
-      Map<String, PasswordManagerMeta> self, SseSerializer serializer);
-
-  @protected
   void sse_encode_Map_String_password_manager_meta_data_ctx(
       Map<String, PasswordManagerMetaDataCtx> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_record_opt_string_passkey(
+      Map<String, (String?, Passkey)> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_record_opt_string_password_manager_meta(
+      Map<String, (String?, PasswordManagerMeta)> self,
+      SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_record_opt_string_password_raw_entry(
+      Map<String, (String?, PasswordRawEntry)> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_record_opt_string_wifi_password(
+      Map<String, (String?, WifiPassword)> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_Map_String_share_invite_content_data(
+      Map<String, ShareInviteContentData> self, SseSerializer serializer);
 
   @protected
   void sse_encode_Map_String_status_kit_personal_config(
@@ -5910,10 +6184,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_Map_String_sync_status(
       Map<String, SyncStatus> self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_Map_String_wifi_password(
-      Map<String, WifiPassword> self, SseSerializer serializer);
 
   @protected
   void
@@ -5991,6 +6261,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession(
           ArcMutexVecActiveCircleSession self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          ArcPasswordManagerDefaultAnisetteProvider self,
+          SseSerializer serializer);
 
   @protected
   void
@@ -6135,12 +6411,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-          PasswordManagerDefaultAnisetteProvider self,
-          SseSerializer serializer);
-
-  @protected
-  void
       sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPushError(
           PushError self, SseSerializer serializer);
 
@@ -6276,6 +6546,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
           ArcMutexAppleAccountDefaultAnisetteProvider self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          ArcPasswordManagerDefaultAnisetteProvider self,
           SseSerializer serializer);
 
   @protected
@@ -6519,6 +6795,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LPImageMetadata self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_lp_specialization_metadata(
+      LPSpecializationMetadata self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_memoji_data(
       MemojiData self, SseSerializer serializer);
 
@@ -6612,8 +6892,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PasswordManagerMetaData self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_password_manager_meta_data_formerly_shared(
+      PasswordManagerMetaDataFormerlyShared self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_password_manager_totp(
       PasswordManagerTotp self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_password_raw_entry(
+      PasswordRawEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_box_autoadd_permanent_delete_message(
@@ -6850,6 +7138,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_ft_session(FTSession self, SseSerializer serializer);
 
   @protected
+  void sse_encode_group_summary(GroupSummary self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_group_summary_member(
+      GroupSummaryMember self, SseSerializer serializer);
+
+  @protected
   void sse_encode_hw_extra(HwExtra self, SseSerializer serializer);
 
   @protected
@@ -6935,6 +7230,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_ft_session(
       List<FTSession> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_group_summary_member(
+      List<GroupSummaryMember> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_indexed_message_part(
@@ -7030,6 +7329,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<(String, FTParticipant)> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_record_string_group_summary(
+      List<(String, GroupSummary)> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_record_string_list_message_edit(
       List<(String, List<MessageEdit>)> self, SseSerializer serializer);
 
@@ -7054,17 +7357,31 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       List<(String, CloudMessage?)> self, SseSerializer serializer);
 
   @protected
-  void sse_encode_list_record_string_passkey(
-      List<(String, Passkey)> self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_list_record_string_password_manager_meta(
-      List<(String, PasswordManagerMeta)> self, SseSerializer serializer);
-
-  @protected
   void sse_encode_list_record_string_password_manager_meta_data_ctx(
       List<(String, PasswordManagerMetaDataCtx)> self,
       SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_record_opt_string_passkey(
+      List<(String, (String?, Passkey))> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_record_opt_string_password_manager_meta(
+      List<(String, (String?, PasswordManagerMeta))> self,
+      SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_record_opt_string_password_raw_entry(
+      List<(String, (String?, PasswordRawEntry))> self,
+      SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_record_opt_string_wifi_password(
+      List<(String, (String?, WifiPassword))> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_record_string_share_invite_content_data(
+      List<(String, ShareInviteContentData)> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_record_string_status_kit_personal_config(
@@ -7077,10 +7394,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_list_record_string_sync_status(
       List<(String, SyncStatus)> self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_list_record_string_wifi_password(
-      List<(String, WifiPassword)> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_record_u_32_ns_dictionary_typed_coder(
@@ -7118,6 +7431,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_lp_link_metadata(
       LPLinkMetadata self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_lp_specialization_metadata(
+      LPSpecializationMetadata self, SseSerializer serializer);
 
   @protected
   void sse_encode_memoji_data(MemojiData self, SseSerializer serializer);
@@ -7261,6 +7578,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
           ArcMutexAppleAccountDefaultAnisetteProvider? self,
+          SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+          ArcPasswordManagerDefaultAnisetteProvider? self,
           SseSerializer serializer);
 
   @protected
@@ -7453,6 +7776,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       LPImageMetadata? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_lp_specialization_metadata(
+      LPSpecializationMetadata? self, SseSerializer serializer);
+
+  @protected
   void sse_encode_opt_box_autoadd_mmcs_attachment_meta(
       MMCSAttachmentMeta? self, SseSerializer serializer);
 
@@ -7470,6 +7797,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_opt_box_autoadd_part_extension(
       PartExtension? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_password_manager_meta_data_formerly_shared(
+      PasswordManagerMetaDataFormerlyShared? self, SseSerializer serializer);
 
   @protected
   void sse_encode_opt_box_autoadd_password_manager_totp(
@@ -7585,8 +7916,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       PasswordManagerMetaDataCtx self, SseSerializer serializer);
 
   @protected
+  void sse_encode_password_manager_meta_data_formerly_shared(
+      PasswordManagerMetaDataFormerlyShared self, SseSerializer serializer);
+
+  @protected
   void sse_encode_password_manager_totp(
       PasswordManagerTotp self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_password_raw_entry(
+      PasswordRawEntry self, SseSerializer serializer);
 
   @protected
   void sse_encode_permanent_delete_message(
@@ -7753,6 +8092,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           (List<IdsUser>?, SupportAlert?) self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_opt_string_passkey(
+      (String?, Passkey) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_opt_string_password_manager_meta(
+      (String?, PasswordManagerMeta) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_opt_string_password_raw_entry(
+      (String?, PasswordRawEntry) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_opt_string_wifi_password(
+      (String?, WifiPassword) self, SseSerializer serializer);
+
+  @protected
   void
       sse_encode_record_shared_push_state_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_aps_watcher(
           (SharedPushState, ApsWatcher) self, SseSerializer serializer);
@@ -7792,12 +8147,26 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       (String, FTParticipant) self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_string_group_summary(
+      (String, GroupSummary) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_record_string_list_message_edit(
       (String, List<MessageEdit>) self, SseSerializer serializer);
 
   @protected
   void sse_encode_record_string_list_prim_u_8_strict(
       (String, Uint8List) self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_record_string_map_string_group_summary_map_string_share_invite_content_data(
+          (
+            String,
+            Map<String, GroupSummary>,
+            Map<String, ShareInviteContentData>
+          ) self,
+          SseSerializer serializer);
 
   @protected
   void sse_encode_record_string_message_edit_range(
@@ -7816,16 +8185,28 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       (String, CloudMessage?) self, SseSerializer serializer);
 
   @protected
-  void sse_encode_record_string_passkey(
-      (String, Passkey) self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_record_string_password_manager_meta(
-      (String, PasswordManagerMeta) self, SseSerializer serializer);
-
-  @protected
   void sse_encode_record_string_password_manager_meta_data_ctx(
       (String, PasswordManagerMetaDataCtx) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_record_opt_string_passkey(
+      (String, (String?, Passkey)) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_record_opt_string_password_manager_meta(
+      (String, (String?, PasswordManagerMeta)) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_record_opt_string_password_raw_entry(
+      (String, (String?, PasswordRawEntry)) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_record_opt_string_wifi_password(
+      (String, (String?, WifiPassword)) self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_string_share_invite_content_data(
+      (String, ShareInviteContentData) self, SseSerializer serializer);
 
   @protected
   void sse_encode_record_string_shared_push_state(
@@ -7846,10 +8227,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_record_string_u_64(
       (String, BigInt) self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_record_string_wifi_password(
-      (String, WifiPassword) self, SseSerializer serializer);
 
   @protected
   void sse_encode_record_u_32_ns_dictionary_typed_coder(
@@ -7878,6 +8255,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void sse_encode_set_transcript_background_message(
       SetTranscriptBackgroundMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_share_invite_content_data(
+      ShareInviteContentData self, SseSerializer serializer);
 
   @protected
   void sse_encode_share_profile_message(
@@ -8459,6 +8840,38 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSession =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexVecActiveCircleSessionPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProviderPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  void
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider(
+      ptr,
+    );
+  }
+
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProvider =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcPasswordManagerDefaultAnisetteProviderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
@@ -9323,38 +9736,6 @@ class RustLibWire implements BaseWire {
           'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata');
   late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadata =
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerNSArrayLPImageMetadataPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProviderPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProviderPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider(
-      ptr,
-    );
-  }
-
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProviderPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_bluebubbles_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProvider =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerPasswordManagerDefaultAnisetteProviderPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void

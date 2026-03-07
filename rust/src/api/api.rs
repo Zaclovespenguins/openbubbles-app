@@ -20,7 +20,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::{AnisetteProvider, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}};
+use rustpush::{AnisetteProvider, cloudkit::contact_info_to_handle, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}, passwords::PasswordState};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -552,6 +552,7 @@ pub struct SharedICloudServices {
 
     pub cloudkit_client: Option<Arc<CloudKitClient<DefaultAnisetteProvider>>>,
     pub keychain: Option<Arc<KeychainClient<DefaultAnisetteProvider>>>,
+    pub passwords: Option<Arc<PasswordManager<DefaultAnisetteProvider>>>,
     pub profiles_client: Arc<ProfilesClient<DefaultAnisetteProvider>>,
     pub fmfd: Option<Arc<FindMyClient<DefaultAnisetteProvider>>>,
     pub sharedstreams: Option<SyncManager<DefaultAnisetteProvider, MyFilePackager>>,
@@ -623,6 +624,9 @@ impl SharedPushState {
 
                     cloudkit_client: Some(cloudkit.clone()),
                     keychain: keychain.clone(),
+                    passwords: if let Some(keychain) = &keychain {
+                        Some(make_passwords(path.clone(), keychain, &cloudkit, &client, &conn).await)
+                    } else { None },
                     profiles_client: make_profiles(&cloudkit).await,
                     fmfd: if let Some(keychain) = &keychain {
                         make_findmy(path.clone(), &token_provider, &conn, &cloudkit, &keychain, &anisette, config, &client).await
@@ -720,6 +724,17 @@ pub async fn make_cloudkit(path: String, anisette: &ArcAnisetteClient<DefaultAni
 
 pub async fn make_profiles(cloudkit: &Arc<CloudKitClient<DefaultAnisetteProvider>>) -> Arc<ProfilesClient<DefaultAnisetteProvider>> {
     Arc::new(ProfilesClient::new(cloudkit.clone()))
+}
+
+pub async fn make_passwords(path: String, keychain: &Arc<KeychainClient<DefaultAnisetteProvider>>, cloudkit: &Arc<CloudKitClient<DefaultAnisetteProvider>>, client: &Arc<IMClient>, conn: &APSConnection) -> Arc<PasswordManager<DefaultAnisetteProvider>> {
+    let dir = PathBuf::from_str(&path).unwrap();
+
+    let path = dir.join("passwords.plist");
+    let state: PasswordState = plist::from_file(&path).unwrap_or_default();
+
+    PasswordManager::new(keychain.clone(), cloudkit.clone(), client.identity.clone(), conn.clone(), state, Box::new(move |item| {
+        plist::to_file_xml(&path, item).expect("Failed to serialize plist!");
+    })).await
 }
 
 pub async fn make_facetime(path: String, conn: &APSConnection, client: &Arc<IMClient>) -> Arc<FTClient> {
@@ -1212,16 +1227,11 @@ pub enum PushMessage {
     }
 }
 
-#[frb(sync)]
-pub fn get_password_manager(keychain: &Arc<KeychainClient<DefaultAnisetteProvider>>) -> PasswordManager<DefaultAnisetteProvider> {
-    PasswordManager::new(keychain.clone())
-}
-
-pub async fn sync_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> anyhow::Result<()> {
-    passwords.sync_passwords().await?;
+pub async fn sync_passwords(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, conn: &APSConnection) -> anyhow::Result<()> {
+    passwords.sync_passwords(conn).await?;
 
     let wifi_networks: HashMap<String, String> = get_wifi_passwords(passwords).await.into_values()
-        .map(|p| (p.acct, String::from_utf8(p.data).expect("bad password!"))).collect();
+        .map(|(_, p)| (p.acct, String::from_utf8(p.data).expect("bad password!"))).collect();
 
     if let Some(handle) = HANDLE_WIFI_NETWORKS.get() {
         handle.handle_wifi_networks(wifi_networks);
@@ -1230,40 +1240,118 @@ pub async fn sync_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>
     Ok(())
 }
 
-pub async fn get_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, PasswordManagerMeta> {
+pub async fn get_passwords(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>) -> HashMap<String, (Option<String>, PasswordRawEntry)> {
     passwords.get_password_entries().await
 }
 
-pub async fn get_passkeys(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, Passkey> {
+pub async fn get_passwords_meta(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>) -> HashMap<String, (Option<String>, PasswordManagerMeta)> {
     passwords.get_password_entries().await
 }
 
-pub async fn get_wifi_passwords(passwords: &PasswordManager<DefaultAnisetteProvider>) -> HashMap<String, WifiPassword> {
+pub async fn get_passkeys(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>) -> HashMap<String, (Option<String>, Passkey)> {
     passwords.get_password_entries().await
 }
 
-pub async fn save_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &PasswordManagerMeta) -> anyhow::Result<()> {
-    Ok(passwords.insert_password(&id, entry).await?)
+pub async fn get_wifi_passwords(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>) -> HashMap<String, (Option<String>, WifiPassword)> {
+    passwords.get_password_entries().await
 }
 
-pub async fn save_passkey(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &Passkey) -> anyhow::Result<()> {
-    Ok(passwords.insert_password_entry(&id, entry).await?)
+pub async fn save_password(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, entry: &PasswordRawEntry, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry, group).await?)
 }
 
-pub async fn save_wifi_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String, entry: &WifiPassword) -> anyhow::Result<()> {
-    Ok(passwords.insert_password_entry(&id, entry).await?)
+pub async fn save_password_meta(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, entry: &PasswordManagerMeta, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry, group).await?)
 }
 
-pub async fn delete_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
-    Ok(passwords.delete_password(&id).await?)
+pub async fn save_passkey(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, entry: &Passkey, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry, group).await?)
 }
 
-pub async fn delete_passkey(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
-    Ok(passwords.delete_password_entry::<Passkey>(&id).await?)
+pub async fn save_wifi_password(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, entry: &WifiPassword, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.insert_password_entry(&id, entry, group).await?)
 }
 
-pub async fn delete_wifi_password(passwords: &PasswordManager<DefaultAnisetteProvider>, id: String) -> anyhow::Result<()> {
-    Ok(passwords.delete_password_entry::<WifiPassword>(&id).await?)
+pub async fn delete_password(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<PasswordRawEntry>(&id, group).await?)
+}
+
+pub async fn delete_password_meta(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<PasswordManagerMeta>(&id, group).await?)
+}
+
+pub async fn delete_passkey(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<Passkey>(&id, group).await?)
+}
+
+pub async fn delete_wifi_password(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, id: String, group: Option<String>) -> anyhow::Result<()> {
+    Ok(passwords.delete_password_entry::<WifiPassword>(&id, group).await?)
+}
+
+pub struct GroupSummaryMember {
+    pub name: Option<String>,
+    pub handle: String,
+    pub user_id: Option<String>,
+    pub is_joined: bool,
+}
+
+pub struct GroupSummary {
+    pub display_name: String,
+    pub is_owner: bool,
+    pub members: Vec<GroupSummaryMember>,
+}
+
+pub async fn get_groups(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>) -> anyhow::Result<(String, HashMap<String, GroupSummary>, HashMap<String, ShareInviteContentData>)> {
+    let container = passwords.get_container().await?;
+    let state = passwords.state.read().await;
+    let filter = state.groups.iter().filter_map(|(id, group)| {
+        let item = group.share.as_ref()?;
+        Some((id.clone(), GroupSummary {
+            display_name: item.display_name.clone(),
+            is_owner: group.is_owner,
+            members: item.share_info.participants.iter().filter_map(|p| if p.state() == 3 { None } else {
+                Some(GroupSummaryMember {
+                    name: p.contact_information.as_ref()?.first_name.clone(),
+                    handle: p.contact_information.as_ref().and_then(|c| contact_info_to_handle(c))?,
+                    user_id: p.user_id.as_ref().and_then(|u| u.name.clone()),
+                    is_joined: p.state() == 2,
+                })
+            }).collect()
+        }))
+    }).collect::<HashMap<_, _>>();
+    Ok((container.user_id.clone(), filter, state.invite_groups.clone()))
+}
+
+pub async fn create_group(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, name: String) -> anyhow::Result<String> {
+    Ok(passwords.create_group(&name).await?)
+}
+
+pub async fn delete_group(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, gid: String) -> anyhow::Result<()> {
+    Ok(passwords.remove_group(&gid).await?)
+}
+
+pub async fn invite_user(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, gid: String, handle: String) -> anyhow::Result<()> {
+    Ok(passwords.invite_user(&gid, &handle).await?)
+}
+
+pub async fn remove_user(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, gid: String, handle: String) -> anyhow::Result<()> {
+    Ok(passwords.remove_user(&gid, &handle).await?)
+}
+
+pub async fn rename_group(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, gid: String, newname: String) -> anyhow::Result<()> {
+    Ok(passwords.rename_group(&gid, &newname).await?)
+}
+
+pub async fn accept_invite(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, invite_id: String) -> anyhow::Result<()> {
+    Ok(passwords.accept_invite(&invite_id).await?)
+}
+
+pub async fn decline_invite(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, invite_id: String) -> anyhow::Result<()> {
+    Ok(passwords.decline_invite(&invite_id).await?)
+}
+
+pub async fn query_handle(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, handle: String) -> anyhow::Result<bool> {
+    Ok(passwords.query_handle(&handle).await?)
 }
 
 async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>, changes: Vec<String>, local: &Arc<mpsc::Sender<PushMessage>>) {
@@ -1676,6 +1764,11 @@ pub async fn recv_wait(watcher: &mut APSWatcher, state: &Arc<SharedPushState>) -
                     Ok(None) => {},
                     Ok(Some(msg)) => {
                         return PollResult::Cont(Some(PushMessage::StatusUpdate(msg)))
+                    }
+                }
+                if let Some(passwords) = &icloud.passwords {
+                    if let Err(e) = passwords.handle(msg.clone()).await {
+                        info!("error handling passwords {e}");
                     }
                 }
             }

@@ -492,6 +492,7 @@ class SetupViewController extends StatefulController {
             
             cloudkitClient: cloudkit,
             keychain: keychain,
+            passwords: keychain == null ? null : await api.makePasswords(path: pushService.statePath, keychain: keychain, cloudkit: cloudkit!, client: imclient, conn: connection!),
             profilesClient: await api.makeProfiles(cloudkit: cloudkit!),
             fmfd: keychain == null ? null : await api.makeFindmy(path: pushService.statePath, tokenProvider: tokenProvider, conn: connection!, cloudkit: cloudkit, keychain: keychain, anisette: anisette!, config: config!, client: imclient), 
             sharedstreams: await api.makeSharedStreams(path: pushService.statePath, conn: connection!, anisette: anisette!, config: config!, token: tokenProvider),
@@ -815,12 +816,13 @@ class _SetupViewState extends OptimizedState<SetupView> {
       for (var items in list) {
         if (!items.key.startsWith("sms-auth-")) continue;
 
-        var user = await api.restoreUser(user: items.value);
         controller.phoneValidating.value = true;
         try {
+          var user = await api.restoreUser(user: items.value);
           Logger.info("restore validating!");
           await api.validateCert(conn: controller.connection!, user: user);
           Logger.info("restore validated");
+          controller.currentPhoneUsers[int.parse(items.key.replaceFirst("sms-auth-", ""))] = user;
         } catch (e) {
           Logger.info("restore resetting! $e");
           ss.settings.cachedCodes.remove(items.key);
@@ -831,7 +833,6 @@ class _SetupViewState extends OptimizedState<SetupView> {
           controller.phoneValidating.value = false;
         }
 
-        controller.currentPhoneUsers[int.parse(items.key.replaceFirst("sms-auth-", ""))] = user;
       }
     })();
 

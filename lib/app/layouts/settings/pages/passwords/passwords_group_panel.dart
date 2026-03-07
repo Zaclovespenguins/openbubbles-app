@@ -6,25 +6,30 @@ import 'package:bluebubbles/app/layouts/settings/widgets/content/next_button.dar
 import 'package:bluebubbles/app/layouts/settings/widgets/settings_widgets.dart';
 import 'package:bluebubbles/app/wrappers/stateful_boilerplate.dart';
 import 'package:bluebubbles/helpers/helpers.dart';
-import 'package:bluebubbles/helpers/types/constants.dart';
 import 'package:bluebubbles/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:bluebubbles/src/rust/api/api.dart' as api;
-import 'package:get/get.dart';
+import 'package:bluebubbles/src/rust/lib.dart' as lib;
+import 'package:cbor/simple.dart';
+import 'dart:convert';
 
 class PasswordsGroupPanel extends StatefulWidget {
   final String title;
   final PasswordGroupType groupType;
-  final api.PasswordManagerDefaultAnisetteProvider provider;
+  final lib.ArcPasswordManagerDefaultAnisetteProvider provider;
+  final Map<String, String> groupNamesById;
+  final String? groupUserId;
 
   const PasswordsGroupPanel({
     super.key,
     required this.title,
     required this.groupType,
     required this.provider,
+    required this.groupNamesById,
+    required this.groupUserId,
   });
 
   @override
@@ -43,67 +48,113 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
   Future<List<CredentialEntry>> _loadCredentials(PasswordGroupType type) async {
     switch (type) {
       case PasswordGroupType.web:
-        final entries = await api.getPasswords(passwords: widget.provider);
-        final items = entries.entries
-            .map((entry) {
-              final data = entry.value.getPasswordData();
-              if (data.history.isEmpty) {
-                return null;
-              }
-              return CredentialEntry(
-                id: entry.key,
-                groupType: type,
-                item: buildPasswordCredential(
-                  meta: entry.value,
-                  data: data,
-                  groupType: type,
-                ),
-                passwordMeta: entry.value,
-              );
-            })
-            .whereType<CredentialEntry>()
-            .toList(growable: false);
+        final passwords = await api.getPasswords(passwords: widget.provider);
+        final metas = await api.getPasswordsMeta(passwords: widget.provider);
+        final metasBySiteUser = _indexMetasBySiteAndUser(metas);
+        final items = passwords.entries.map((entry) {
+          final password = entry.value.$2;
+          final passwordGroup = entry.value.$1;
+          final match = _takeMatchingMeta(
+            metasBySiteUser,
+            site: password.srvr,
+            user: password.acct,
+            group: passwordGroup,
+          );
+          final metaId = match?.$1;
+          final meta = match?.$2;
+          final data = meta?.getPasswordData();
+          final displayGroup = _resolveGroupName(passwordGroup);
+          return CredentialEntry(
+            id: entry.key,
+            group: passwordGroup,
+            passwordMetaId: metaId,
+            groupType: type,
+            item: buildPasswordCredential(
+              meta: meta,
+              password: password,
+              data: data,
+              group: displayGroup,
+              groupType: type,
+            ),
+            passwordMeta: meta,
+            passwordRaw: password,
+          );
+        }).toList(growable: false);
         items.sort(
-          (a, b) => (b.passwordMeta?.mdat ?? 0).compareTo(
-            a.passwordMeta?.mdat ?? 0,
+          (a, b) =>
+              (b.passwordMeta?.mdat ?? b.passwordRaw?.mdat ?? 0).compareTo(
+            a.passwordMeta?.mdat ?? a.passwordRaw?.mdat ?? 0,
           ),
         );
         return items;
       case PasswordGroupType.passkeys:
         final entries = await api.getPasskeys(passwords: widget.provider);
-        final items = entries.entries
-            .map(
-              (entry) => CredentialEntry(
-                id: entry.key,
-                groupType: type,
-                item: buildPasskeyCredential(passkey: entry.value),
-              ),
-            )
-            .toList(growable: false);
+        final metas = await api.getPasswordsMeta(passwords: widget.provider);
+        final metasBySiteUser = _indexMetasBySiteAndUser(metas);
+        final items = entries.entries.map((entry) {
+          final passkey = entry.value.$2;
+          final passkeyGroup = entry.value.$1;
+          final match = _takeMatchingMeta(
+            metasBySiteUser,
+            site: passkey.labl,
+            user: _extractPasskeyKeyIdBase64(passkey),
+            group: passkeyGroup,
+          );
+          final displayGroup = _resolveGroupName(passkeyGroup);
+          return CredentialEntry(
+            id: entry.key,
+            group: passkeyGroup,
+            passwordMetaId: match?.$1,
+            groupType: type,
+            item: buildPasskeyCredential(
+              passkey: passkey,
+              group: displayGroup,
+            ),
+            passwordMeta: match?.$2,
+            passkey: passkey,
+          );
+        }).toList(growable: false);
         items.sort(
-          (a, b) => (entries[b.id]?.mdat ?? 0).compareTo(
-            entries[a.id]?.mdat ?? 0,
+          (a, b) => (b.passkey?.mdat ?? 0).compareTo(
+            a.passkey?.mdat ?? 0,
           ),
         );
         return items;
       case PasswordGroupType.codes:
-        final entries = await api.getPasswords(passwords: widget.provider);
+        final passwords = await api.getPasswords(passwords: widget.provider);
+        final metas = await api.getPasswordsMeta(passwords: widget.provider);
+        final metasBySiteUser = _indexMetasBySiteAndUser(metas);
         final items = <CredentialEntry>[];
-        for (final entry in entries.entries) {
-          final data = entry.value.getPasswordData();
-          if (data.totp == null) {
+        for (final entry in passwords.entries) {
+          final password = entry.value.$2;
+          final passwordGroup = entry.value.$1;
+          final match = _takeMatchingMeta(
+            metasBySiteUser,
+            site: password.srvr,
+            user: password.acct,
+            group: passwordGroup,
+          );
+          final meta = match?.$2;
+          final data = meta?.getPasswordData();
+          if (data?.totp == null) {
             continue;
           }
+          final displayGroup = _resolveGroupName(passwordGroup);
           items.add(
             CredentialEntry(
               id: entry.key,
+              group: passwordGroup,
+              passwordMetaId: match?.$1,
               groupType: type,
               item: buildPasswordCredential(
-                meta: entry.value,
+                meta: meta,
+                password: password,
                 data: data,
+                group: displayGroup,
                 groupType: type,
               ),
-              passwordMeta: entry.value,
+              passwordMeta: meta,
+              passwordRaw: password,
             ),
           );
         }
@@ -119,9 +170,13 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
             .map(
               (entry) => CredentialEntry(
                 id: entry.key,
+                group: entry.value.$1,
                 groupType: type,
-                item: buildWifiCredential(wifi: entry.value),
-                wifiPassword: entry.value,
+                item: buildWifiCredential(
+                  wifi: entry.value.$2,
+                  group: _resolveGroupName(entry.value.$1),
+                ),
+                wifiPassword: entry.value.$2,
               ),
             )
             .toList(growable: false);
@@ -132,6 +187,112 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
         );
         return items;
     }
+  }
+
+  Map<String, List<(String, String?, api.PasswordManagerMeta)>>
+      _indexMetasBySiteAndUser(
+    Map<String, (String?, api.PasswordManagerMeta)> metas,
+  ) {
+    final result = <String, List<(String, String?, api.PasswordManagerMeta)>>{};
+    for (final entry in metas.entries) {
+      final group = entry.value.$1;
+      final meta = entry.value.$2;
+      final key = _siteUserKey(site: meta.srvr, user: meta.acct);
+      result.putIfAbsent(
+          key, () => <(String, String?, api.PasswordManagerMeta)>[]);
+      result[key]!.add((entry.key, group, meta));
+    }
+    return result;
+  }
+
+  (String, api.PasswordManagerMeta)? _takeMatchingMeta(
+    Map<String, List<(String, String?, api.PasswordManagerMeta)>>
+        metasBySiteUser, {
+    required String site,
+    required String user,
+    required String? group,
+  }) {
+    final key = _siteUserKey(site: site, user: user);
+    final bucket = metasBySiteUser[key];
+    if (bucket == null || bucket.isEmpty) {
+      return null;
+    }
+    for (var i = 0; i < bucket.length; i++) {
+      final candidate = bucket[i];
+      if (_sameGroup(candidate.$2, group)) {
+        bucket.removeAt(i);
+        return (candidate.$1, candidate.$3);
+      }
+    }
+    return null;
+  }
+
+  String _siteUserKey({required String site, required String user}) {
+    final normalizedSite = site.trim().toLowerCase();
+    final normalizedUser = user.trim().toLowerCase();
+    return "$normalizedSite::$normalizedUser";
+  }
+
+  String _resolveGroupName(String? groupId) {
+    if (groupId == null || groupId.trim().isEmpty) {
+      return "(unknown group)";
+    }
+    return widget.groupNamesById[groupId] ?? "(unknown group)";
+  }
+
+  bool _sameGroup(String? a, String? b) {
+    final normalizedA = a?.trim() ?? "";
+    final normalizedB = b?.trim() ?? "";
+    return normalizedA == normalizedB;
+  }
+
+  String _extractPasskeyKeyIdBase64(api.Passkey passkey) {
+    try {
+      final tag = cbor.decode(passkey.atag) as Map<dynamic, dynamic>;
+      final keyId = _extractTagKeyId(tag);
+      if (keyId == null || keyId.isEmpty) {
+        return "";
+      }
+      return base64Encode(keyId);
+    } catch (_) {
+      return "";
+    }
+  }
+
+  Uint8List? _extractTagKeyId(Map<dynamic, dynamic> tag) {
+    final candidates = <dynamic>[
+      tag["id"],
+      tag["keyId"],
+      tag["key_id"],
+      tag["credentialId"],
+      tag["credential_id"],
+      tag[0],
+      tag[1],
+    ];
+    for (final value in candidates) {
+      final bytes = _toBytes(value);
+      if (bytes != null && bytes.isNotEmpty) {
+        return bytes;
+      }
+    }
+    return null;
+  }
+
+  Uint8List? _toBytes(dynamic value) {
+    if (value is Uint8List) {
+      return value;
+    }
+    if (value is List<int>) {
+      return Uint8List.fromList(value);
+    }
+    if (value is String) {
+      try {
+        return base64Decode(value);
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
   }
 
   EdgeInsets get _sectionPadding {
@@ -204,8 +365,10 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(isFirst ? _sectionRadius : 0),
                         topRight: Radius.circular(isFirst ? _sectionRadius : 0),
-                        bottomLeft: Radius.circular(isLast ? _sectionRadius : 0),
-                        bottomRight: Radius.circular(isLast ? _sectionRadius : 0),
+                        bottomLeft:
+                            Radius.circular(isLast ? _sectionRadius : 0),
+                        bottomRight:
+                            Radius.circular(isLast ? _sectionRadius : 0),
                       ),
                       child: Container(
                         color: tileColor,
@@ -236,6 +399,8 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
         CredentialDetailPanel(
           credential: entry,
           provider: widget.provider,
+          groupNamesById: widget.groupNamesById,
+          groupUserId: widget.groupUserId,
         ),
       );
       if (result == true && mounted) {
@@ -244,6 +409,7 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
         );
       }
     }
+
     if (widget.groupType == PasswordGroupType.codes) {
       final totp = entry.passwordMeta?.getPasswordData().totp;
       return TotpCodeListTile(
@@ -300,6 +466,8 @@ class _PasswordsGroupPanelState extends OptimizedState<PasswordsGroupPanel> {
           PasswordEditorPanel(
             provider: widget.provider,
             groupType: widget.groupType,
+            availableGroups: widget.groupNamesById,
+            groupUserId: widget.groupUserId,
           ),
         );
         if (result == true && mounted) {

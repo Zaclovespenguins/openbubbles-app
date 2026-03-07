@@ -3,7 +3,7 @@ use std::{collections::{BTreeMap, HashMap}, fmt::Debug, io::Cursor, sync::{Arc, 
 use flexi_logger::{FileSpec, Logger, WriteMode};
 use log::{error, info, warn};
 use openssl::{ec::EcKey, pkey::PKey};
-use rustpush::{EntitlementAuthState, GenerateVerificationTokenRequest, PushError, get_gateways_for_mccmnc, passwords::{Passkey, PasswordManager, PasswordManagerMeta, PasswordManagerMetaChange, PasswordManagerMetaData, PasswordManagerMetaDataCtx}};
+use rustpush::{EntitlementAuthState, GenerateVerificationTokenRequest, PushError, get_gateways_for_mccmnc, passwords::{Passkey, PasskeyCriteria, PasswordCriteria, PasswordManager, PasswordManagerMeta, PasswordManagerMetaChange, PasswordManagerMetaData, PasswordManagerMetaDataCtx, PasswordRawEntry}};
 use tokio::{runtime::{Handle, Runtime}, sync::Mutex};
 
 use futures::FutureExt;
@@ -48,6 +48,11 @@ pub trait CarrierHandler: Send + Sync + Debug {
 #[uniffi::export(with_foreign)]
 pub trait InsertKeychainCallback: Send + Sync + Debug {
     fn done(&self, error: Option<String>);
+}
+
+#[uniffi::export(with_foreign)]
+pub trait AvailableGroupsCallback: Send + Sync + Debug {
+    fn groups(&self, groups: HashMap<String, String>);
 }
 
 #[derive(uniffi::Record)]
@@ -215,43 +220,40 @@ impl NativePushState {
         });
     }
 
-    pub fn keychain_password_insert(&self, site: String, user: String, password: String, callback: Arc<dyn InsertKeychainCallback>) {
-        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+    pub fn get_available_groups(&self, groups_callback: Arc<dyn AvailableGroupsCallback>) {
+        let passwords = self.state.icloud_services.as_ref().and_then(|i| i.passwords.clone()).expect("no icloud");
         RUNTIME.spawn(async move {
-            let id = passwords.get_password_for_site(site.clone()).await.passwords_meta.into_iter().find(|(_, p)| p.acct == user).map(|i| i.0)
-                .unwrap_or_else(|| Uuid::new_v4().to_string().to_uppercase());
-            let result = passwords.insert_password(&id, &PasswordManagerMeta {
-                cdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
-                mdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
-                srvr: site,
-                acct: user,
-                agrp: "com.apple.password-manager".to_string(),
-                data: PasswordManagerMeta::get_data(&PasswordManagerMetaData {
-                    history: vec![
-                        PasswordManagerMetaChange {
-                            date: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
-                            password,
-                            old_password: None,
-                            id: id.clone(),
-                            typ: "pwcr".to_string()
-                        }
-                    ],
-                    alt_domains: vec![],
-                    totp: None,
-                    ctxt: HashMap::from_iter([
-                        ("".to_string(), PasswordManagerMetaDataCtx {
-                            last_used: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_secs_f64()
-                        })
-                    ])
-                }).unwrap(),
-            }).await.err();
-            callback.done(result.map(|e| format!("{e}")));
+            let state = passwords.state.read().await;
+            let result = state.groups.iter().filter_map(|g| Some((g.1.share.as_ref()?.display_name.clone(), g.0.clone()))).collect::<HashMap<_, _>>();
+            groups_callback.groups(result);
         });
     }
 
-    pub fn keychain_passkey_insert(&self, site: String, record_id: String, id: Vec<u8>, tag: Vec<u8>, key: Vec<u8>, callback: Arc<dyn InsertKeychainCallback>) {
-        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+    pub fn keychain_password_insert(&self, site: String, user: String, password: String, callback: Arc<dyn InsertKeychainCallback>, group: Option<String>) {
+        let passwords = self.state.icloud_services.as_ref().and_then(|i| i.passwords.clone()).expect("no icloud");
         RUNTIME.spawn(async move {
+            let criteria = PasswordCriteria {
+                site,
+                account: user,
+            };
+            let a = passwords.modify_password_entry::<PasswordRawEntry>(&criteria, |pw| {
+                pw.data = password.as_bytes().to_vec();
+            }, group.clone()).await.err();
+            let b = passwords.modify_password_entry::<PasswordManagerMeta>(&criteria, |pw| {
+                let mut data = pw.get_password_data().expect("Failed to get data?");
+                data.set_last_used(SystemTime::now());
+                data.change_password(password);
+            }, group.clone()).await.err();
+            let e = a.or(b);
+            callback.done(e.map(|e| format!("{e}")));
+        });
+    }
+
+    pub fn keychain_passkey_insert(&self, site: String, record_id: String, id: Vec<u8>, tag: Vec<u8>, key: Vec<u8>, callback: Arc<dyn InsertKeychainCallback>, group: Option<String>) {
+        let passwords = self.state.icloud_services.as_ref().and_then(|i| i.passwords.clone()).expect("no icloud");
+        RUNTIME.spawn(async move {
+            // techincally this may insert into wrong group, but does anyone really ever update a passkey with the same ID??
+            // and if they do, damn right it may go into the wrong group. Not my issue at this time lol
             let result = passwords.insert_password_entry(&record_id, &Passkey {
                 cdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
                 mdat: SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap().as_millis() as u64,
@@ -260,13 +262,13 @@ impl NativePushState {
                 atag: tag,
                 data: Passkey::encode_key(PKey::private_key_from_pkcs8(&key).expect("Invalid EC key??").ec_key().expect("not ec key??")),
                 klbl: id,
-            }).await.err();
+            }, group.clone()).await.err();
             callback.done(result.map(|e| format!("{e}")));
         });
     }
 
     pub fn get_site_config(&self, site: String, callback: Arc<dyn RetrieveKeysCallback>) {
-        let passwords = PasswordManager::new(self.state.icloud_services.as_ref().and_then(|i| i.keychain.clone()).expect("no icloud"));
+        let passwords = self.state.icloud_services.as_ref().and_then(|i| i.passwords.clone()).expect("no icloud");
         RUNTIME.spawn(async move {
             let passwords = passwords.get_password_for_site(site).await;
             callback.keys(passwords.passwords.into_iter().map(|(k, p)| SavedPassword {

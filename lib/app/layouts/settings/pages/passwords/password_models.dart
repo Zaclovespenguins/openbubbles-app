@@ -44,16 +44,24 @@ class BasicCredentialItem implements CredentialItem {
 
 class CredentialEntry {
   final String id;
+  final String? group;
+  final String? passwordMetaId;
   final PasswordGroupType groupType;
   final CredentialItem item;
   final api.PasswordManagerMeta? passwordMeta;
+  final api.PasswordRawEntry? passwordRaw;
+  final api.Passkey? passkey;
   final api.WifiPassword? wifiPassword;
 
   const CredentialEntry({
     required this.id,
+    this.group,
+    this.passwordMetaId,
     required this.groupType,
     required this.item,
     this.passwordMeta,
+    this.passwordRaw,
+    this.passkey,
     this.wifiPassword,
   });
 
@@ -89,14 +97,18 @@ PasswordGroupStyle styleForPasswordGroup(PasswordGroupType type) {
 }
 
 CredentialItem buildPasswordCredential({
-  required api.PasswordManagerMeta meta,
-  required api.PasswordManagerMetaData data,
+  api.PasswordManagerMeta? meta,
+  api.PasswordRawEntry? password,
+  api.PasswordManagerMetaData? data,
+  String? group,
   required PasswordGroupType groupType,
 }) {
   final style = styleForPasswordGroup(groupType);
-  final server = meta.srvr.trim();
-  final account = meta.acct.trim();
-  final title = server.isNotEmpty ? server : account;
+  final server = (meta?.srvr ?? password?.srvr ?? "").trim();
+  final account = (meta?.acct ?? password?.acct ?? "").trim();
+  final showServer = server.contains(".");
+  final metadataTitle = _decodeOptionalUtf8(data?.title);
+  final title = metadataTitle ?? (showServer ? server : account);
   final subtitle = account;
 
   return BasicCredentialItem(
@@ -105,20 +117,23 @@ CredentialItem buildPasswordCredential({
     icon: style.icon,
     color: style.color,
     fields: [
-      ..._buildCommonFields(meta),
+      ..._buildGroupField(group),
+      ..._buildCommonFields(meta: meta, password: password),
       if (account.isNotEmpty) CredentialField("Account", account),
-      if (server.isNotEmpty) CredentialField("Server", server),
-      ..._buildPasswordFields(data),
+      if (showServer) CredentialField("Server", server),
+      ..._buildPasswordFields(data: data, password: password),
     ],
   );
 }
 
-CredentialItem buildPasskeyCredential({required api.Passkey passkey}) {
+CredentialItem buildPasskeyCredential({
+  required api.Passkey passkey,
+  String? group,
+}) {
   final style = styleForPasswordGroup(PasswordGroupType.passkeys);
   final label = passkey.labl.trim();
   final title = label;
-  final tag = cbor.decode(passkey.atag) as Map<dynamic, dynamic>;
-  final subtitle = tag["name"];
+  final subtitle = _extractPasskeyName(passkey);
 
   return BasicCredentialItem(
     title: title.isNotEmpty ? title : "Passkey",
@@ -126,9 +141,10 @@ CredentialItem buildPasskeyCredential({required api.Passkey passkey}) {
     icon: style.icon,
     color: style.color,
     fields: [
+      ..._buildGroupField(group),
       if (label.isNotEmpty) CredentialField("Site", label),
       if (passkey.agrp.trim().isNotEmpty)
-      CredentialField("Created", _formatPlistDate(passkey.cdat)),
+        CredentialField("Created", _formatPlistDate(passkey.cdat)),
       CredentialField("Modified", _formatPlistDate(passkey.mdat)),
       CredentialField("Account", subtitle),
       // ..._bytesField("Attachment Tag", passkey.atag),
@@ -138,7 +154,10 @@ CredentialItem buildPasskeyCredential({required api.Passkey passkey}) {
   );
 }
 
-CredentialItem buildWifiCredential({required api.WifiPassword wifi}) {
+CredentialItem buildWifiCredential({
+  required api.WifiPassword wifi,
+  String? group,
+}) {
   final style = styleForPasswordGroup(PasswordGroupType.wifi);
   final ssid = wifi.acct.trim();
   final title = ssid;
@@ -150,6 +169,7 @@ CredentialItem buildWifiCredential({required api.WifiPassword wifi}) {
     icon: style.icon,
     color: style.color,
     fields: [
+      ..._buildGroupField(group),
       if (ssid.isNotEmpty) CredentialField("SSID", ssid),
       CredentialField("Created", _formatPlistDate(wifi.cdat)),
       CredentialField("Modified", _formatPlistDate(wifi.mdat)),
@@ -158,20 +178,30 @@ CredentialItem buildWifiCredential({required api.WifiPassword wifi}) {
   );
 }
 
-List<CredentialField> _buildCommonFields(api.PasswordManagerMeta meta) {
+List<CredentialField> _buildCommonFields({
+  api.PasswordManagerMeta? meta,
+  api.PasswordRawEntry? password,
+}) {
+  final created = meta?.cdat ?? password?.cdat ?? 0;
+  final modified = meta?.mdat ?? password?.mdat ?? 0;
   return [
-    CredentialField("Created", _formatPlistDate(meta.cdat)),
-    CredentialField("Modified", _formatPlistDate(meta.mdat)),
+    CredentialField("Created", _formatPlistDate(created)),
+    CredentialField("Modified", _formatPlistDate(modified)),
   ];
 }
 
-List<CredentialField> _buildPasswordFields(api.PasswordManagerMetaData data) {
+List<CredentialField> _buildPasswordFields({
+  api.PasswordManagerMetaData? data,
+  api.PasswordRawEntry? password,
+}) {
   final fields = <CredentialField>[];
-  final password = _currentPassword(data);
-  if (password != null && password.isNotEmpty) {
-    fields.add(CredentialField("Password", password));
+  final latestPassword = _currentPassword(data);
+  final fallbackPassword = _decodePasswordFromRaw(password);
+  final passwordValue = latestPassword ?? fallbackPassword;
+  if (passwordValue != null && passwordValue.isNotEmpty) {
+    fields.add(CredentialField("Password", passwordValue));
   }
-  if (data.altDomains.isNotEmpty) {
+  if (data != null && data.altDomains.isNotEmpty) {
     fields.add(
       CredentialField(
         "Alternate Domains",
@@ -179,14 +209,34 @@ List<CredentialField> _buildPasswordFields(api.PasswordManagerMetaData data) {
       ),
     );
   }
+  final notes = _decodeOptionalUtf8(data?.notes);
+  if (notes != null) {
+    fields.add(CredentialField("Notes", notes));
+  }
   return fields;
 }
 
-String? _currentPassword(api.PasswordManagerMetaData data) {
-  if (data.history.isEmpty) {
+String? _currentPassword(api.PasswordManagerMetaData? data) {
+  if (data == null || data.history.isEmpty) {
     return null;
   }
-  return data.history.last.password;
+  for (final change in data.history.reversed) {
+    if (change.password != null) {
+      return change.password;
+    }
+  }
+  return null;
+}
+
+String? _decodePasswordFromRaw(api.PasswordRawEntry? password) {
+  if (password == null || password.data.isEmpty) {
+    return null;
+  }
+  try {
+    return utf8.decode(password.data);
+  } catch (_) {
+    return null;
+  }
 }
 
 String _formatBytes(Uint8List bytes) {
@@ -227,6 +277,38 @@ String _formatUtf8(Uint8List bytes) {
   }
   try {
     return utf8.decode(bytes);
+  } catch (_) {
+    return "";
+  }
+}
+
+List<CredentialField> _buildGroupField(String? group) {
+  final value = group?.trim() ?? "";
+  if (value.isEmpty || value == "(none)" || value == "(unknown group)") {
+    return const [];
+  }
+  return [CredentialField("Group", value)];
+}
+
+String? _decodeOptionalUtf8(Uint8List? bytes) {
+  if (bytes == null || bytes.isEmpty) {
+    return null;
+  }
+  try {
+    final decoded = utf8.decode(bytes).trim();
+    if (decoded.isEmpty) {
+      return null;
+    }
+    return decoded;
+  } catch (_) {
+    return null;
+  }
+}
+
+String _extractPasskeyName(api.Passkey passkey) {
+  try {
+    final tag = cbor.decode(passkey.atag) as Map<dynamic, dynamic>;
+    return (tag["name"]?.toString() ?? "").trim();
   } catch (_) {
     return "";
   }
