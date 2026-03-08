@@ -2148,6 +2148,22 @@ class RustPushService extends GetxService {
     Database.attachments.putMany(attachments);
   }
 
+  // forcibly stops a running sync operation.
+  Future<void> resetCloudKitSync() async {
+    if (isSyncing.value == null) return;
+
+    if (kIsDesktop) {
+      exit(0);
+    } else {
+      await mcs.invokeMethod("native-sync-isolate", {
+        "close": true
+      });
+      ui.IsolateNameServer.removePortNameMapping("bg_sync");
+      pushService.isSyncing.value = null;
+      chats.restoring = false;
+    }
+  }
+
   Rxn<String> isSyncing = Rxn(null);
   Future<void> doCloudKitSync() async {
     if (kIsDesktop) {
@@ -2185,6 +2201,20 @@ class RustPushService extends GetxService {
     var i = (log(bytes) / log(1024)).floor();
     var size = bytes / pow(1024, i);
     return "${size.toStringAsFixed(decimals)} ${suffixes[i]}";  
+  }
+
+  (int, DateTime) getCutoffTime() {
+    // yes, we call this a lot, it's a bit of a shame.
+    ss.prefs.reload();
+    var time = ss.prefs.getInt('syncHistoryTime') ?? 0;
+
+    var cutoffDateTime = DateTime.fromMillisecondsSinceEpoch(0);
+    var cutoffTime = 0;
+    if (time != 0) {
+      cutoffTime = RustPushBBUtils.nsSinceAppleEpoch(DateTime.now()) - (time * 1000000);
+      cutoffDateTime = DateTime.now().subtract(Duration(milliseconds: time));
+    }
+    return (cutoffTime, cutoffDateTime);
   }
 
   Future<void> uploadMessages(
@@ -2394,6 +2424,8 @@ class RustPushService extends GetxService {
 
     isSyncing.value = "Downloading Attachments...";
 
+    // we must have one uniform cutoff time to ensure we don't upload duplicates
+    var (cutoffTime, cutoffDateTime) = getCutoffTime();
     var attCount = 0;
     currentState = 0;
     while (currentState != 3) {
@@ -2413,6 +2445,12 @@ class RustPushService extends GetxService {
           }
           if (dupDeleteAttachments.contains(item.key)) continue;
           var decoded = api.decodeAttachmentmeta(wrapped: item.value!.cm);
+
+          if (cutoffTime > decoded.createdDate && currentState != 3) {
+            Logger.info("Stopping attachment sync for cutoff!");
+            currentState = 3;
+          }
+
           var existing = Attachment.findOne(convertAttachmentGuid(decoded.guid));
           if (existing != null) {
             if (existing.ckRecordId != null && existing.ckRecordId != item.key) {
@@ -2482,6 +2520,12 @@ class RustPushService extends GetxService {
             continue;
           }
           if (dupDeleteMessages.contains(item.key)) continue;
+
+          if (cutoffTime > item.value!.time && currentState != 3) {
+            Logger.info("Stopping message sync for cutoff!");
+            currentState = 3;
+          }
+
           var existing = Message.findOne(guid: item.value!.guid);
           if (existing != null) {
             if (existing.ckRecordId == item.key) {
@@ -2591,7 +2635,8 @@ class RustPushService extends GetxService {
     bool noAttachments = !ss.settings.attachmentSyncEnabled.value;
 
 
-    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull())))
+    var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull()))
+      .and(Message_.dateCreated.greaterThanDate(cutoffDateTime)))
       .build()
       ..limit = 3000;
     var messages = unsyncedMessages.find();
@@ -2601,7 +2646,8 @@ class RustPushService extends GetxService {
       Logger.info("Syncing batch ${messages.length}");
       await uploadMessages(messages, uploadAttachments, idToAttachment, noAttachments);
 
-      var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull())))
+      var unsyncedMessages = Database.messages.query(Message_.ckRecordId.isNull().and(Message_.itemType.equals(0)).and(Message_.ckSyncState.equals(false).or(Message_.ckSyncState.isNull()))
+        .and(Message_.dateCreated.greaterThanDate(cutoffDateTime)))
         .build()
         ..limit = 3000;
       messages = unsyncedMessages.find();

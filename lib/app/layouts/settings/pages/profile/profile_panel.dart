@@ -42,6 +42,14 @@ class ProfilePanel extends StatefulWidget {
 }
 
 class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindingObserver {
+  static const List<int> _syncHistoryOptions = [604800000, 2592000000, 15552000000, 31536000000, 0];
+  static const Map<int, String> _syncHistoryLabels = {
+    604800000: "7 days",
+    2592000000: "1 month",
+    15552000000: "6 months",
+    31536000000: "1 year",
+    0: "No limit",
+  };
   final RxDouble opacity = 1.0.obs;
   final RxMap<String, dynamic> accountInfo = RxMap({});
   final RxMap<String, dynamic> accountContact = RxMap({});
@@ -474,6 +482,11 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                           Logger.info("Enabling messages in iCloud!");
                           ss.settings.cloudSyncingEnabled.value = val;
                           ss.saveSettings();
+                          if (!val) {
+                            await pushService.resetCloudKitSync();
+                          } else {
+                            pushService.doCloudKitSync();
+                          }
                         },
                         initialVal: ss.settings.cloudSyncingEnabled.value,
                         title: "Messages in iCloud (BETA)",
@@ -488,6 +501,24 @@ class _ProfilePanelState extends OptimizedState<ProfilePanel> with WidgetsBindin
                         title: "Upload attachments",
                         subtitle: "Disable to reduce iCloud storage usage",
                         backgroundColor: tileColor,
+                      ),
+                      if(ss.settings.cloudSyncingEnabled.value)
+                      SettingsOptions<int>(
+                        title: "Sync history",
+                        initial: _syncHistoryOptions.contains(ss.settings.syncHistoryTime.value) ? ss.settings.syncHistoryTime.value : 0,
+                        clampWidth: false,
+                        options: _syncHistoryOptions,
+                        secondaryColor: headerColor,
+                        useCupertino: false,
+                        capitalize: false,
+                        textProcessing: (value) => _syncHistoryLabels[value] ?? "No limit",
+                        onChanged: (value) async {
+                          if (value == null) return;
+                          ss.settings.syncHistoryTime.value = value;
+                          ss.saveSettings();
+                          await pushService.resetCloudKitSync();
+                          pushService.doCloudKitSync();
+                        },
                       ),
                       if (quotaInfo.value != null && ss.settings.cloudSyncingEnabled.value)
                       Container(

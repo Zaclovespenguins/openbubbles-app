@@ -759,9 +759,6 @@ class SetupViewController extends StatefulController {
       pageController.jumpToPage(5);
       return;
     }
-    if (newError.contains("6001")) {
-      newError += " Make sure Contact Key Verification and Advanced Data Protection are off.";
-    }
     error = newError;
     if (ss.settings.deviceIsHosted.value && errorIsProblem()) {
       pushService.mixpanel?.track("hosted-setup-error");

@@ -18,6 +18,8 @@ import kotlin.coroutines.suspendCoroutine
 class NativeSyncIsolateHandler : MethodCallHandlerImpl() {
     companion object {
         const val tag = "native-sync-isolate"
+
+        var engine: FlutterEngine? = null
     }
 
     override fun handleMethodCall(
@@ -26,12 +28,27 @@ class NativeSyncIsolateHandler : MethodCallHandlerImpl() {
         mainContext: Context
     ) {
         val context = mainContext.applicationContext
+
+        var param = call.argument<Boolean>("close") ?: false
+        if (param) {
+            engine?.destroy()
+            engine = null
+            mainresult.success(null)
+            return
+        }
+
+        if (engine != null) {
+            mainresult.success(null)
+            return
+        }
+
         FlutterMain.startInitialization(context)
         FlutterMain.ensureInitializationComplete(context, null)
 
         Log.d(Constants.logTag, "Loading callback info")
         val info = ApplicationInfoLoader.load(context)
         val workerEngine = FlutterEngine(context)
+        engine = workerEngine
         MethodChannel(workerEngine.dartExecutor.binaryMessenger, Constants.methodChannel).setMethodCallHandler {
                 call, result -> run {
             if (call.method == "ready") {
@@ -39,6 +56,7 @@ class NativeSyncIsolateHandler : MethodCallHandlerImpl() {
                 mainresult.success(null)
             } else if (call.method == "exit") {
                 workerEngine.destroy()
+                engine = null
             } else {
                 MethodCallHandler().methodCallHandler(call, result, context)
             }
