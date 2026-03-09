@@ -85,7 +85,7 @@ pub static HANDLE_WIFI_NETWORKS: OnceLock<Arc<dyn HandleWifiNetworksCallback>> =
 
 #[uniffi::export(with_foreign)]
 pub trait HandleWifiNetworksCallback: Send + Sync + Debug {
-    fn handle_wifi_networks(&self, networks: HashMap<String, String>);
+    fn handle_wifi_networks(&self, networks: HashMap<String, String>, user_approve: bool);
 }
 
 #[derive(uniffi::Object)] 

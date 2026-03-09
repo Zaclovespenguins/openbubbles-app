@@ -61,7 +61,10 @@ class _PasswordsPanelState extends OptimizedState<PasswordsPanel> {
       await _loadCredentialCaches();
       await _loadGroups();
     }
-    pushService.checkClique();
+    pushService.checkClique().then((inclique) {
+      if (!inclique) return;
+      api.syncWifiPasswords(manager: manager!, userApprove: true);
+    });
     if (!mounted) return;
     setState(() {
       _isInClique = inClique;
@@ -73,6 +76,7 @@ class _PasswordsPanelState extends OptimizedState<PasswordsPanel> {
     if (manager == null) return;
     try {
       final groups = await api.getGroups(passwords: manager!);
+      print("groups ${groups.$2.length} ${groups.$3.length}");
       if (!mounted) return;
       setState(() {
         _groupsUserId = groups.$1;
@@ -166,7 +170,9 @@ class _PasswordsPanelState extends OptimizedState<PasswordsPanel> {
 
     setState(() => _isJoiningClique = true);
     try {
-      await pushService.joinClique();
+      if (await pushService.joinClique()) {
+        await api.syncPasswords(passwords: pushService.state!.icloudServices!.passwords!, conn: pushService.state!.conn);
+      }
       await _refreshCliqueStatus();
     } finally {
       if (mounted) {
@@ -459,13 +465,7 @@ class _PasswordsPanelState extends OptimizedState<PasswordsPanel> {
 
   List<Widget> _buildGroupsListTiles() {
     if (_groupsById.isEmpty) {
-      return [
-        SettingsTile(
-          backgroundColor: tileColor,
-          title: "(unknown group)",
-          subtitle: "No group details available",
-        ),
-      ];
+      return [];
     }
 
     final entries = _groupsById.entries.toList()

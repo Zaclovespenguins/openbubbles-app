@@ -193,6 +193,12 @@ Future<ArcPasswordManagerDefaultAnisetteProvider> makePasswords(
         client: client,
         conn: conn);
 
+Future<void> syncWifiPasswords(
+        {required ArcPasswordManagerDefaultAnisetteProvider manager,
+        required bool userApprove}) =>
+    RustLib.instance.api.crateApiApiSyncWifiPasswords(
+        manager: manager, userApprove: userApprove);
+
 Future<ArcFtClient> makeFacetime(
         {required String path,
         required ApsConnection conn,

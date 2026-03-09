@@ -13,14 +13,14 @@ use plist::{Data, Dictionary};
 pub use plist::Value;
 use sha2::Digest;
 
-pub use tokio::sync::Mutex;
+pub use rustpush::DebugMutex as Mutex;
 pub use std::path::PathBuf;
 use prost::Message as prostMessage;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::{AnisetteProvider, cloudkit::contact_info_to_handle, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}, passwords::PasswordState};
+use rustpush::{AnisetteProvider, DebugRwLock, cloudkit::contact_info_to_handle, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}, passwords::PasswordState};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -713,7 +713,7 @@ pub async fn make_cloudkit(path: String, anisette: &ArcAnisetteClient<DefaultAni
 
     let state = plist::from_file(&cloudkit_path).ok()?;
     let cloudkit = Arc::new(CloudKitClient {
-        state: RwLock::new(state),
+        state: DebugRwLock::new(state),
         anisette: anisette.clone(),
         config: config.config(),
         token_provider: token_provider.clone()
@@ -734,7 +734,21 @@ pub async fn make_passwords(path: String, keychain: &Arc<KeychainClient<DefaultA
 
     PasswordManager::new(keychain.clone(), cloudkit.clone(), client.identity.clone(), conn.clone(), state, Box::new(move |item| {
         plist::to_file_xml(&path, item).expect("Failed to serialize plist!");
+    }), Box::new(|manager, wifi| {
+        if !wifi { return }
+        tokio::spawn(async move {
+            sync_wifi_passwords(&manager, false).await;
+        });
     })).await
+}
+
+pub async fn sync_wifi_passwords(manager: &Arc<PasswordManager<DefaultAnisetteProvider>>, user_approve: bool) {
+    let wifi_networks: HashMap<String, String> = get_wifi_passwords(manager).await.into_values()
+        .map(|(_, p)| (p.acct, String::from_utf8(p.data).expect("bad password!"))).collect();
+
+    if let Some(handle) = HANDLE_WIFI_NETWORKS.get() {
+        handle.handle_wifi_networks(wifi_networks, user_approve);
+    }
 }
 
 pub async fn make_facetime(path: String, conn: &APSConnection, client: &Arc<IMClient>) -> Arc<FTClient> {
@@ -770,7 +784,7 @@ pub fn make_keychain(path: String, cloudkit: &Arc<CloudKitClient<DefaultAnisette
     Some(Arc::new(KeychainClient {
         anisette: anisette.clone(),
         token_provider: token_provider.clone(),
-        state: RwLock::new(state),
+        state: DebugRwLock::new(state),
         config: config.config(),
         update_state: Box::new(move |update| {
             plist::to_file_xml(&cloudkit_path, update).unwrap();
@@ -1230,12 +1244,7 @@ pub enum PushMessage {
 pub async fn sync_passwords(passwords: &Arc<PasswordManager<DefaultAnisetteProvider>>, conn: &APSConnection) -> anyhow::Result<()> {
     passwords.sync_passwords(conn).await?;
 
-    let wifi_networks: HashMap<String, String> = get_wifi_passwords(passwords).await.into_values()
-        .map(|(_, p)| (p.acct, String::from_utf8(p.data).expect("bad password!"))).collect();
-
-    if let Some(handle) = HANDLE_WIFI_NETWORKS.get() {
-        handle.handle_wifi_networks(wifi_networks);
-    }
+    sync_wifi_passwords(passwords, false).await;
 
     Ok(())
 }
@@ -2680,6 +2689,7 @@ fn reset_user(path: &str) {
     let _ = std::fs::remove_file(dir.join("facetime.plist"));
     let _ = std::fs::remove_file(dir.join("cloudkit.plist"));
     let _ = std::fs::remove_file(dir.join("keychain.plist"));
+    let _ = std::fs::remove_file(dir.join("passwords.plist"));
     let _ = std::fs::remove_file(dir.join("sharedstreams.plist"));
 
     let path = dir.join("statuskit.plist");

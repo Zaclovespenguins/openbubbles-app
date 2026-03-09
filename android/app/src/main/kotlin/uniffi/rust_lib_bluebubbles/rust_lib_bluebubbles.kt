@@ -661,7 +661,7 @@ internal interface UniffiCallbackInterfaceCarrierHandlerMethod0 : com.sun.jna.Ca
     fun callback(`uniffiHandle`: Long,`gateway`: RustBuffer.ByValue,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
 }
 internal interface UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0 : com.sun.jna.Callback {
-    fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
+    fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`userApprove`: Byte,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
 }
 internal interface UniffiCallbackInterfaceInsertKeychainCallbackMethod0 : com.sun.jna.Callback {
     fun callback(`uniffiHandle`: Long,`error`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,)
@@ -1279,7 +1279,7 @@ fun uniffi_rust_lib_bluebubbles_fn_free_handlewifinetworkscallback(`ptr`: Pointe
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_init_callback_vtable_handlewifinetworkscallback(`vtable`: UniffiVTableCallbackInterfaceHandleWifiNetworksCallback,
 ): Unit
-fun uniffi_rust_lib_bluebubbles_fn_method_handlewifinetworkscallback_handle_wifi_networks(`ptr`: Pointer,`networks`: RustBuffer.ByValue,uniffi_out_err: UniffiRustCallStatus, 
+fun uniffi_rust_lib_bluebubbles_fn_method_handlewifinetworkscallback_handle_wifi_networks(`ptr`: Pointer,`networks`: RustBuffer.ByValue,`userApprove`: Byte,uniffi_out_err: UniffiRustCallStatus, 
 ): Unit
 fun uniffi_rust_lib_bluebubbles_fn_clone_insertkeychaincallback(`ptr`: Pointer,uniffi_out_err: UniffiRustCallStatus, 
 ): Pointer
@@ -1560,7 +1560,7 @@ private fun uniffiCheckApiChecksums(lib: IntegrityCheckingUniffiLib) {
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_carrierhandler_got_gateway() != 11467.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
-    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_handlewifinetworkscallback_handle_wifi_networks() != 20800.toShort()) {
+    if (lib.uniffi_rust_lib_bluebubbles_checksum_method_handlewifinetworkscallback_handle_wifi_networks() != 42968.toShort()) {
         throw RuntimeException("UniFFI API checksum mismatch: try cleaning and rebuilding your project")
     }
     if (lib.uniffi_rust_lib_bluebubbles_checksum_method_insertkeychaincallback_done() != 26973.toShort()) {
@@ -2643,7 +2643,7 @@ public object FfiConverterTypeCarrierHandler: FfiConverter<CarrierHandler, Point
 
 public interface HandleWifiNetworksCallback {
     
-    fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>)
+    fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>, `userApprove`: kotlin.Boolean)
     
     companion object
 }
@@ -2730,12 +2730,12 @@ open class HandleWifiNetworksCallbackImpl: Disposable, AutoCloseable, HandleWifi
         }
     }
 
-    override fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>)
+    override fun `handleWifiNetworks`(`networks`: Map<kotlin.String, kotlin.String>, `userApprove`: kotlin.Boolean)
         = 
     callWithPointer {
     uniffiRustCall() { _status ->
     UniffiLib.INSTANCE.uniffi_rust_lib_bluebubbles_fn_method_handlewifinetworkscallback_handle_wifi_networks(
-        it, FfiConverterMapStringString.lower(`networks`),_status)
+        it, FfiConverterMapStringString.lower(`networks`),FfiConverterBoolean.lower(`userApprove`),_status)
 }
     }
     
@@ -2753,11 +2753,12 @@ open class HandleWifiNetworksCallbackImpl: Disposable, AutoCloseable, HandleWifi
 // Put the implementation in an object so we don't pollute the top-level namespace
 internal object uniffiCallbackInterfaceHandleWifiNetworksCallback {
     internal object `handleWifiNetworks`: UniffiCallbackInterfaceHandleWifiNetworksCallbackMethod0 {
-        override fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
+        override fun callback(`uniffiHandle`: Long,`networks`: RustBuffer.ByValue,`userApprove`: Byte,`uniffiOutReturn`: Pointer,uniffiCallStatus: UniffiRustCallStatus,) {
             val uniffiObj = FfiConverterTypeHandleWifiNetworksCallback.handleMap.get(uniffiHandle)
             val makeCall = { ->
                 uniffiObj.`handleWifiNetworks`(
                     FfiConverterMapStringString.lift(`networks`),
+                    FfiConverterBoolean.lift(`userApprove`),
                 )
             }
             val writeReturn = { _: Unit -> Unit }

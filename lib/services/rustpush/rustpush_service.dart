@@ -4795,6 +4795,7 @@ class RustPushService extends GetxService {
   @override
   Future<void> onInit() async {
     super.onInit();
+    api.doFirstTimeInit(path: fs.appDocDir.path);
     initFuture = (() async {
       statePath = (await getApplicationSupportDirectory()).path;
       final vpnDetector = VpnConnectionDetector();

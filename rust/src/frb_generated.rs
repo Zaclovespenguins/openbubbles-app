@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1433548768;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1606826074;
 
 // Section: executor
 
@@ -12998,6 +12998,72 @@ fn wire__crate__api__api__sync_passwords_impl(
         },
     )
 }
+fn wire__crate__api__api__sync_wifi_passwords_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "sync_wifi_passwords",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_manager = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                    Arc<PasswordManager<DefaultAnisetteProvider>>,
+                >,
+            >>::sse_decode(&mut deserializer);
+            let api_user_approve = <bool>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, ()>(
+                    (move || async move {
+                        let mut api_manager_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                    &api_manager,
+                                    0,
+                                    false,
+                                )],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_manager_guard =
+                                        Some(api_manager.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_manager_guard = api_manager_guard.unwrap();
+                        let output_ok = Result::<_, ()>::Ok({
+                            crate::api::api::sync_wifi_passwords(
+                                &*api_manager_guard,
+                                api_user_approve,
+                            )
+                            .await;
+                        })?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__api__systemtime_to_millis_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -22988,31 +23054,32 @@ fn pde_ffi_dispatcher_primary_impl(
         235 => wire__crate__api__api__sync_messages_impl(port, ptr, rust_vec_len, data_len),
         236 => wire__crate__api__api__sync_now_impl(port, ptr, rust_vec_len, data_len),
         237 => wire__crate__api__api__sync_passwords_impl(port, ptr, rust_vec_len, data_len),
-        239 => wire__crate__api__api__teardown_2fa_impl(port, ptr, rust_vec_len, data_len),
-        240 => {
+        238 => wire__crate__api__api__sync_wifi_passwords_impl(port, ptr, rust_vec_len, data_len),
+        240 => wire__crate__api__api__teardown_2fa_impl(port, ptr, rust_vec_len, data_len),
+        241 => {
             wire__crate__api__api__transcript_poster_save_impl(port, ptr, rust_vec_len, data_len)
         }
-        241 => wire__crate__api__api__try_auth_impl(port, ptr, rust_vec_len, data_len),
-        242 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
-        243 => {
+        242 => wire__crate__api__api__try_auth_impl(port, ptr, rust_vec_len, data_len),
+        243 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
+        244 => {
             wire__crate__api__api__update_account_headers_impl(port, ptr, rust_vec_len, data_len)
         }
-        244 => wire__crate__api__api__update_beacon_name_impl(port, ptr, rust_vec_len, data_len),
-        245 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
-        246 => {
+        245 => wire__crate__api__api__update_beacon_name_impl(port, ptr, rust_vec_len, data_len),
+        246 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
+        247 => {
             wire__crate__api__api__upload_cloud_attachments_impl(port, ptr, rust_vec_len, data_len)
         }
-        247 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
-        248 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
-        249 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
-        251 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
-        252 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
-        253 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
-        254 => {
+        248 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
+        249 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
+        250 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
+        252 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
+        253 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
+        254 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
+        255 => {
             wire__crate__api__api__validate_targets_facetime_impl(port, ptr, rust_vec_len, data_len)
         }
-        255 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
-        256 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
+        256 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
+        257 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -23238,8 +23305,8 @@ fn pde_ffi_dispatcher_sync_impl(
         216 => wire__crate__api__api__save_users_impl(ptr, rust_vec_len, data_len),
         223 => wire__crate__api__api__send_daemon_impl(ptr, rust_vec_len, data_len),
         231 => wire__crate__api__api__subscribe_conn_impl(ptr, rust_vec_len, data_len),
-        238 => wire__crate__api__api__systemtime_to_millis_impl(ptr, rust_vec_len, data_len),
-        250 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
+        239 => wire__crate__api__api__systemtime_to_millis_impl(ptr, rust_vec_len, data_len),
+        251 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

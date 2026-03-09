@@ -160,8 +160,9 @@ class APNService : Service(), MsgReceiver {
         Log.i("here", "hjeal")
 
         start(applicationContext.filesDir.path, AndroidFilePackager(this), object : HandleWifiNetworksCallback {
-            override fun handleWifiNetworks(networks: Map<String, String>) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return
+            @RequiresApi(Build.VERSION_CODES.Q)
+            fun addWifiNetworks(networks: Map<String, String>) {
+                val manager = getSystemService(WIFI_SERVICE) as WifiManager
                 val suggestions = networks.entries.flatMap {
                     if (it.value.length > 63 || it.key.length > 32 || it.value.length < 8) {
                         Log.i("NETWORK", "Bad password or ssid ${it.key}")
@@ -178,13 +179,35 @@ class APNService : Service(), MsgReceiver {
                             .build()
                     )
                 }.toList()
-                val manager = getSystemService(WIFI_SERVICE) as WifiManager
                 val status = manager.addNetworkSuggestions(suggestions)
                 if (status != WifiManager.STATUS_NETWORK_SUGGESTIONS_SUCCESS) {
                     Log.e("NETWORK", "Adding suggestions failed! $status")
                 } else {
                     Log.i("NETWORK", "Adding suggestions success!")
                 }
+            }
+
+            override fun handleWifiNetworks(networks: Map<String, String>, userApprove: Boolean) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return
+
+                if (userApprove) {
+                    addWifiNetworks(networks)
+                    return
+                }
+
+                val manager = getSystemService(WIFI_SERVICE) as WifiManager
+
+                val listener = object : WifiManager.SuggestionUserApprovalStatusListener {
+                    override fun onUserApprovalStatusChange(status: Int) {
+                        Log.i("NETWORK", "User approval status retrived: $status")
+                        if (status == WifiManager.STATUS_SUGGESTION_APPROVAL_APPROVED_BY_USER) {
+                            addWifiNetworks(networks)
+                        }
+                        manager.removeSuggestionUserApprovalStatusListener(this)
+                    }
+                }
+
+                manager.addSuggestionUserApprovalStatusListener(mainExecutor, listener)
             }
         })
         setupKeystore(applicationContext.filesDir.path, keystore)
