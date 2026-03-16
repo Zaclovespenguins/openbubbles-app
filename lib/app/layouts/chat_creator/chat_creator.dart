@@ -168,6 +168,38 @@ class ChatCreatorState extends OptimizedState<ChatCreator> {
     selectedContacts.add(c);
     try {
       c.iMessage.value = await backend.handleiMessageState(c.address);
+      if (!c.iMessage.value! && !ss.settings.nonIMessageWarning.value) {
+        await showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "This recipient is GREEN because they do not have iMessage or you are being rate-limited.",
+                style: context.theme.textTheme.titleLarge,
+              ),
+              content: Text(
+                "${ss.settings.smsForwardingTargets.isEmpty ? 'You can start a text here, and sending it will open your default messaging app. ' : ''}Rate limits can start at 0 users for brand new accounts. The only way to resolve a rate limit is patience, trying to reconfigure or re-install to 'fix' the rate limit will result in being temporarily blocked from iMessage.",
+                style: context.theme.textTheme.bodyLarge,
+              ),
+              backgroundColor: context.theme.colorScheme.properSurface,
+              actions: <Widget>[
+                TextButton(
+                  child: Text(
+                    "Ok",
+                    style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary),
+                  ),
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    ss.settings.nonIMessageWarning.value = true;
+                    await ss.settings.saveOne('nonIMessageWarning');
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     } catch (_) {}
     addressController.text = "";
     findExistingChat();

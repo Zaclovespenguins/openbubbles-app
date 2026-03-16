@@ -24707,3 +24707,322 @@ abstract class UIColor_GrayscaleAlphaColorSpace extends UIColor {
           _$UIColor_GrayscaleAlphaColorSpaceImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$UpdateAccountFinish {
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() macOs,
+    required TResult Function(String url) ios,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? macOs,
+    TResult? Function(String url)? ios,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? macOs,
+    TResult Function(String url)? ios,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UpdateAccountFinish_MacOS value) macOs,
+    required TResult Function(UpdateAccountFinish_IOS value) ios,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult? Function(UpdateAccountFinish_IOS value)? ios,
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult Function(UpdateAccountFinish_IOS value)? ios,
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UpdateAccountFinishCopyWith<$Res> {
+  factory $UpdateAccountFinishCopyWith(
+          UpdateAccountFinish value, $Res Function(UpdateAccountFinish) then) =
+      _$UpdateAccountFinishCopyWithImpl<$Res, UpdateAccountFinish>;
+}
+
+/// @nodoc
+class _$UpdateAccountFinishCopyWithImpl<$Res, $Val extends UpdateAccountFinish>
+    implements $UpdateAccountFinishCopyWith<$Res> {
+  _$UpdateAccountFinishCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UpdateAccountFinish
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+abstract class _$$UpdateAccountFinish_MacOSImplCopyWith<$Res> {
+  factory _$$UpdateAccountFinish_MacOSImplCopyWith(
+          _$UpdateAccountFinish_MacOSImpl value,
+          $Res Function(_$UpdateAccountFinish_MacOSImpl) then) =
+      __$$UpdateAccountFinish_MacOSImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$UpdateAccountFinish_MacOSImplCopyWithImpl<$Res>
+    extends _$UpdateAccountFinishCopyWithImpl<$Res,
+        _$UpdateAccountFinish_MacOSImpl>
+    implements _$$UpdateAccountFinish_MacOSImplCopyWith<$Res> {
+  __$$UpdateAccountFinish_MacOSImplCopyWithImpl(
+      _$UpdateAccountFinish_MacOSImpl _value,
+      $Res Function(_$UpdateAccountFinish_MacOSImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UpdateAccountFinish
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$UpdateAccountFinish_MacOSImpl extends UpdateAccountFinish_MacOS {
+  const _$UpdateAccountFinish_MacOSImpl() : super._();
+
+  @override
+  String toString() {
+    return 'UpdateAccountFinish.macOs()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateAccountFinish_MacOSImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() macOs,
+    required TResult Function(String url) ios,
+  }) {
+    return macOs();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? macOs,
+    TResult? Function(String url)? ios,
+  }) {
+    return macOs?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? macOs,
+    TResult Function(String url)? ios,
+    required TResult orElse(),
+  }) {
+    if (macOs != null) {
+      return macOs();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UpdateAccountFinish_MacOS value) macOs,
+    required TResult Function(UpdateAccountFinish_IOS value) ios,
+  }) {
+    return macOs(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult? Function(UpdateAccountFinish_IOS value)? ios,
+  }) {
+    return macOs?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult Function(UpdateAccountFinish_IOS value)? ios,
+    required TResult orElse(),
+  }) {
+    if (macOs != null) {
+      return macOs(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateAccountFinish_MacOS extends UpdateAccountFinish {
+  const factory UpdateAccountFinish_MacOS() = _$UpdateAccountFinish_MacOSImpl;
+  const UpdateAccountFinish_MacOS._() : super._();
+}
+
+/// @nodoc
+abstract class _$$UpdateAccountFinish_IOSImplCopyWith<$Res> {
+  factory _$$UpdateAccountFinish_IOSImplCopyWith(
+          _$UpdateAccountFinish_IOSImpl value,
+          $Res Function(_$UpdateAccountFinish_IOSImpl) then) =
+      __$$UpdateAccountFinish_IOSImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String url});
+}
+
+/// @nodoc
+class __$$UpdateAccountFinish_IOSImplCopyWithImpl<$Res>
+    extends _$UpdateAccountFinishCopyWithImpl<$Res,
+        _$UpdateAccountFinish_IOSImpl>
+    implements _$$UpdateAccountFinish_IOSImplCopyWith<$Res> {
+  __$$UpdateAccountFinish_IOSImplCopyWithImpl(
+      _$UpdateAccountFinish_IOSImpl _value,
+      $Res Function(_$UpdateAccountFinish_IOSImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UpdateAccountFinish
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? url = null,
+  }) {
+    return _then(_$UpdateAccountFinish_IOSImpl(
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateAccountFinish_IOSImpl extends UpdateAccountFinish_IOS {
+  const _$UpdateAccountFinish_IOSImpl({required this.url}) : super._();
+
+  @override
+  final String url;
+
+  @override
+  String toString() {
+    return 'UpdateAccountFinish.ios(url: $url)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateAccountFinish_IOSImpl &&
+            (identical(other.url, url) || other.url == url));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, url);
+
+  /// Create a copy of UpdateAccountFinish
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateAccountFinish_IOSImplCopyWith<_$UpdateAccountFinish_IOSImpl>
+      get copyWith => __$$UpdateAccountFinish_IOSImplCopyWithImpl<
+          _$UpdateAccountFinish_IOSImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() macOs,
+    required TResult Function(String url) ios,
+  }) {
+    return ios(url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? macOs,
+    TResult? Function(String url)? ios,
+  }) {
+    return ios?.call(url);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? macOs,
+    TResult Function(String url)? ios,
+    required TResult orElse(),
+  }) {
+    if (ios != null) {
+      return ios(url);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UpdateAccountFinish_MacOS value) macOs,
+    required TResult Function(UpdateAccountFinish_IOS value) ios,
+  }) {
+    return ios(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult? Function(UpdateAccountFinish_IOS value)? ios,
+  }) {
+    return ios?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UpdateAccountFinish_MacOS value)? macOs,
+    TResult Function(UpdateAccountFinish_IOS value)? ios,
+    required TResult orElse(),
+  }) {
+    if (ios != null) {
+      return ios(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class UpdateAccountFinish_IOS extends UpdateAccountFinish {
+  const factory UpdateAccountFinish_IOS({required final String url}) =
+      _$UpdateAccountFinish_IOSImpl;
+  const UpdateAccountFinish_IOS._() : super._();
+
+  String get url;
+
+  /// Create a copy of UpdateAccountFinish
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateAccountFinish_IOSImplCopyWith<_$UpdateAccountFinish_IOSImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}

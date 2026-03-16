@@ -39,7 +39,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.3.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1606826074;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1267927268;
 
 // Section: executor
 
@@ -4423,12 +4423,8 @@ fn wire__crate__api__api__do_login_impl(
                     Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>,
                 >,
             >>::sse_decode(&mut deserializer);
-            let api_cookie = <Option<String>>::sse_decode(&mut deserializer);
-            let api_anisette = <RustOpaqueMoi<
-                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
-                    ArcAnisetteClient<DefaultAnisetteProvider>,
-                >,
-            >>::sse_decode(&mut deserializer);
+            let api_finish =
+                <Option<crate::api::api::UpdateAccountFinish>>::sse_decode(&mut deserializer);
             let api_os_config = <RustOpaqueMoi<
                 flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>,
             >>::sse_decode(&mut deserializer);
@@ -4437,7 +4433,6 @@ fn wire__crate__api__api__do_login_impl(
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || async move {
                         let mut api_account_guard = None;
-                        let mut api_anisette_guard = None;
                         let mut api_os_config_guard = None;
                         let decode_indices_ =
                             flutter_rust_bridge::for_generated::lockable_compute_decode_order(
@@ -4448,13 +4443,8 @@ fn wire__crate__api__api__do_login_impl(
                                         false,
                                     ),
                                     flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                        &api_anisette,
-                                        1,
-                                        false,
-                                    ),
-                                    flutter_rust_bridge::for_generated::LockableOrderInfo::new(
                                         &api_os_config,
-                                        2,
+                                        1,
                                         false,
                                     ),
                                 ],
@@ -4466,10 +4456,6 @@ fn wire__crate__api__api__do_login_impl(
                                         Some(api_account.lockable_decode_async_ref().await)
                                 }
                                 1 => {
-                                    api_anisette_guard =
-                                        Some(api_anisette.lockable_decode_async_ref().await)
-                                }
-                                2 => {
                                     api_os_config_guard =
                                         Some(api_os_config.lockable_decode_async_ref().await)
                                 }
@@ -4477,13 +4463,11 @@ fn wire__crate__api__api__do_login_impl(
                             }
                         }
                         let api_account_guard = api_account_guard.unwrap();
-                        let api_anisette_guard = api_anisette_guard.unwrap();
                         let api_os_config_guard = api_os_config_guard.unwrap();
                         let output_ok = crate::api::api::do_login(
                             api_path,
                             &*api_account_guard,
-                            api_cookie,
-                            &*api_anisette_guard,
+                            api_finish,
                             &*api_os_config_guard,
                         )
                         .await?;
@@ -13291,6 +13275,85 @@ fn wire__crate__api__api__try_auth_impl(
         },
     )
 }
+fn wire__crate__api__api__try_icloud_login_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "try_icloud_login",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
+                    ptr_,
+                    rust_vec_len_,
+                    data_len_,
+                )
+            };
+            let mut deserializer =
+                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            let api_conf = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>,
+            >>::sse_decode(&mut deserializer);
+            let api_account = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<
+                    Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>,
+                >,
+            >>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| async move {
+                transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
+                    (move || async move {
+                        let mut api_conf_guard = None;
+                        let mut api_account_guard = None;
+                        let decode_indices_ =
+                            flutter_rust_bridge::for_generated::lockable_compute_decode_order(
+                                vec![
+                                    flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                        &api_conf, 0, false,
+                                    ),
+                                    flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                        &api_account,
+                                        1,
+                                        false,
+                                    ),
+                                ],
+                            );
+                        for i in decode_indices_ {
+                            match i {
+                                0 => {
+                                    api_conf_guard =
+                                        Some(api_conf.lockable_decode_async_ref().await)
+                                }
+                                1 => {
+                                    api_account_guard =
+                                        Some(api_account.lockable_decode_async_ref().await)
+                                }
+                                _ => unreachable!(),
+                            }
+                        }
+                        let api_conf_guard = api_conf_guard.unwrap();
+                        let api_account_guard = api_account_guard.unwrap();
+                        let output_ok = crate::api::api::try_icloud_login(
+                            api_path,
+                            &*api_conf_guard,
+                            &*api_account_guard,
+                        )
+                        .await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__api__unsubscribe_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -13377,18 +13440,29 @@ fn wire__crate__api__api__update_account_headers_impl(
                     Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>,
                 >,
             >>::sse_decode(&mut deserializer);
+            let api_config = <RustOpaqueMoi<
+                flutter_rust_bridge::for_generated::RustAutoOpaqueInner<JoinedOSConfig>,
+            >>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| async move {
                 transform_result_sse::<_, flutter_rust_bridge::for_generated::anyhow::Error>(
                     (move || async move {
                         let mut api_account_guard = None;
+                        let mut api_config_guard = None;
                         let decode_indices_ =
                             flutter_rust_bridge::for_generated::lockable_compute_decode_order(
-                                vec![flutter_rust_bridge::for_generated::LockableOrderInfo::new(
-                                    &api_account,
-                                    0,
-                                    false,
-                                )],
+                                vec![
+                                    flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                        &api_account,
+                                        0,
+                                        false,
+                                    ),
+                                    flutter_rust_bridge::for_generated::LockableOrderInfo::new(
+                                        &api_config,
+                                        1,
+                                        false,
+                                    ),
+                                ],
                             );
                         for i in decode_indices_ {
                             match i {
@@ -13396,12 +13470,20 @@ fn wire__crate__api__api__update_account_headers_impl(
                                     api_account_guard =
                                         Some(api_account.lockable_decode_async_ref().await)
                                 }
+                                1 => {
+                                    api_config_guard =
+                                        Some(api_config.lockable_decode_async_ref().await)
+                                }
                                 _ => unreachable!(),
                             }
                         }
                         let api_account_guard = api_account_guard.unwrap();
-                        let output_ok =
-                            crate::api::api::update_account_headers(&*api_account_guard).await?;
+                        let api_config_guard = api_config_guard.unwrap();
+                        let output_ok = crate::api::api::update_account_headers(
+                            &*api_account_guard,
+                            &*api_config_guard,
+                        )
+                        .await?;
                         Ok(output_ok)
                     })()
                     .await,
@@ -15674,6 +15756,12 @@ const _: fn() = || {
         let UnsendMessage = None::<crate::api::api::UnsendMessage>.unwrap();
         let _: String = UnsendMessage.tuuid;
         let _: u64 = UnsendMessage.edit_part;
+    }
+    match None::<crate::api::api::UpdateAccountFinish>.unwrap() {
+        crate::api::api::UpdateAccountFinish::MacOS => {}
+        crate::api::api::UpdateAccountFinish::IOS { url } => {
+            let _: String = url;
+        }
     }
     {
         let UpdateExtensionMessage = None::<crate::api::api::UpdateExtensionMessage>.unwrap();
@@ -20841,6 +20929,19 @@ impl SseDecode for Option<u32> {
     }
 }
 
+impl SseDecode for Option<crate::api::api::UpdateAccountFinish> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<crate::api::api::UpdateAccountFinish>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for Option<Vec<IDSUser>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -21631,7 +21732,6 @@ impl SseDecode
     for (
         Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>,
         crate::api::api::LoginState,
-        Option<IDSUser>,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -21639,8 +21739,7 @@ impl SseDecode
         let mut var_field0 =
             <Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>>::sse_decode(deserializer);
         let mut var_field1 = <crate::api::api::LoginState>::sse_decode(deserializer);
-        let mut var_field2 = <Option<IDSUser>>::sse_decode(deserializer);
-        return (var_field0, var_field1, var_field2);
+        return (var_field0, var_field1);
     }
 }
 
@@ -22101,6 +22200,15 @@ impl SseDecode for (String, crate::api::api::SyncStatus) {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_field0 = <String>::sse_decode(deserializer);
         let mut var_field1 = <crate::api::api::SyncStatus>::sse_decode(deserializer);
+        return (var_field0, var_field1);
+    }
+}
+
+impl SseDecode for (String, crate::api::api::UpdateAccountFinish) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_field0 = <String>::sse_decode(deserializer);
+        let mut var_field1 = <crate::api::api::UpdateAccountFinish>::sse_decode(deserializer);
         return (var_field0, var_field1);
     }
 }
@@ -22744,6 +22852,25 @@ impl SseDecode for crate::api::api::UnsendMessage {
     }
 }
 
+impl SseDecode for crate::api::api::UpdateAccountFinish {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                return crate::api::api::UpdateAccountFinish::MacOS;
+            }
+            1 => {
+                let mut var_url = <String>::sse_decode(deserializer);
+                return crate::api::api::UpdateAccountFinish::IOS { url: var_url };
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
 impl SseDecode for crate::api::api::UpdateExtensionMessage {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -23060,26 +23187,27 @@ fn pde_ffi_dispatcher_primary_impl(
             wire__crate__api__api__transcript_poster_save_impl(port, ptr, rust_vec_len, data_len)
         }
         242 => wire__crate__api__api__try_auth_impl(port, ptr, rust_vec_len, data_len),
-        243 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
-        244 => {
+        243 => wire__crate__api__api__try_icloud_login_impl(port, ptr, rust_vec_len, data_len),
+        244 => wire__crate__api__api__unsubscribe_impl(port, ptr, rust_vec_len, data_len),
+        245 => {
             wire__crate__api__api__update_account_headers_impl(port, ptr, rust_vec_len, data_len)
         }
-        245 => wire__crate__api__api__update_beacon_name_impl(port, ptr, rust_vec_len, data_len),
-        246 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
-        247 => {
+        246 => wire__crate__api__api__update_beacon_name_impl(port, ptr, rust_vec_len, data_len),
+        247 => wire__crate__api__api__upload_attachment_impl(port, ptr, rust_vec_len, data_len),
+        248 => {
             wire__crate__api__api__upload_cloud_attachments_impl(port, ptr, rust_vec_len, data_len)
         }
-        248 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
-        249 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
-        250 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
-        252 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
-        253 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
-        254 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
-        255 => {
+        249 => wire__crate__api__api__upload_group_photo_impl(port, ptr, rust_vec_len, data_len),
+        250 => wire__crate__api__api__upload_mmcs_impl(port, ptr, rust_vec_len, data_len),
+        251 => wire__crate__api__api__use_link_for_impl(port, ptr, rust_vec_len, data_len),
+        253 => wire__crate__api__api__validate_cert_impl(port, ptr, rust_vec_len, data_len),
+        254 => wire__crate__api__api__validate_relay_impl(port, ptr, rust_vec_len, data_len),
+        255 => wire__crate__api__api__validate_targets_impl(port, ptr, rust_vec_len, data_len),
+        256 => {
             wire__crate__api__api__validate_targets_facetime_impl(port, ptr, rust_vec_len, data_len)
         }
-        256 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
-        257 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
+        257 => wire__crate__api__api__verify_2fa_impl(port, ptr, rust_vec_len, data_len),
+        258 => wire__crate__api__api__verify_2fa_sms_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -23306,7 +23434,7 @@ fn pde_ffi_dispatcher_sync_impl(
         223 => wire__crate__api__api__send_daemon_impl(ptr, rust_vec_len, data_len),
         231 => wire__crate__api__api__subscribe_conn_impl(ptr, rust_vec_len, data_len),
         239 => wire__crate__api__api__systemtime_to_millis_impl(ptr, rust_vec_len, data_len),
-        251 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
+        252 => wire__crate__api__api__utm_now_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -28242,6 +28370,31 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::UnsendMessage
     }
 }
 // Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::UpdateAccountFinish> {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self.0 {
+            crate::api::api::UpdateAccountFinish::MacOS => [0.into_dart()].into_dart(),
+            crate::api::api::UpdateAccountFinish::IOS { url } => {
+                [1.into_dart(), url.into_into_dart().into_dart()].into_dart()
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for FrbWrapper<crate::api::api::UpdateAccountFinish>
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<crate::api::api::UpdateAccountFinish>>
+    for crate::api::api::UpdateAccountFinish
+{
+    fn into_into_dart(self) -> FrbWrapper<crate::api::api::UpdateAccountFinish> {
+        self.into()
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<crate::api::api::UpdateExtensionMessage> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -32510,6 +32663,16 @@ impl SseEncode for Option<u32> {
     }
 }
 
+impl SseEncode for Option<crate::api::api::UpdateAccountFinish> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <crate::api::api::UpdateAccountFinish>::sse_encode(value, serializer);
+        }
+    }
+}
+
 impl SseEncode for Option<Vec<IDSUser>> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -33120,14 +33283,12 @@ impl SseEncode
     for (
         Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>,
         crate::api::api::LoginState,
-        Option<IDSUser>,
     )
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>>::sse_encode(self.0, serializer);
         <crate::api::api::LoginState>::sse_encode(self.1, serializer);
-        <Option<IDSUser>>::sse_encode(self.2, serializer);
     }
 }
 
@@ -33535,6 +33696,14 @@ impl SseEncode for (String, crate::api::api::SyncStatus) {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.0, serializer);
         <crate::api::api::SyncStatus>::sse_encode(self.1, serializer);
+    }
+}
+
+impl SseEncode for (String, crate::api::api::UpdateAccountFinish) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.0, serializer);
+        <crate::api::api::UpdateAccountFinish>::sse_encode(self.1, serializer);
     }
 }
 
@@ -34043,6 +34212,24 @@ impl SseEncode for crate::api::api::UnsendMessage {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <String>::sse_encode(self.tuuid, serializer);
         <u64>::sse_encode(self.edit_part, serializer);
+    }
+}
+
+impl SseEncode for crate::api::api::UpdateAccountFinish {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::api::UpdateAccountFinish::MacOS => {
+                <i32>::sse_encode(0, serializer);
+            }
+            crate::api::api::UpdateAccountFinish::IOS { url } => {
+                <i32>::sse_encode(1, serializer);
+                <String>::sse_encode(url, serializer);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
     }
 }
 

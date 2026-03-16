@@ -451,15 +451,16 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
       loading = true;
     });
     try {
-      var (account, result, user) = await api.tryAuth(
+      var (account, result) = await api.tryAuth(
         path: pushService.statePath,
         conf: controller.config!,
         conn: controller.connection!,
         anisette: controller.anisette!, 
         creds: password == null ? null : (appleId, password),
       );
-      controller.currentAppleUser = user;
       controller.currentAppleAccount = account;
+      controller.currentAppleUser = await api.tryIcloudLogin(path: pushService.statePath, conf: controller.config!, account: account);
+
       result = await controller.updateLoginState(result);
 
 
@@ -498,7 +499,21 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
     } catch (e) {
       if (e is AnyhowException) {
         if (e.message.contains("MOBILEME_TERMS_OF_SERVICE_UPDATE")) {
-          await controller.updateAccountUi((finished) => setState(() { loading = finished; }));
+          await controller.updateAccountUi((finished) => setState(() { 
+            loading = finished; 
+            if (!finished) {
+              if (!controller.success) {
+                return;
+              }
+              controller.goingTo2fa = false;
+              controller.pageController.animateToPage(
+                controller.pageController.page!.toInt() + 2,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          }));
         }
         controller.updateConnectError(e.message);
       }

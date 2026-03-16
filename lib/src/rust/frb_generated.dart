@@ -67,7 +67,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.3.0';
 
   @override
-  int get rustContentHash => 1606826074;
+  int get rustContentHash => -1267927268;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -364,8 +364,7 @@ abstract class RustLibApi extends BaseApi {
   Future<IdsUser> crateApiApiDoLogin(
       {required String path,
       required ArcMutexAppleAccountDefaultAnisetteProvider account,
-      String? cookie,
-      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      UpdateAccountFinish? finish,
       required JoinedOsConfig osConfig});
 
   Future<void> crateApiApiDoReregister({required ArcImClient state});
@@ -950,7 +949,7 @@ abstract class RustLibApi extends BaseApi {
   Future<Uint8List> crateApiApiTranscriptPosterSave(
       {required SimplifiedTranscriptPoster poster});
 
-  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState, IdsUser?)>
+  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState)>
       crateApiApiTryAuth(
           {required String path,
           required JoinedOsConfig conf,
@@ -958,12 +957,18 @@ abstract class RustLibApi extends BaseApi {
           required ArcAnisetteClientDefaultAnisetteProvider anisette,
           (String, String)? creds});
 
+  Future<IdsUser?> crateApiApiTryIcloudLogin(
+      {required String path,
+      required JoinedOsConfig conf,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account});
+
   Future<List<SharedAlbum>> crateApiApiUnsubscribe(
       {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
       required String guid});
 
-  Future<String> crateApiApiUpdateAccountHeaders(
-      {required ArcMutexAppleAccountDefaultAnisetteProvider account});
+  Future<(String, UpdateAccountFinish)> crateApiApiUpdateAccountHeaders(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required JoinedOsConfig config});
 
   Future<void> crateApiApiUpdateBeaconName(
       {required ArcFindMyClientDefaultAnisetteProvider items,
@@ -3829,8 +3834,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Future<IdsUser> crateApiApiDoLogin(
       {required String path,
       required ArcMutexAppleAccountDefaultAnisetteProvider account,
-      String? cookie,
-      required ArcAnisetteClientDefaultAnisetteProvider anisette,
+      UpdateAccountFinish? finish,
       required JoinedOsConfig osConfig}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -3838,9 +3842,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(path, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             account, serializer);
-        sse_encode_opt_String(cookie, serializer);
-        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcAnisetteClientDefaultAnisetteProvider(
-            anisette, serializer);
+        sse_encode_opt_box_autoadd_update_account_finish(finish, serializer);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
             osConfig, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
@@ -3852,14 +3854,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiDoLoginConstMeta,
-      argValues: [path, account, cookie, anisette, osConfig],
+      argValues: [path, account, finish, osConfig],
       apiImpl: this,
     ));
   }
 
   TaskConstMeta get kCrateApiApiDoLoginConstMeta => const TaskConstMeta(
         debugName: "do_login",
-        argNames: ["path", "account", "cookie", "anisette", "osConfig"],
+        argNames: ["path", "account", "finish", "osConfig"],
       );
 
   @override
@@ -8245,7 +8247,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState, IdsUser?)>
+  Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState)>
       crateApiApiTryAuth(
           {required String path,
           required JoinedOsConfig conf,
@@ -8268,7 +8270,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       },
       codec: SseCodec(
         decodeSuccessData:
-            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user,
+            sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiTryAuthConstMeta,
@@ -8283,6 +8285,38 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<IdsUser?> crateApiApiTryIcloudLogin(
+      {required String path,
+      required JoinedOsConfig conf,
+      required ArcMutexAppleAccountDefaultAnisetteProvider account}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        final serializer = SseSerializer(generalizedFrbRustBinding);
+        sse_encode_String(path, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            conf, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
+            account, serializer);
+        pdeCallFfi(generalizedFrbRustBinding, serializer,
+            funcId: 243, port: port_);
+      },
+      codec: SseCodec(
+        decodeSuccessData:
+            sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser,
+        decodeErrorData: sse_decode_AnyhowException,
+      ),
+      constMeta: kCrateApiApiTryIcloudLoginConstMeta,
+      argValues: [path, conf, account],
+      apiImpl: this,
+    ));
+  }
+
+  TaskConstMeta get kCrateApiApiTryIcloudLoginConstMeta => const TaskConstMeta(
+        debugName: "try_icloud_login",
+        argNames: ["path", "conf", "account"],
+      );
+
+  @override
   Future<List<SharedAlbum>> crateApiApiUnsubscribe(
       {required SyncManagerDefaultAnisetteProviderMyFilePackager lock,
       required String guid}) {
@@ -8293,7 +8327,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             lock, serializer);
         sse_encode_String(guid, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 243, port: port_);
+            funcId: 244, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_shared_album,
@@ -8311,22 +8345,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<String> crateApiApiUpdateAccountHeaders(
-      {required ArcMutexAppleAccountDefaultAnisetteProvider account}) {
+  Future<(String, UpdateAccountFinish)> crateApiApiUpdateAccountHeaders(
+      {required ArcMutexAppleAccountDefaultAnisetteProvider account,
+      required JoinedOsConfig config}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         final serializer = SseSerializer(generalizedFrbRustBinding);
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             account, serializer);
+        sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
+            config, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 244, port: port_);
+            funcId: 245, port: port_);
       },
       codec: SseCodec(
-        decodeSuccessData: sse_decode_String,
+        decodeSuccessData: sse_decode_record_string_update_account_finish,
         decodeErrorData: sse_decode_AnyhowException,
       ),
       constMeta: kCrateApiApiUpdateAccountHeadersConstMeta,
-      argValues: [account],
+      argValues: [account, config],
       apiImpl: this,
     ));
   }
@@ -8334,7 +8371,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kCrateApiApiUpdateAccountHeadersConstMeta =>
       const TaskConstMeta(
         debugName: "update_account_headers",
-        argNames: ["account"],
+        argNames: ["account", "config"],
       );
 
   @override
@@ -8348,7 +8385,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             items, serializer);
         sse_encode_box_autoadd_beacon_naming_record(namingRecord, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 245, port: port_);
+            funcId: 246, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -8385,7 +8422,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(uti, serializer);
         sse_encode_String(name, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 246, port: port_);
+            funcId: 247, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -8416,7 +8453,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 247, port: port_);
+            funcId: 248, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -8447,7 +8484,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             cloudMessagesClient, serializer);
         sse_encode_list_record_string_string(files, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 248, port: port_);
+            funcId: 249, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -8478,7 +8515,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             aps, serializer);
         sse_encode_String(path, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 249, port: port_);
+            funcId: 250, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -8509,7 +8546,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_String(oldUsage, serializer);
         sse_encode_String(usage, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 250, port: port_);
+            funcId: 251, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_unit,
@@ -8531,7 +8568,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(SyncTask(
       callFfi: () {
         final serializer = SseSerializer(generalizedFrbRustBinding);
-        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 251)!;
+        return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 252)!;
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -8560,7 +8597,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
             user, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 252, port: port_);
+            funcId: 253, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -8586,7 +8623,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerJoinedOSConfig(
             configRef, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 253, port: port_);
+            funcId: 254, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_opt_String,
@@ -8616,7 +8653,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_String(targets, serializer);
         sse_encode_String(sender, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 254, port: port_);
+            funcId: 255, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -8646,7 +8683,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_list_String(targets, serializer);
         sse_encode_String(sender, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 255, port: port_);
+            funcId: 256, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData: sse_decode_list_String,
@@ -8692,7 +8729,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             idms, serializer);
         sse_encode_String(code, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 256, port: port_);
+            funcId: 257, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -8750,7 +8787,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
             body, serializer);
         sse_encode_String(code, serializer);
         pdeCallFfi(generalizedFrbRustBinding, serializer,
-            funcId: 257, port: port_);
+            funcId: 258, port: port_);
       },
       codec: SseCodec(
         decodeSuccessData:
@@ -11763,6 +11800,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  UpdateAccountFinish dco_decode_box_autoadd_update_account_finish(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_update_account_finish(raw);
+  }
+
+  @protected
   UpdateExtensionMessage dco_decode_box_autoadd_update_extension_message(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -14220,6 +14264,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  UpdateAccountFinish? dco_decode_opt_box_autoadd_update_account_finish(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_update_account_finish(raw);
+  }
+
+  @protected
   List<IdsUser>?
       dco_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw) {
@@ -14845,21 +14898,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   (
     ArcMutexAppleAccountDefaultAnisetteProvider,
-    LoginState,
-    IdsUser?
-  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+    LoginState
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
       dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
-    if (arr.length != 3) {
-      throw Exception('Expected 3 elements, got ${arr.length}');
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
     }
     return (
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
           arr[0]),
       dco_decode_login_state(arr[1]),
-      dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
-          arr[2]),
     );
   }
 
@@ -15536,6 +15586,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  (String, UpdateAccountFinish) dco_decode_record_string_update_account_finish(
+      dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      dco_decode_String(arr[0]),
+      dco_decode_update_account_finish(arr[1]),
+    );
+  }
+
+  @protected
   (int, NSDictionaryTypedCoder)
       dco_decode_record_u_32_ns_dictionary_typed_coder(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
@@ -16090,6 +16154,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       tuuid: dco_decode_String(arr[0]),
       editPart: dco_decode_CastedPrimitive_u_64(arr[1]),
     );
+  }
+
+  @protected
+  UpdateAccountFinish dco_decode_update_account_finish(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    switch (raw[0]) {
+      case 0:
+        return UpdateAccountFinish_MacOS();
+      case 1:
+        return UpdateAccountFinish_IOS(
+          url: dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
   }
 
   @protected
@@ -18918,6 +18997,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_unsend_message(deserializer));
+  }
+
+  @protected
+  UpdateAccountFinish sse_decode_box_autoadd_update_account_finish(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_update_account_finish(deserializer));
   }
 
   @protected
@@ -22099,6 +22185,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  UpdateAccountFinish? sse_decode_opt_box_autoadd_update_account_finish(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_update_account_finish(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
   List<IdsUser>?
       sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer) {
@@ -22794,19 +22892,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   (
     ArcMutexAppleAccountDefaultAnisetteProvider,
-    LoginState,
-    IdsUser?
-  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+    LoginState
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
       SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 =
         sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
             deserializer);
     var var_field1 = sse_decode_login_state(deserializer);
-    var var_field2 =
-        sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
-            deserializer);
-    return (var_field0, var_field1, var_field2);
+    return (var_field0, var_field1);
   }
 
   @protected
@@ -23291,6 +23385,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_field0 = sse_decode_String(deserializer);
     var var_field1 = sse_decode_u_64(deserializer);
+    return (var_field0, var_field1);
+  }
+
+  @protected
+  (String, UpdateAccountFinish) sse_decode_record_string_update_account_finish(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_String(deserializer);
+    var var_field1 = sse_decode_update_account_finish(deserializer);
     return (var_field0, var_field1);
   }
 
@@ -23851,6 +23954,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_tuuid = sse_decode_String(deserializer);
     var var_editPart = sse_decode_CastedPrimitive_u_64(deserializer);
     return UnsendMessage(tuuid: var_tuuid, editPart: var_editPart);
+  }
+
+  @protected
+  UpdateAccountFinish sse_decode_update_account_finish(
+      SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        return UpdateAccountFinish_MacOS();
+      case 1:
+        var var_url = sse_decode_String(deserializer);
+        return UpdateAccountFinish_IOS(url: var_url);
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected
@@ -26835,6 +26955,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_update_account_finish(
+      UpdateAccountFinish self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_update_account_finish(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_update_extension_message(
       UpdateExtensionMessage self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
@@ -29390,6 +29517,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_opt_box_autoadd_update_account_finish(
+      UpdateAccountFinish? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_update_account_finish(self, serializer);
+    }
+  }
+
+  @protected
   void
       sse_encode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           List<IdsUser>? self, SseSerializer serializer) {
@@ -29934,19 +30072,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
-          (
-            ArcMutexAppleAccountDefaultAnisetteProvider,
-            LoginState,
-            IdsUser?
-          ) self,
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
+          (ArcMutexAppleAccountDefaultAnisetteProvider, LoginState) self,
           SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArcMutexAppleAccountDefaultAnisetteProvider(
         self.$1, serializer);
     sse_encode_login_state(self.$2, serializer);
-    sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
-        self.$3, serializer);
   }
 
   @protected
@@ -30344,6 +30476,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.$1, serializer);
     sse_encode_u_64(self.$2, serializer);
+  }
+
+  @protected
+  void sse_encode_record_string_update_account_finish(
+      (String, UpdateAccountFinish) self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_String(self.$1, serializer);
+    sse_encode_update_account_finish(self.$2, serializer);
   }
 
   @protected
@@ -30793,6 +30933,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.tuuid, serializer);
     sse_encode_CastedPrimitive_u_64(self.editPart, serializer);
+  }
+
+  @protected
+  void sse_encode_update_account_finish(
+      UpdateAccountFinish self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    switch (self) {
+      case UpdateAccountFinish_MacOS():
+        sse_encode_i_32(0, serializer);
+      case UpdateAccountFinish_IOS(url: final url):
+        sse_encode_i_32(1, serializer);
+        sse_encode_String(url, serializer);
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected

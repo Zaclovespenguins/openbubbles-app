@@ -287,7 +287,23 @@ class _AppleId2FAState extends OptimizedState<AppleId2FA> {
     } catch (e) {
       if (e is AnyhowException) {
         if (e.message.contains("MOBILEME_TERMS_OF_SERVICE_UPDATE")) {
-          await controller.updateAccountUi((finished) => setState(() { loading = finished; }));
+          await controller.updateAccountUi((finished) => setState(() { 
+            loading = finished; 
+            if (!finished) {
+              if (controller.success) {
+                controller.pageController.nextPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              } else {
+                controller.pageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              }
+              FocusManager.instance.primaryFocus?.unfocus();  
+            }
+            }));
         }
         controller.updateConnectError(e.message);
       }

@@ -20,7 +20,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use tokio::{runtime::Runtime, select, sync::{broadcast, mpsc, watch, RwLock}};
 pub use mpsc::Sender;
 pub use rustpush::{APSMessage, CircleClientSession, CircleServerSession, EntitlementAuthState, IDSNGMIdentity, LoginDelegate, MADRID_SERVICE, TokenProvider, authenticate_apple, authenticate_phone, authenticate_smsless, cloud_messages::CloudMessagesClient, cloudkit::{CloudKitClient, CloudKitState}, facetime::{FACETIME_SERVICE, FTClient, FTState, VIDEO_SERVICE}, findmy::{FindMyClient, FindMyState, FindMyStateManager, MULTIPLEX_SERVICE}, keychain::{KeychainClient, KeychainClientState}, login_apple_delegates, name_photo_sharing::ProfilesClient, sharedstreams::{AssetMetadata, FFMpegFilePackager, FileMetadata, FilePackager, PreparedAsset, PreparedFile, SharedStreamClient, SharedStreamsState, SyncController, SyncManager, SyncState}, statuskit::{ChannelInterestToken, StatusKitClient, StatusKitState, StatusKitStatus}};
-use rustpush::{AnisetteProvider, DebugRwLock, cloudkit::contact_info_to_handle, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}, passwords::PasswordState};
+use rustpush::{AnisetteProvider, DebugRwLock, cloudkit::contact_info_to_handle, cloudkit_proto::{CuttlefishSerializedKey, base64_encode}, findmy::SharedBeaconClient, keychain::{CloudKey, CurrentBottle, SivKey}, passwords::PasswordState, request_update_account};
 pub use rustpush::findmy::{FindMyFriendsClient, FindMyPhoneClient};
 pub use rustpush::sharedstreams::{SharedAlbum, SyncStatus};
 pub use rustpush::cloudkit_proto::EscrowData;
@@ -1373,10 +1373,10 @@ async fn handle_photostream(client: &SharedStreamClient<DefaultAnisetteProvider>
     }
 }
 
-pub async fn update_account_headers(account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>) -> anyhow::Result<String> {
+pub async fn update_account_headers(account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, config: &JoinedOSConfig) -> anyhow::Result<(String, UpdateAccountFinish)> {
     let account = account.lock().await;
 
-    Ok(account.request_update_account().await?)
+    Ok(request_update_account(&*account, &*config.config()).await?)
 }
 
 pub async fn get_anisette_headers(state: &ArcAnisetteClient<DefaultAnisetteProvider>, config: &JoinedOSConfig) -> anyhow::Result<HashMap<String, String>> {
@@ -2170,7 +2170,7 @@ impl GSAConfig {
     }
 }
 
-pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, cookie: Option<String>, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, os_config: &JoinedOSConfig) -> anyhow::Result<IDSUser> {
+pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, finish: Option<UpdateAccountFinish>, os_config: &JoinedOSConfig) -> anyhow::Result<IDSUser> {
     let mut account = account.lock().await;
     
     let conf_dir = PathBuf::from_str(&path).unwrap();
@@ -2181,12 +2181,17 @@ pub async fn do_login(path: String, account: &Arc<Mutex<AppleAccount<DefaultAnis
     let Some(spd) = &account.spd else { return Err(anyhow!("No spd!")) };
 
     debug!("Got spd {:?}", spd);
-    let adsid = spd.get("adsid").ok_or(anyhow!("No adsid!"))?.as_string().unwrap();
     let acname = spd.get("acname").ok_or(anyhow!("No acname!"))?.as_string().unwrap().to_string();
     let dsid = spd.get("DsPrsId").ok_or(anyhow!("No dsid!"))?.as_unsigned_integer().unwrap().to_string();
+    let adsid = spd.get("adsid").ok_or(anyhow!("No adsid!"))?.as_string().unwrap();
     
-    let delegates = login_apple_delegates(account.username.as_ref().unwrap(), &pet, adsid, cookie.as_ref().map(|i| i.as_str()), &mut *anisette.lock().await, &*os_config.config(), &[LoginDelegate::IDS, LoginDelegate::MobileMe]).await?;
-
+    let delegates = if let Some(finish) = finish {
+        finish.accept_terms(&[LoginDelegate::IDS, LoginDelegate::MobileMe], &*account, &*os_config.config()).await?
+    } else {
+        login_apple_delegates(&*account, None, &*os_config.config(), &[LoginDelegate::IDS, LoginDelegate::MobileMe]).await?
+    };
+    
+    
     plist::to_file_xml(conf_dir.join("gsa.plist"), &GSAConfig {
         username: account.username.clone().unwrap(),
         encrypted_password: GSAConfig::encrypt(&account.hashed_password.clone().unwrap())?,
@@ -2249,7 +2254,7 @@ pub fn get_available_user(path: String) -> Option<String> {
     plist::from_file::<_, GSAConfig>(&conf_dir.join("gsa.plist")).ok().map(|i| i.username)
 }
 
-pub async fn try_auth(path: String, conf: &JoinedOSConfig, conn: &APSConnection, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, creds: Option<(String, String)>) -> anyhow::Result<(Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, LoginState, Option<IDSUser>)> {
+pub async fn try_auth(path: String, conf: &JoinedOSConfig, conn: &APSConnection, anisette: &ArcAnisetteClient<DefaultAnisetteProvider>, creds: Option<(String, String)>) -> anyhow::Result<(Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>, LoginState)> {
     let conf_dir = PathBuf::from_str(&path).unwrap();
     info!("Here");
     let mut apple_account =
@@ -2267,30 +2272,27 @@ pub async fn try_auth(path: String, conf: &JoinedOSConfig, conn: &APSConnection,
         (state.username.clone(), state.get_password()?)
     };
 
-    let mut login_state = apple_account.login_email_pass(&result.0, &result.1).await?;
+    let login_state = apple_account.login_email_pass(&result.0, &result.1).await?;
 
     info!("Here3");
 
     let account = Arc::new(Mutex::new(apple_account));
+    
+    info!("Here6");
+    Ok((account, login_state))
+}
 
-    let mut user = None;
+pub async fn try_icloud_login(path: String, conf: &JoinedOSConfig, account: &Arc<Mutex<AppleAccount<DefaultAnisetteProvider>>>) -> anyhow::Result<Option<IDSUser>> {
     let pet = account.lock().await.get_pet();
     if let Some(pet) = pet {
         info!("Here4");
-        let identity = do_login(path, &account, None, anisette, conf).await?;
+        let identity = do_login(path, &account, None, conf).await?;
         info!("Here5");
-        user = Some(identity);
-
-        // who needs extra steps when you have a PET, amirite?
-        println!("confirmed login {:?}", login_state);
-        if matches!(login_state, LoginState::NeedsExtraStep(_)) {
-            login_state = LoginState::LoggedIn;
-        }
+        
+        Ok(Some(identity))
+    } else {
+        Ok(None)
     }
-    info!("Here6");
-
-
-    Ok((account, login_state, user))
 }
 
 pub async fn auth_phone(conn: &APSConnection, config: &JoinedOSConfig, number: String, sig: Vec<u8>) -> anyhow::Result<IDSUser> {
@@ -2617,7 +2619,7 @@ pub async fn verify_2fa(path: String, client: &mut CircleClientSession<DefaultAn
     let mut user = None;
     let pet = account.lock().await.get_pet();
     if let Some(pet) = pet {
-        let identity = do_login(path, &account, None, anisette, os_config).await?;
+        let identity = do_login(path, &account, None, os_config).await?;
         user = Some(identity);
 
         // who needs extra steps when you have a PET, amirite?
@@ -2657,7 +2659,7 @@ pub async fn verify_2fa_sms(path: String, account_mut: &Arc<Mutex<AppleAccount<D
     let mut user = None;
     if let Some(pet) = account.get_pet() {
         drop(account);
-        let identity = do_login(path, &account_mut, None, anisette, config).await?;
+        let identity = do_login(path, &account_mut, None, config).await?;
         user = Some(identity);
 
         // who needs extra steps when you have a PET, amirite?

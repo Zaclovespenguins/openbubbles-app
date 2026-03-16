@@ -508,9 +508,11 @@ Future<bool> queryHandle(
     RustLib.instance.api
         .crateApiApiQueryHandle(passwords: passwords, handle: handle);
 
-Future<String> updateAccountHeaders(
-        {required ArcMutexAppleAccountDefaultAnisetteProvider account}) =>
-    RustLib.instance.api.crateApiApiUpdateAccountHeaders(account: account);
+Future<(String, UpdateAccountFinish)> updateAccountHeaders(
+        {required ArcMutexAppleAccountDefaultAnisetteProvider account,
+        required JoinedOsConfig config}) =>
+    RustLib.instance.api
+        .crateApiApiUpdateAccountHeaders(account: account, config: config);
 
 Future<Map<String, String>> getAnisetteHeaders(
         {required ArcAnisetteClientDefaultAnisetteProvider state,
@@ -873,32 +875,29 @@ Future<QuotaInfo> getQuotaInfo(
 Future<IdsUser> doLogin(
         {required String path,
         required ArcMutexAppleAccountDefaultAnisetteProvider account,
-        String? cookie,
-        required ArcAnisetteClientDefaultAnisetteProvider anisette,
+        UpdateAccountFinish? finish,
         required JoinedOsConfig osConfig}) =>
     RustLib.instance.api.crateApiApiDoLogin(
-        path: path,
-        account: account,
-        cookie: cookie,
-        anisette: anisette,
-        osConfig: osConfig);
+        path: path, account: account, finish: finish, osConfig: osConfig);
 
 String? getAvailableUser({required String path}) =>
     RustLib.instance.api.crateApiApiGetAvailableUser(path: path);
 
-Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState, IdsUser?)>
-    tryAuth(
-            {required String path,
-            required JoinedOsConfig conf,
-            required ApsConnection conn,
-            required ArcAnisetteClientDefaultAnisetteProvider anisette,
-            (String, String)? creds}) =>
-        RustLib.instance.api.crateApiApiTryAuth(
-            path: path,
-            conf: conf,
-            conn: conn,
-            anisette: anisette,
-            creds: creds);
+Future<(ArcMutexAppleAccountDefaultAnisetteProvider, LoginState)> tryAuth(
+        {required String path,
+        required JoinedOsConfig conf,
+        required ApsConnection conn,
+        required ArcAnisetteClientDefaultAnisetteProvider anisette,
+        (String, String)? creds}) =>
+    RustLib.instance.api.crateApiApiTryAuth(
+        path: path, conf: conf, conn: conn, anisette: anisette, creds: creds);
+
+Future<IdsUser?> tryIcloudLogin(
+        {required String path,
+        required JoinedOsConfig conf,
+        required ArcMutexAppleAccountDefaultAnisetteProvider account}) =>
+    RustLib.instance.api
+        .crateApiApiTryIcloudLogin(path: path, conf: conf, account: account);
 
 Future<IdsUser> authPhone(
         {required ApsConnection conn,
@@ -6016,6 +6015,16 @@ class UnsendMessage {
           runtimeType == other.runtimeType &&
           tuuid == other.tuuid &&
           editPart == other.editPart;
+}
+
+@freezed
+sealed class UpdateAccountFinish with _$UpdateAccountFinish {
+  const UpdateAccountFinish._();
+
+  const factory UpdateAccountFinish.macOs() = UpdateAccountFinish_MacOS;
+  const factory UpdateAccountFinish.ios({
+    required String url,
+  }) = UpdateAccountFinish_IOS;
 }
 
 class UpdateExtensionMessage {

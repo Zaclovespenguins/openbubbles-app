@@ -192,11 +192,11 @@ class SetupViewController extends StatefulController {
     availableIAP.value = details.productDetailsList.first.subscriptionOfferDetails?.first;
   }
 
-  void updateSucceeded(Function finish) async {
+  void updateSucceeded(Function finish, api.UpdateAccountFinish updateFinish) async {
     finish(true);
     updateConnectError('');
     try {
-      currentAppleUser = await api.doLogin(path: pushService.statePath, account: currentAppleAccount!, anisette: anisette!, osConfig: config!, cookie: "termsAccepted=true");
+      currentAppleUser = await api.doLogin(path: pushService.statePath, account: currentAppleAccount!, osConfig: config!, finish: updateFinish);
       ss.settings.userName.value = await api.getUserName(state: currentAppleAccount!);
       await doRegister();
     } catch (e) {
@@ -213,70 +213,83 @@ class SetupViewController extends StatefulController {
   }
 
   Future<void> updateAccountUi(Function finish) async {
-    var data = await api.updateAccountHeaders(account: currentAppleAccount!);
+    var (data, finalI) = await api.updateAccountHeaders(account: currentAppleAccount!, config: config!);
     var request = URLRequest(url: WebUri("https://inappwebview.dev/"));
     
     double height = 400;
     showDialog(
       context: Get.context!,
       builder: (context) => StatefulBuilder(
-      builder: (context, setState) {
-        return Center(child: Container(
-        height: height,
-      child: InAppWebView(
-        initialUrlRequest: request,
-        initialData: InAppWebViewInitialData(data: data, baseUrl: WebUri("https://setup.icloud.com/setup/update_account_ui")),
-        initialSettings: InAppWebViewSettings(
-          useShouldInterceptAjaxRequest: true,
-          interceptOnlyAsyncAjaxRequests: false,
-          useShouldInterceptFetchRequest: true,
-        ),
-        shouldInterceptAjaxRequest: (controller, request) async {
-          var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
-          for (var header in anisette.entries) {
-            request.headers!.setRequestHeader(header.key, header.value);
-          }
-          return request;
-        },
-        shouldInterceptFetchRequest: (controller, request) async {
-          var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
-          request.headers ??= {};
-          request.headers!.addAll(anisette);
-          return request;
-        },
-        onWebViewCreated: (controller) {
-          controller.addJavaScriptHandler(handlerName: 'log', callback: (args) {
-            Logger.info("AppleAccountSetup ${args[0]}");
-          });
-          controller.addJavaScriptHandler(handlerName: 'cancel', callback: (args) {
-            Get.back();
-          });
-          controller.addJavaScriptHandler(handlerName: 'updateSucceeded', callback: (args) {
-            updateSucceeded(finish);
-            Get.back();
-          });
-          // for ios, also hijacks macos because ios doesn't load prefpange-setupservice.js, loads ios-setupservice.js but that doesn't work
-          controller.addJavaScriptHandler(handlerName: 'confirmWithCallback', callback: (args) {
-            updateSucceeded(finish);
-            Get.back();
-          });
-          controller.addJavaScriptHandler(handlerName: 'resizeToWindow', callback: (args) {
-            setState(() {
-              height = args[1];
-            });
-          });
-          controller.injectJavascriptFileFromAsset(assetFilePath: "assets/scripts/AppleAccountSetup.js");
-        },
-      )),);
-      })
+        builder: (context, setState) {
+          return Center(child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: height,
+                child: InAppWebView(
+                  initialUrlRequest: request,
+                  initialData: InAppWebViewInitialData(data: data, baseUrl: WebUri("https://setup.icloud.com/setup/update_account_ui")),
+                  initialSettings: InAppWebViewSettings(
+                    useShouldInterceptAjaxRequest: true,
+                    interceptOnlyAsyncAjaxRequests: false,
+                    useShouldInterceptFetchRequest: true,
+                  ),
+                  shouldInterceptAjaxRequest: (controller, request) async {
+                    var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
+                    for (var header in anisette.entries) {
+                      request.headers!.setRequestHeader(header.key, header.value);
+                    }
+                    return request;
+                  },
+                  shouldInterceptFetchRequest: (controller, request) async {
+                    var anisette = await api.getAnisetteHeaders(state: this.anisette!, config: config!);
+                    request.headers ??= {};
+                    request.headers!.addAll(anisette);
+                    return request;
+                  },
+                  onWebViewCreated: (controller) {
+                    controller.addJavaScriptHandler(handlerName: 'log', callback: (args) {
+                      Logger.info("AppleAccountSetup ${args[0]}");
+                    });
+                    controller.addJavaScriptHandler(handlerName: 'cancel', callback: (args) {
+                      Get.back();
+                    });
+                    controller.addJavaScriptHandler(handlerName: 'updateSucceeded', callback: (args) {
+                      updateSucceeded(finish, finalI);
+                      Get.back();
+                    });
+                    // for ios, also hijacks macos because ios doesn't load prefpange-setupservice.js, loads ios-setupservice.js but that doesn't work
+                    controller.addJavaScriptHandler(handlerName: 'confirmWithCallback', callback: (args) {
+                      updateSucceeded(finish, finalI);
+                      Get.back();
+                    });
+                    controller.addJavaScriptHandler(handlerName: 'resizeToWindow', callback: (args) {
+                      setState(() {
+                        height = args[1];
+                      });
+                    });
+                    controller.injectJavascriptFileFromAsset(assetFilePath: "assets/scripts/AppleAccountSetup.js");
+                  },
+                )
+              ),
+              TextButton(
+                onPressed: () {
+                  updateSucceeded(finish, finalI);
+                  Get.back();
+                },
+                child: const Text('Accept Terms'),
+              ),
+            ],
+          ));
+        }
+      )
     );
   }
 
   Future<api.LoginState> updateLoginState(api.LoginState ret) async {
     if (ret is api.LoginState_NeedsLogin) {
-      api.IdsUser? user;
       ArcMutexAppleAccountDefaultAnisetteProvider account;
-      (account, ret, user) = await api.tryAuth(
+      (account, ret) = await api.tryAuth(
         path: pushService.statePath,
         conf: config!,
         conn: connection!,
@@ -284,9 +297,9 @@ class SetupViewController extends StatefulController {
 
         creds: twoFaCreds
       );
-      currentAppleUser = user;
       currentAppleAccount?.dispose();
       currentAppleAccount = account;
+      currentAppleUser = await api.tryIcloudLogin(path: pushService.statePath, conf: config!, account: account);
     }
     if (ret is api.LoginState_NeedsDevice2FA) {
       // subscribe now to not miss the 2fa message
@@ -446,7 +459,7 @@ class SetupViewController extends StatefulController {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "The above message is from Apple.\nWarning: Do not contact Apple support for help with OpenBubbles. For assistance, join our Discord from our website. If you can't login on this Mac, call Apple support.\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
+                        "The above message is from Apple.\nWarning: Do not contact Apple support for help with OpenBubbles. For assistance, join our Discord from our website. If you can't login on this Apple Device, call Apple support. When clicking the contact button below, choose 'Get Started,' not 'Chat,' and then choose 'Apple Device.' Do not mention you are using OpenBubbles.\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
                         textAlign: TextAlign.center,
                         style: Get.textTheme.bodySmall,
                       )
@@ -456,7 +469,7 @@ class SetupViewController extends StatefulController {
                 actions: [
                   if (response.action != null)
                     TextButton(
-                        onPressed: () => launchUrl(Uri.parse(response.action!.url), mode: LaunchMode.externalApplication),
+                        onPressed: () => launchUrl(Uri.parse("https://apple.co/IMFT-mac"), mode: LaunchMode.externalApplication),
                         child: Text(response.action!.button, style: context.theme.textTheme.bodyLarge!.copyWith(color: context.theme.colorScheme.primary))),
                   TextButton(
                       onPressed: () => Get.back(),
@@ -725,7 +738,7 @@ class SetupViewController extends StatefulController {
                     if (status.data.toString().contains("No device available!")) {
                       Timer(const Duration(milliseconds: 100), () => pushService.offerHostedRefund(false));
                     }
-                    throw Exception("Failed to swap ${status.statusCode}");
+                    throw Exception("Failed to swap ${status.statusCode} ${status.data.toString()}");
                   }
 
                   var newTicket = status.data["new_ticket"];

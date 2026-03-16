@@ -11,6 +11,7 @@ pub use rustpush::facetime::facetimep::{ConversationParticipant, ConversationLin
 pub use rustpush::statuskit::{StatusKitPersonalConfig, StatusKitMessage};
 pub use rustpush::posterkit::{TranscriptDynamicUserData, WatchBackground, SimplifiedTranscriptPoster, SimplifiedIncomingCallPoster, PosterRole, UIColor, PRPosterContentMaterialStyle, PosterAsset, PRPosterSystemTimeFontConfiguration, PRPosterColor, PRPosterTitleStyleConfiguration, WallpaperMetadata, PosterColor, PhotoPosterContentsFrame, PhotoPosterContentsSize, PhotoPosterLayer, PhotoPosterLayout, PhotoPosterProperties, PhotoPosterContents, MonogramData, MemojiData, PosterType, SimplifiedPoster};
 pub use rustpush::findmy::BeaconAttributes;
+pub use rustpush::UpdateAccountFinish;
 
 #[frb(non_opaque, mirror(PRPosterContentMaterialStyle))]
 pub enum DartPRPosterContentMaterialStyle {
@@ -1027,6 +1028,14 @@ pub enum DartMessageType {
         is_phone: bool,
         using_number: String, // prefixed with tel:
         from_handle: Option<String>,
+    }
+}
+
+#[frb(mirror(UpdateAccountFinish))]
+pub enum DartUpdateAccountFinish {
+    MacOS,
+    IOS {
+        url: String,
     }
 }
 

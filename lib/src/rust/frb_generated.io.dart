@@ -1557,6 +1557,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   UnsendMessage dco_decode_box_autoadd_unsend_message(dynamic raw);
 
   @protected
+  UpdateAccountFinish dco_decode_box_autoadd_update_account_finish(dynamic raw);
+
+  @protected
   UpdateExtensionMessage dco_decode_box_autoadd_update_extension_message(
       dynamic raw);
 
@@ -2314,6 +2317,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
 
   @protected
+  UpdateAccountFinish? dco_decode_opt_box_autoadd_update_account_finish(
+      dynamic raw);
+
+  @protected
   List<IdsUser>?
       dco_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           dynamic raw);
@@ -2442,9 +2449,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   (
     ArcMutexAppleAccountDefaultAnisetteProvider,
-    LoginState,
-    IdsUser?
-  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+    LoginState
+  ) dco_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
       dynamic raw);
 
   @protected
@@ -2664,6 +2670,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, BigInt) dco_decode_record_string_u_64(dynamic raw);
 
   @protected
+  (String, UpdateAccountFinish) dco_decode_record_string_update_account_finish(
+      dynamic raw);
+
+  @protected
   (int, NSDictionaryTypedCoder)
       dco_decode_record_u_32_ns_dictionary_typed_coder(dynamic raw);
 
@@ -2776,6 +2786,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   UnsendMessage dco_decode_unsend_message(dynamic raw);
+
+  @protected
+  UpdateAccountFinish dco_decode_update_account_finish(dynamic raw);
 
   @protected
   UpdateExtensionMessage dco_decode_update_extension_message(dynamic raw);
@@ -4207,6 +4220,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       SseDeserializer deserializer);
 
   @protected
+  UpdateAccountFinish sse_decode_box_autoadd_update_account_finish(
+      SseDeserializer deserializer);
+
+  @protected
   UpdateExtensionMessage sse_decode_box_autoadd_update_extension_message(
       SseDeserializer deserializer);
 
@@ -5031,6 +5048,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
+  UpdateAccountFinish? sse_decode_opt_box_autoadd_update_account_finish(
+      SseDeserializer deserializer);
+
+  @protected
   List<IdsUser>?
       sse_decode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           SseDeserializer deserializer);
@@ -5174,9 +5195,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   (
     ArcMutexAppleAccountDefaultAnisetteProvider,
-    LoginState,
-    IdsUser?
-  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
+    LoginState
+  ) sse_decode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
       SseDeserializer deserializer);
 
   @protected
@@ -5412,6 +5432,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   (String, BigInt) sse_decode_record_string_u_64(SseDeserializer deserializer);
 
   @protected
+  (String, UpdateAccountFinish) sse_decode_record_string_update_account_finish(
+      SseDeserializer deserializer);
+
+  @protected
   (int, NSDictionaryTypedCoder)
       sse_decode_record_u_32_ns_dictionary_typed_coder(
           SseDeserializer deserializer);
@@ -5531,6 +5555,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   UnsendMessage sse_decode_unsend_message(SseDeserializer deserializer);
+
+  @protected
+  UpdateAccountFinish sse_decode_update_account_finish(
+      SseDeserializer deserializer);
 
   @protected
   UpdateExtensionMessage sse_decode_update_extension_message(
@@ -7030,6 +7058,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       UnsendMessage self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_update_account_finish(
+      UpdateAccountFinish self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_update_extension_message(
       UpdateExtensionMessage self, SseSerializer serializer);
 
@@ -7874,6 +7906,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_opt_box_autoadd_update_account_finish(
+      UpdateAccountFinish? self, SseSerializer serializer);
+
+  @protected
   void
       sse_encode_opt_list_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerIDSUser(
           List<IdsUser>? self, SseSerializer serializer);
@@ -8016,12 +8052,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state_opt_box_autoadd_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_ids_user(
-          (
-            ArcMutexAppleAccountDefaultAnisetteProvider,
-            LoginState,
-            IdsUser?
-          ) self,
+      sse_encode_record_auto_owned_rust_opaque_flutter_rust_bridgefor_generated_rust_auto_opaque_inner_arc_mutex_apple_account_default_anisette_provider_login_state(
+          (ArcMutexAppleAccountDefaultAnisetteProvider, LoginState) self,
           SseSerializer serializer);
 
   @protected
@@ -8229,6 +8261,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       (String, BigInt) self, SseSerializer serializer);
 
   @protected
+  void sse_encode_record_string_update_account_finish(
+      (String, UpdateAccountFinish) self, SseSerializer serializer);
+
+  @protected
   void sse_encode_record_u_32_ns_dictionary_typed_coder(
       (int, NSDictionaryTypedCoder) self, SseSerializer serializer);
 
@@ -8352,6 +8388,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_unsend_message(UnsendMessage self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_update_account_finish(
+      UpdateAccountFinish self, SseSerializer serializer);
 
   @protected
   void sse_encode_update_extension_message(
