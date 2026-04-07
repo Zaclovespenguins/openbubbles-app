@@ -10,7 +10,9 @@ import 'package:bluebubbles/src/rust/api/api.dart' as api;
 import 'package:bluebubbles/helpers/helpers.dart';
 import 'package:bluebubbles/services/rustpush/rustpush_service.dart';
 import 'package:bluebubbles/services/services.dart';
+import 'package:bluebubbles/utils/logger/logger.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:get/get.dart' hide Response;
@@ -49,11 +51,77 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
     });
   }
 
+  void registerPhoneOnly() async {
+    controller.currentAppleUser = null;
+    controller.updateConnectError("");
+    setState(() {
+      loading = true;
+    });
+    try {
+      ss.settings.iCloudAccount.value = "";
+      ss.settings.userName.value = "You";
+      ss.settings.customHeaders.value = {};
+      await ss.settings.saveAsync();
+      http.onInit();
+      await controller.doRegister();
+      if (!controller.success) {
+        return;
+      }
+      controller.goingTo2fa = false;
+      controller.pageController.animateToPage(
+        controller.pageController.page!.toInt() + 2,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } catch (e) {
+      if (e is AnyhowException) {
+        controller.updateConnectError(e.message);
+      }
+      if (e is PanicException) {
+        controller.updateConnectError(e.message);
+      }
+      rethrow;
+    } finally {
+      setState(() {
+        loading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SetupPageTemplate(
       title: "Apple Account",
-      subtitle: "Use OpenBubbles with your Apple Account",
+      subtitle: "",
+      customSubtitle: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: RichText(
+            text: TextSpan(
+              style: context.theme.textTheme.bodyLarge!.apply(
+                fontSizeDelta: 1.5,
+                color: context.theme.colorScheme.outline,
+              ).copyWith(height: 2),
+              children: [
+                const TextSpan(
+                  text: "Use OpenBubbles with your Apple Account"
+                ),
+                if (availableUser == null && controller.currentPhoneUsers.isNotEmpty && !loading) ...[
+                  const TextSpan(text: "\nHaving trouble? "),
+                  TextSpan(
+                    text: "Skip Apple Account login.",
+                    style: TextStyle(
+                      color: context.theme.colorScheme.primary,
+                    ),
+                    recognizer: TapGestureRecognizer()..onTap = registerPhoneOnly,
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
       customButton: Column(
         children: [
           ErrorText(parentController: controller),
@@ -102,7 +170,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                 labelText: "Email or Phone Number",
                               ),
                             ),
-                          ),
+                          )
                         ),
                         if (availableUser == null)
                         const SizedBox(height: 20),
@@ -175,7 +243,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                         Align(
                                           alignment: Alignment.center,
                                           child: Text(
-                                            "Warning: Do not contact Apple support for help with OpenBubbles. For assistance, join our Discord from our website.\n\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
+                                            "Warning: Do not contact Apple support for help with OpenBubbles. Do not mention OpenBubbles. For assistance, join our Discord from our website.\n\n${RustPushBBUtils.modelToUser(devInfo.name)}\nS/N: ${devInfo.serial}\nmacOS ${devInfo.osVersion}",
                                             textAlign: TextAlign.center,
                                             style: Get.textTheme.bodySmall,
                                           )
@@ -379,39 +447,7 @@ class _AppleIdLoginState extends OptimizedState<AppleIdLogin> {
                                     });
                                     return;
                                   }
-                                  controller.updateConnectError("");
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  try {
-                                    ss.settings.iCloudAccount.value = "";
-                                    ss.settings.userName.value = "You";
-                                    ss.settings.customHeaders.value = {};
-                                    await ss.settings.saveAsync();
-                                    http.onInit();
-                                    await controller.doRegister();
-                                    if (!controller.success) {
-                                      return;
-                                    }
-                                    controller.goingTo2fa = false;
-                                    controller.pageController.animateToPage(
-                                      controller.pageController.page!.toInt() + 2,
-                                      duration: const Duration(milliseconds: 300),
-                                      curve: Curves.easeInOut,
-                                    );
-                                  } catch (e) {
-                                    if (e is AnyhowException) {
-                                      controller.updateConnectError(e.message);
-                                    }
-                                    if (e is PanicException) {
-                                      controller.updateConnectError(e.message);
-                                    }
-                                    rethrow;
-                                  } finally {
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                  }
+                                  registerPhoneOnly();
                                 },
                                 child: Stack(
                                   alignment: Alignment.center,
