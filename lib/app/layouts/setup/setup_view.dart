@@ -827,12 +827,16 @@ class _SetupViewState extends OptimizedState<SetupView> {
         ss.settings.isDumb.value = true;
         ss.settings.macIsMine.value = false;
         await ss.saveSettings();
-        var list = base64Decode(dumb.readAsStringSync()).toList();
-        list.removeRange(0, 5);
-        var imported = await api.configFromEncoded(encoded: list);
-        controller.config = imported;
-        controller.identity = api.newNgmIdentity();
-        await controller.setupConnection();
+        try {
+          var list = base64Decode(dumb.readAsStringSync()).toList();
+          list.removeRange(0, 5);
+          var imported = await api.configFromEncoded(encoded: list);
+          controller.config = imported;
+          controller.identity = api.newNgmIdentity();
+          await controller.setupConnection();
+        } catch (e, s) {
+          Logger.error("Failed to setup dumb", error: e, trace: s);
+        }
       }
 
       var list = ss.settings.cachedCodes.entries.toList();
